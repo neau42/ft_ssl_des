@@ -6,13 +6,15 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/19 16:59:01 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/11/19 23:05:47 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ssl
 
 SRC = 	srcs/main.c\
+		srcs/usage.c\
+		srcs/rm_data.c\
 		srcs/get_args.c\
 		srcs/get_opts.c
 

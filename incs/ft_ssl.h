@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/19 19:17:49 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/19 23:05:58 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ typedef struct s_data
 t_data	*get_args(int ac, char **av, uint32_t *opts);
 t_data	*get_opts(char *str, char *str_next, uint32_t *opts, t_data *data);
 t_data	*init_data(void);
-
+void	short_usage(char *str);
+void	long_usage(char *str);
+void	rm_data(t_data *data);
 
 #endif

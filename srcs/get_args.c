@@ -6,26 +6,17 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/19 20:18:50 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/19 23:06:16 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void 		short_usage(char *str)
-{
-	ft_printf("usage:\n%s <md5|sha-256> [-hpqrs] \n", str);
-}
-
-void		long_usage(char *str)
-{
-	short_usage(str);
-}
-
 t_data		*init_data(void)
 {
 	t_data *data;
 
+	ft_printf("call init_data\n");
 	if (!(data = ft_memalloc(sizeof(t_data))))
 		return (NULL);
 	data->type = NULL_TYPE;
@@ -61,28 +52,21 @@ t_data		*get_args(int ac, char **av, uint32_t *opts)
 
 	i = 1;
 	*opts = 0;
-	if (ac < 2 || !(data = init_data()))
+	if (ac < 2 || !(data = init_data())
+	|| ((*opts = SET_OPT_HASH_TYPE(get_hash_type(av[1]))) == NULL_HASH))
 		return (NULL);
 	first = data;
-	if ((*opts = SET_OPT_HASH_TYPE(get_hash_type(av[1]))) == NULL_HASH)
-		return (NULL);
 	while (++i < ac)
 	{
 		if (av[i][0] != '-'
 		|| (!av[i][1] || (av[i][1] == '-' && !av[i][2] && ++i)))
 			break ;
-		else
-		{
-			data = get_opts(&av[i][1], av[i + 1], opts, data);
-			i++;
-		}
-		if (*opts & (OPT_ERR))
-			break ;
+		data = get_opts(&av[i][1], av[i + 1], opts, data);
+		i++;
+		if (!data || *opts & OPT_ERR)
+			return (first);
 	}
 	while (i < ac)
-	{
-		data = get_file_name(data, av[i]);
-		i++;
-	}
-		return (first);
+		data = get_file_name(data, av[i++]);
+	return (first);
 }
