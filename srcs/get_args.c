@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/19 19:19:05 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/19 20:18:50 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,19 @@ t_data		*get_args(int ac, char **av, uint32_t *opts)
 	{
 		if (av[i][0] != '-'
 		|| (!av[i][1] || (av[i][1] == '-' && !av[i][2] && ++i)))
-			data = get_file_name(data, av[i]);
+			break ;
 		else
+		{
 			data = get_opts(&av[i][1], av[i + 1], opts, data);
+			i++;
+		}
 		if (*opts & (OPT_ERR))
 			break ;
 	}
-	// if (!av[i] || av[i + 1] || *opts & OPT_ERR || *opts & OPT_H)
-	// {
-	// 	(*opts & OPT_H) ? long_usage(av[0]) : short_usage(av[0]);
-	// 	return (first);
-	// }
-	return (first);
+	while (i < ac)
+	{
+		data = get_file_name(data, av[i]);
+		i++;
+	}
+		return (first);
 }

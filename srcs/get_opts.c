@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/19 18:01:16 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/19 20:29:16 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ uint32_t	get_opt_int(char **str)
 	return (count);
 }
 
-t_data *get_string(char *str, t_data *data)
+t_data *get_string(char *str, t_data *data, uint32_t *opts)
 {
+	if (!str)
+		(*opts) &= OPT_ERR;
 	data->type = STRING_TYPE;
 	if (!(data->str = ft_strdup(str)))
 		return (NULL);
@@ -50,7 +52,7 @@ t_data			*get_opts(char *str, char *str_next, uint32_t *opts, t_data *data)
 		else if (*str == 'r')
 			(*opts) |= OPT_R;
 		else if (*str == 's')
-			data = get_string(str_next, data);
+			data = get_string(str_next, data, opts);
 		else if (*str)
 		{
 			(*opts) |= OPT_ERR;
