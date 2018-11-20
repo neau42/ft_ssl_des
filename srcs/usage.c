@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usage.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/19 23:04:40 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/20 04:36:07 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,19 @@
 
 void		short_usage(char *str)
 {
-	ft_printf("usage:\n%s <md5|sha-256> [-hpqrs] \n", str);
+	ft_printf("usage:\n%s <md5|sha256> [-hpqrs] file ...\n", str);
 }
 
 void		long_usage(char *str)
 {
 	short_usage(str);
+	ft_printf("\nMessage Digest commands:"
+	"\n md5: to use the md5 message digest algorithm"
+	"\n sha256: to use the sha256 message digest algorithm"
+	"\n-h: help."
+	"\n-p: echo STDIN to STDOUT and append the checksum to STDOUT."
+	"\n-q: quiet mode."
+	"\n-r: reverse the format of the output."
+	"\n-s: print the sum of the given string."
+	"\n");
 }

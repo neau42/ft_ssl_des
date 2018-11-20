@@ -3,20 +3,23 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
+#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/19 23:05:47 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/11/20 08:24:42 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ssl
 
 SRC = 	srcs/main.c\
+		srcs/utils.c\
 		srcs/usage.c\
 		srcs/rm_data.c\
 		srcs/get_args.c\
-		srcs/get_opts.c
+		srcs/get_opts.c\
+		srcs/exec_on_file.c\
+		srcs/ft_exec_on_string.c
 
 FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb
 

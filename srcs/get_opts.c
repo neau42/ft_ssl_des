@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_opts.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/19 23:50:50 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/20 08:26:04 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,27 @@
 // 	return (count);
 // }
 
-static t_data	*get_string(char *str, t_data *data, uint32_t *opts)
+static t_arg	*get_string(char *str, t_arg *arg, uint32_t *opts)
 {
 	if (!str)
 	{
-		(*opts) |= OPT_ERR;
+		*opts |= OPT_ERR;
 		return (NULL);
 	}
-	data->type = STRING_TYPE;
-	if (!(data->str = ft_strdup(str)))
+	*opts |= OPT_S;
+	arg->type = STRING_TYPE;
+	if (!(arg->str = ft_strdup(str)))
 		return (NULL);
-	data->next = init_data();
-	return (data->next);
+	arg->next = init_arg();
+	return (arg->next);
 }
 
-t_data			*get_opts(char *str, char *str_next, uint32_t *opts,
-				t_data *data)
+t_arg			*get_opts(char *str, char *str_next, uint32_t *opts,
+				t_arg *arg)
 {
+	int chk;
+
+	chk = 0;
 	while (*str)
 	{
 		if (*str == 'h')
@@ -55,16 +59,16 @@ t_data			*get_opts(char *str, char *str_next, uint32_t *opts,
 			(*opts) |= OPT_Q;
 		else if (*str == 'r')
 			(*opts) |= OPT_R;
-		else if (*str == 's')
-			data = get_string(str_next, data, opts);
+		else if (*str == 's' && !chk++)
+			arg = get_string(str_next, arg, opts);
 		else if (*str)
 		{
 			(*opts) |= OPT_ERR;
 			ft_printf("invalid option -- \"%s\"\n", str);
 		}
-		if (!data || *opts & OPT_ERR)
+		if (!arg || *opts & OPT_ERR)
 			break ;
 		str++;
 	}
-	return (data);
+	return (arg);
 }

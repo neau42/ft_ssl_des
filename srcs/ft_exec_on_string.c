@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rm_arg.c                                          :+:      :+:    :+:   */
+/*   ft_exec_on_string.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 04:42:31 by no               ###   ########.fr       */
+/*   Updated: 2018/11/20 06:18:57 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void rm_arg(t_arg *arg)
+int		ft_exec_on_string(char *str, uint32_t opts)
 {
-	if (arg)
-	{
-		ft_printf("remove '%s'\n", arg->str);
-		ft_strdel(&arg->str);
-		rm_arg(arg->next);
-		free(arg);
-		arg = NULL;
-	}
+	ft_printf("ft_exec_on_string\n");
+	ft_printf("\tEXEC ALGO on '%s'\n", str);
+    (void)str, (void)opts;
+
+	return (0);
 }
