@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 22:32:21 by nboulaye          #+#    #+#             */
-/*   Updated: 2017/02/20 22:02:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/20 13:25:30 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-long int		ft_atoi(const char *str)
+int64_t		ft_atoi(const char *str)
 {
-	unsigned long int	absnbr;
-	char				invers;
+	uint64_t		absnbr;
+	uint64_t		tmp;
+	char			invers;
 
 	absnbr = 0;
 	invers = 0;
@@ -29,7 +30,10 @@ long int		ft_atoi(const char *str)
 	}
 	while (*str >= '0' && *str <= '9')
 	{
+		tmp = absnbr;
 		absnbr *= 10;
+		if (absnbr < tmp)
+			return (invers - 1);
 		absnbr += *str - 48;
 		str++;
 	}

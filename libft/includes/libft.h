@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/29 16:49:16 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/18 17:16:16 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/20 12:52:12 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 # define LIBFT_H
 
 # include <string.h>
+# include <inttypes.h>
 
-long int	ft_atoi(const char *src);
+int64_t		ft_atoi(const char *str);
 void		ft_bzero(void *s, size_t n);
 int			ft_isdigit(int c);
 int			ft_isprint(int c);
 int			ft_itoa_base_buffer(long double val, int base, char *buf);
 void		*ft_memcpy(void *dst, const void *str, size_t n);
-void		*ft_memset(void *s, int c, size_t n);
+void		*ft_memset(void *s, uint64_t c, size_t n);
 size_t		ft_strlen(const char *str);
 char		*ft_strstr(const char *s1, const char *s2);
 int			ft_strcmp(const char *s1, const char *s2);
@@ -43,7 +44,6 @@ char		*ft_strjoin(const char *s1, const char *s2);
 char		*ft_strjoin_free(char *s1, char *s2, int i);
 char		*ft_strcat(char *s1, const char *s2);
 char		**ft_strsplit(const char *s, char c);
-void		ft_freetab(char ***t);
 char		*ft_strchr(const char *str, int c);
 char		*ft_strrchr(const char *s, int c);
 char		*ft_strcpy(char *dst, const char *src);

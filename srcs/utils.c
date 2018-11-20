@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 08:26:42 by no               ###   ########.fr       */
+/*   Updated: 2018/11/20 15:37:11 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void             print_last_memory_hex(size_t len, size_t size, size_t si
         i = len;
         while (i--)
                 ft_printf(" ");
-        ft_printf("\t\t  |");
+        ft_printf("|");
 }
 
 void                    print_memory_hex(void *data, size_t blk_size)
@@ -54,15 +54,17 @@ void                    print_memory_hex(void *data, size_t blk_size)
         size_t                  size;
         size_t                  size2;
         unsigned char   *str;
+        int idx;
 
         str = data;
         ft_printf("\n|\t");
         size = 0;
         size2 = 0;
+        idx = 0;
         while (size < blk_size)
         {
-                ft_printf("%02x ", str[size]);
-                if (++size % 32 == 0)
+                ft_printf("%08b ", str[size]);
+                if (++size % 4 == 0)
                 {
                         while (size2 < size)
                         {
@@ -70,7 +72,7 @@ void                    print_memory_hex(void *data, size_t blk_size)
                                 size2++;
                         }
                         if (size2 < blk_size)
-                                ft_printf("\t\t  |\n|\t");
+                                ft_printf("|\n|\t");
                 }
         }
         print_last_memory_hex(size - size2, size, size2, str);

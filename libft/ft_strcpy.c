@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 15:06:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2015/11/30 16:29:51 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/20 13:25:04 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 char		*ft_strcpy(char *dst, const char *src)
 {
-	size_t	i;
-
-	i = 0;
-	while (src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = src[i];
+	ft_memcpy(dst, src, ft_strlen(src) + 1);
+	// i = 0;
+	// while (src[i])
+	// {
+	// 	dst[i] = src[i];
+	// 	i++;
+	// }
+	// dst[i] = src[i];
 	return (dst);
 }

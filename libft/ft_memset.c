@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 13:11:17 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 08:19:15 by no               ###   ########.fr       */
+/*   Updated: 2018/11/20 13:24:53 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,45 @@
 # include <inttypes.h>
 
 
-void				*ft_memset(void *s, int c, size_t n)
+static void memsetpart64(uint64_t **s, uint64_t c, uint64_t *n)
 {
-	void *ret = s;
+		(*n) -= sizeof(uint64_t);
+		*(*s)++ = ((c & 0xFF) | (c & 0xFF) << 8 | (c & 0xFF) << 16
+		| (c & 0xFF) << 24 | (c & 0xFF) << 32 | (c & 0xFF) << 40
+		| (c & 0xFF) << 48 | (c & 0xFF) << 56);
+}
 
+static void memsetpart32(uint32_t **s, uint32_t c, uint32_t *n)
+{
+		(*n) -= sizeof(uint32_t);
+		*(*s)++ = ((c & 0xFF) | (c & 0xFF) << 8 | (c & 0xFF) << 16
+		| (c & 0xFF) << 24);
+}
+
+static void memsetpart16(uint16_t **s, uint16_t c, uint16_t *n)
+{
+		(*n) -= sizeof(uint16_t);
+		*(*s)++ = ((c & 0xFF) | ((c & 0xFF) << 8));
+}
+
+static void memsetpart8(uint8_t **s, uint8_t c, uint32_t *n)
+{
+		(*n)--;
+		*(*s)++ = (c & 0xFF);
+}
+
+void		*ft_memset(void *s, uint64_t c, size_t n)
+{
+	void	*ret;
+
+	ret = s;
+	while (n >= sizeof(uint64_t))
+		memsetpart64((uint64_t **)&s, c, (uint64_t *)&n);
 	while (n >= sizeof(uint32_t))
-	{
-		n -= sizeof(uint32_t);
-		*((uint32_t *)s) = ((unsigned char)c | (unsigned char)c << 8
-						| (unsigned char)c << 16 | (unsigned char)c << 24);
-		s += sizeof(uint32_t);
-	}
+		memsetpart32((uint32_t **)&s, c, (uint32_t *)&n);
 	while (n >= sizeof(uint16_t))
-	{
-		n -= sizeof(uint16_t);
-		*((uint16_t *)s) = ((unsigned char)c | ((unsigned char)c << 8));
-		s += sizeof(uint16_t);
-	}
+		memsetpart16((uint16_t **)&s, c, (uint16_t *)&n);
 	while (n >= sizeof(uint8_t))
-	{
-		n -= sizeof(uint8_t);
-		*((unsigned char *)s) = (unsigned char)c;
-		s += sizeof(uint8_t);
-	}
+		memsetpart8((uint8_t **)&s, c, (uint32_t *)&n);
 	return (ret);
 }

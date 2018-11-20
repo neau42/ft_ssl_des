@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amerelo <amerelo@student.42.fr>            +#+  +:+       +#+         #
+#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/27 07:13:00 by nboulaye          #+#    #+#              #
-#    Updated: 2018/11/04 19:02:33 by amerelo          ###   ########.fr        #
+#    Updated: 2018/11/20 13:38:25 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,6 @@ SRCL =	ft_atoi.c\
 	ft_strlast.c\
 	ft_memchr.c\
 	ft_strsplit.c\
-	ft_freetab.c\
 	ft_strsplit_first.c
 
 SRC =	$(SRCL)\
