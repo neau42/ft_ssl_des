@@ -16,7 +16,6 @@ void rm_arg(t_arg *arg)
 {
 	if (arg)
 	{
-		ft_printf("remove '%s'\n", arg->str);
 		ft_strdel(&arg->str);
 		rm_arg(arg->next);
 		free(arg);

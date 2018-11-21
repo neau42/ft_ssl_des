@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 15:13:27 by no               ###   ########.fr       */
+/*   Updated: 2018/11/21 00:57:51 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@
 # define OPT_R 0x10
 # define OPT_S 0x20
 # define OPT_FILE 0x40
-// # define GET_HASH_TYPE(x) ((x & 0xF0000000) >> 28)
-// # define SET_OPT_HASH_TYPE(x) ((x & 0xF) << 28)
 
 # define NULL_TYPE 0x0
 # define FILE_TYPE 0x1
@@ -43,7 +41,7 @@
 typedef struct s_arg
 {
 	char			type;
-	char			*str;
+	char			*str; // || file_name
 	char			*file;
 	struct s_arg	*next;
 }				t_arg;
@@ -64,9 +62,9 @@ void	long_usage(char *str);
 void	rm_arg(t_arg *arg);
 
 
-int		ft_exec_on_null(char *str, uint32_t opts);
-int		ft_exec_on_file(char *file_name, uint32_t opts);
-int		ft_exec_on_string(char *str, uint32_t opts);
+int		process_null(char *str, uint32_t opts);
+int		process_file(char *file_name, uint32_t opts);
+int		process_string(char *str, uint32_t opts);
 
 /*
 ** utils?

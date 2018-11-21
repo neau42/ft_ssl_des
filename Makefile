@@ -6,20 +6,21 @@
 #    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/20 08:24:42 by no               ###   ########.fr        #
+#    Updated: 2018/11/21 01:09:38 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ssl
 
-SRC = 	srcs/main.c\
+SRC = 	srcs/md5.c\
+		srcs/main.c\
 		srcs/utils.c\
 		srcs/usage.c\
 		srcs/rm_data.c\
 		srcs/get_args.c\
 		srcs/get_opts.c\
-		srcs/exec_on_file.c\
-		srcs/ft_exec_on_string.c
+		srcs/process_file.c\
+		srcs/process_string.c
 
 FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb
 

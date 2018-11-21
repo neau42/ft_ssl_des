@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exec_on_string.c                                :+:      :+:    :+:   */
+/*   process_string.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,9 @@
 
 #include "ft_ssl.h"
 
-int		ft_exec_on_string(char *str, uint32_t opts)
+int		process_string(char *str, uint32_t opts)
 {
-	ft_printf("ft_exec_on_string\n");
+	ft_printf("process_string\n");
 	ft_printf("\tEXEC ALGO on '%s'\n", str);
     (void)str, (void)opts;
 

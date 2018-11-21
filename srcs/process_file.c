@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_on_file.c                                     :+:      :+:    :+:   */
+/*   process_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 15:29:31 by no               ###   ########.fr       */
+/*   Updated: 2018/11/21 01:36:41 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "md5.h"
 #include "ft_ssl.h"
 
 void algo(void);
 
 
 void read_stdin(uint32_t opts);
-int		    ft_exec_on_null(char *str, uint32_t opts)
+int		    process_null(char *str, uint32_t opts)
 {
 	(void)str;
-		ft_printf("ft_exec_on_null\n");
+		ft_printf("process_null\n");
 	if (!(opts & OPT_FILE) || opts & OPT_P)
 	{
 		ft_printf("\tread stdin\n");
@@ -33,11 +34,12 @@ void format_last_string(t_read		*r, uint32_t opts)
 {
     (void)opts;
 	// size = nb_loop * SIZE_BUF + r->len;
+
 	if (r->len < 64)
 		r->buf[r->len] = 1;
 	if (r->len > (int)(SIZE_BUF - sizeof(uint64_t) - 1))
 	{
-		algo();
+		// algo();
 		print_memory_hex(r->buf, SIZE_BUF);
 		ft_bzero(r->buf, SIZE_BUF);
 		if (r->len == SIZE_BUF - sizeof(uint64_t))
@@ -52,8 +54,17 @@ void format_last_string(t_read		*r, uint32_t opts)
 			r->buf[0] = 1;
 		}
 	}
-	*(uint64_t *)((uint8_t *)(r->buf) + SIZE_BUF - sizeof(uint64_t)) = r->size;//endian_swapp(size) ??
-	algo();
+	*(uint64_t *)((uint8_t *)(r->buf) + SIZE_BUF - sizeof(uint64_t)) = (r->size);//endian_swap64(size) ??
+	// algo();
+
+	uint64_t test;
+
+	test = ((*(uint64_t*)((r->buf) + SIZE_BUF - 8)));
+	ft_printf("\033[94m\nsize:\t\t{%064b} = %d", r->size, r->size);
+	ft_printf("\ntest:\t\t{%064b} = %d\033[0m",test,test);
+
+
+
 	print_memory_hex(r->buf, SIZE_BUF);
 }
 
@@ -70,34 +81,37 @@ void algo(void)
 	    k[i] = floor(fabs(sin(i + 1)) * 0x100000000);
 
 	i = 0;
-	ft_printf("tab K:\n");
-	while (i< 64)
-	{
-		ft_printf("% 12d .", k[i++]);
-		if (i%8 == 0)
-			ft_printf("\n");
-	}
-	i = 0;
-	ft_printf("tab R:\n");
-	while (i< 64)
-	{
-		ft_printf("% 3d . ", r[i++]);
-		if (i%8 == 0)
-			ft_printf("\n");
-	}
-	i = 0;
-	ft_printf("tab H:\n");
-	while (i< 4)
-	{
-		ft_printf("% 8d . ", h[i++]);
-		if (i%8 == 0)
-			ft_printf("\n");
-	}
+	// ft_printf("tab K:\n");
+	// while (i< 64)
+	// {
+	// 	ft_printf("% 12d .", k[i++]);
+	// 	if (i%8 == 0)
+	// 		ft_printf("\n");
+	// }
+	// i = 0;
+	// ft_printf("tab R:\n");
+	// while (i< 64)
+	// {
+	// 	ft_printf("% 3d . ", r[i++]);
+	// 	if (i%8 == 0)
+	// 		ft_printf("\n");
+	// }
+	// i = 0;
+	(void)r;
+	(void)k;
+	(void)h;
+	// ft_printf("tab H:\n");
+	// while (i< 4)
+	// {
+	// 	ft_printf("% 8d . ", h[i++]);
+	// 	if (i%8 == 0)
+	// 		ft_printf("\n");
+	// }
 
 
 }
 
-int		    ft_exec_on_file(char *file_name, uint32_t opts)
+int		    process_file(char *file_name, uint32_t opts)
 {
 	t_read		r;
 	int			fd;
@@ -106,6 +120,9 @@ int		    ft_exec_on_file(char *file_name, uint32_t opts)
     (void)opts;
 	fd = open(file_name, O_RDONLY);
 	r.size = 0;
+	if (!MD5_SUCCEEDED(md5_init()))
+		ft_printf("\033[31mMD5_ERROR (md5_init() :::: %d\033[0m\n", md5_get_err_number());
+
 	ft_printf("------------------------------- EXEC ON FILE --------------------------------------\n");
 	if (fd < 0)
 	{
@@ -115,14 +132,14 @@ int		    ft_exec_on_file(char *file_name, uint32_t opts)
 	ft_bzero(r.buf, SIZE_BUF);
 	while ((r.len = read(fd, r.buf, SIZE_BUF)) == (int)(SIZE_BUF))
 	{
-		algo();
+		// algo();
 		print_memory_hex(r.buf, SIZE_BUF);
 		ft_bzero(r.buf, SIZE_BUF);
 		r.size += SIZE_BUF;
 	}
 	r.size += r.len;
 	format_last_string(&r, opts);
-	ft_printf("\n\nfinal size: %d\n\n",r.size);
+	// ft_printf("\n\nfinal size: %d\n\n",r.size);
 	result[0] = r.buf[0];
 	if (fd > 0)
 		close(fd);
@@ -144,14 +161,14 @@ void read_stdin(uint32_t opts)
 		
 		if (r.len == 64)
 		{
-			algo();
+			// algo();
 			print_memory_hex(r.buf, r.len);
 		}
 			//pseudo strncat(r.buf, tmp_bul, 64)
 		//if r.len == 64 exec_algo
 		//else concate
 	}
-	ft_printf("\n\nfinal size: %d\n\n",r.size);
+	// ft_printf("\n\nfinal size: %d\n\n",r.size);
 	format_last_string(&r, opts);
 	result[0] = r.buf[0];
 	return ;

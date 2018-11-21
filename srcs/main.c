@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 13:39:54 by no               ###   ########.fr       */
+/*   Updated: 2018/11/21 00:28:53 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	parse_args(t_arg *arg, uint32_t opts)
 {
 	t_arg *first;
 	static int  (*fcts[3])(char *, uint32_t ) =
-        { ft_exec_on_null, ft_exec_on_file, ft_exec_on_string};
+        { process_null, process_file, process_string};
 
 	first = arg;
 	while (arg)
