@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/21 00:28:53 by no               ###   ########.fr       */
+/*   Updated: 2018/11/21 18:56:31 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,21 +74,8 @@ int		main(int ac, char **av)
 		rm_arg(arg);
 		return (1);
 	}
-	// print_arg(arg, opts);
-
 	parse_args(arg, opts);
-
-
-	// char test[604];
-	// ft_bzero(test, 604);
-	// print_memory_hex(test,604);
-	// ft_memset(test, 252, 604);
-	// print_memory_hex(test,604);
-	// ft_memset(test, 'x', 604);
-	// print_memory_hex(test,604);
-
-
-
+	// print_arg(arg, opts);
 	rm_arg(arg);
 	return (0);
 }

@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
+#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/21 01:09:38 by no               ###   ########.fr        #
+#    Updated: 2018/11/21 15:12:12 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ssl
 
-SRC = 	srcs/md5.c\
+SRC =	srcs/md5.c\
 		srcs/main.c\
 		srcs/utils.c\
 		srcs/usage.c\
