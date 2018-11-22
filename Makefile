@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
+#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/22 18:13:07 by no               ###   ########.fr        #
+#    Updated: 2018/11/22 20:25:52 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC =	srcs/md5.c\
 		srcs/get_opts.c\
 		srcs/init_chksum.c\
 		srcs/process_file.c\
+		srcs/process_stdin.c\
 		srcs/process_string.c
 
 FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb

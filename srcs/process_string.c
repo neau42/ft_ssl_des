@@ -12,33 +12,42 @@
 
 #include "ft_ssl.h"
 
+char *format_final_name(char *str, uint64_t size)
+{
+	char	*final_name;
+
+	if (!(final_name = ft_strnew(size + 2)))
+		return (NULL);
+	ft_strcpy(final_name, "\"");
+	ft_strcat(final_name, str);
+	ft_strcat(final_name, "\"");
+	return (final_name);
+}
+
 int		process_string(char *str, uint32_t opts)
 {
 	uint8_t		buf[SIZE_BUF];
+	t_read		r;
 	t_chksum	sum;
-	uint32_t	len;
-	uint64_t	size;
+	char		*final_name;
 
-	ft_printf("process_string\n");
-	ft_printf("\tEXEC md5 on '%s'\n", str);
-	init_chksum(&sum, opts);
-	size = 0;
-	len = 0;
-	ft_bzero(buf, 64);
-	while ((len = ft_strlen(&str[len])) > SIZE_BUF)
+	init_chksum_n_read(&sum, opts, &r);
+	r.buf = buf;
+	ft_bzero(r.buf, r.bsz);
+	while ((r.len = ft_strlen(&str[r.size])) > SIZE_BUF)
 	{
-		ft_memcpy(buf, &str[len], SIZE_BUF);
-		algo(buf, &sum, opts);
-		ft_bzero(buf, 64);
-		size += (SIZE_BUF * 8);
+		ft_memcpy(r.buf, &str[r.size], SIZE_BUF);
+		algo(r.buf, &sum, opts);
+		ft_bzero(r.buf, r.bsz);
+		r.size += SIZE_BUF;
 	}
-	ft_memcpy(buf, &str[size / 8], len);
-	ft_printf("len:%d\n", len);
-	buf[len] = (1 << 7);
-	size += (len*8);
-	*(uint64_t *)&buf[SIZE_BUF - sizeof(uint64_t)] = (size);
-	// print_memory_hex(buf, 64);
-	algo(buf, &sum, opts);
-	print_chksum(&sum, str, opts);
+	ft_memcpy(r.buf, &str[r.size], r.len);
+	r.size = ((r.size + r.len) * 8);
+	format_last_string(&r, opts, &sum);
+	algo(r.buf, &sum, opts);
+	final_name = format_final_name(str, r.size / 8);
+	print_chksum(&sum, final_name, opts);
+	if (final_name)
+		free(final_name);
 	return (0);
 }

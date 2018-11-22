@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   md5.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 15:03:17 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 16:23:16 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 20:22:15 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static uint32_t		*get_constant_k(void)
 	return (k);
 }
 
-static void		    init_vars(uint32_t **k, uint32_t **s, uint32_t *abcdfgi,
+static void			init_vars(uint32_t **k, uint32_t **s, uint32_t *abcdfgi,
 					t_chksum *r)
 {
 	static uint32_t t[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
@@ -54,28 +54,27 @@ void				md5(const uint32_t *msg, t_chksum *sum)
 {
 	static uint32_t	*s = NULL;
 	static uint32_t	*k = NULL;
-	uint32_t		abcdf[7];
+	uint32_t		abcd[7];
 
-	init_vars(&k, &s, abcdf, sum);
-	while (++abcdf[6] < 64)
+	init_vars(&k, &s, abcd, sum);
+	while (++abcd[6] < 64)
 	{
-		if (abcdf[6] < 16 && ((abcdf[5] = abcdf[6]) || 1))
-			abcdf[4] = (abcdf[1] & abcdf[2]) | (~abcdf[1] & abcdf[3]);
-		else if (abcdf[6] < 32 && ((abcdf[5] = (5 * abcdf[6] + 1) % 16) || 1))
-			abcdf[4] = (abcdf[1] & abcdf[3]) | (abcdf[2] & ~abcdf[3]) ;
-		else if (abcdf[6] < 48 && ((abcdf[5] = (3 * abcdf[6] + 5) % 16) || 1))
-			abcdf[4] = abcdf[1] ^ abcdf[2] ^ abcdf[3];
-		else if ((abcdf[5] = (7 * abcdf[6]) % 16) || 1)
-			abcdf[4] = (abcdf[2] ^ (abcdf[1] | ~abcdf[3]));
-		abcdf[4] = abcdf[4] + abcdf[0] + k[abcdf[6]] + msg[abcdf[5]];
-		abcdf[0] = abcdf[3];
-		abcdf[3] = abcdf[2];
-		abcdf[2] = abcdf[1];
-		abcdf[1] += (abcdf[4] << s[abcdf[6]]) | (abcdf[4] >> (32 - s[abcdf[6]]));
+		if (abcd[6] < 16 && ((abcd[5] = abcd[6]) || 1))
+			abcd[4] = (abcd[1] & abcd[2]) | (~abcd[1] & abcd[3]);
+		else if (abcd[6] < 32 && ((abcd[5] = (5 * abcd[6] + 1) % 16) || 1))
+			abcd[4] = (abcd[1] & abcd[3]) | (abcd[2] & ~abcd[3]);
+		else if (abcd[6] < 48 && ((abcd[5] = (3 * abcd[6] + 5) % 16) || 1))
+			abcd[4] = abcd[1] ^ abcd[2] ^ abcd[3];
+		else if ((abcd[5] = (7 * abcd[6]) % 16) || 1)
+			abcd[4] = (abcd[2] ^ (abcd[1] | ~abcd[3]));
+		abcd[4] = abcd[4] + abcd[0] + k[abcd[6]] + msg[abcd[5]];
+		abcd[0] = abcd[3];
+		abcd[3] = abcd[2];
+		abcd[2] = abcd[1];
+		abcd[1] += (abcd[4] << s[abcd[6]]) | (abcd[4] >> (32 - s[abcd[6]]));
 	}
-	sum->md5[0] = (sum->md5[0] + abcdf[0]);
-	sum->md5[1] = (sum->md5[1] + abcdf[1]);
-	sum->md5[2] = (sum->md5[2] + abcdf[2]);
-	sum->md5[3] = (sum->md5[3] + abcdf[3]);
+	sum->md5[0] = (sum->md5[0] + abcd[0]);
+	sum->md5[1] = (sum->md5[1] + abcd[1]);
+	sum->md5[2] = (sum->md5[2] + abcd[2]);
+	sum->md5[3] = (sum->md5[3] + abcd[3]);
 }
- 

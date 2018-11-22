@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 18:13:20 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 21:12:58 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define NULL_HASH 0x0
 # define OPT_MD5 0x1
 # define OPT_SHA256 0x2
-# define GET_HASH (OPT_SHA256 | OPT_MD5)
+# define GET_HASH 0xF
 
 # define NULL_TYPE 0x0
 # define FILE_TYPE 0x1
@@ -83,10 +83,14 @@ int				process_file(char *file_name, uint32_t opts);
 int				process_string(char *str, uint32_t opts);
 
 void			init_chksum(t_chksum *sum, uint32_t opts);
+void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r);
+
 
 
 void 			algo(void *buf, t_chksum *sum, uint32_t opts);
 void			print_chksum(t_chksum *sum, char *file_name, uint32_t opts);
+
+void			format_last_string(t_read *r, uint32_t opts, t_chksum *sum);
 
 void			md5(const uint32_t *msg, t_chksum *r);
 
