@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/22 08:15:42 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 23:47:13 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-t_arg		*init_arg(void)
+t_arg			*init_arg(void)
 {
 	t_arg *arg;
 
@@ -25,18 +25,17 @@ t_arg		*init_arg(void)
 	return (arg);
 }
 
-t_arg		*get_file_name(t_arg *arg, char *name_file, uint32_t *opts)
+static t_arg	*get_file_name(t_arg *arg, char *name_file, uint32_t *opts)
 {
 	arg->type = FILE_TYPE;
 	if (!(arg->str = ft_strdup(name_file)))
 		return (NULL);
 	*opts |= OPT_FILE;
 	arg->next = init_arg();
-
 	return (arg->next);
 }
 
-uint32_t			set_hash_type(char *str, uint32_t *opts)
+static uint32_t	set_hash_type(char *str, uint32_t *opts)
 {
 	if (!ft_strcmp(str, "MD5") || !ft_strcmp(str, "md5"))
 		*opts |= OPT_MD5;
@@ -44,16 +43,16 @@ uint32_t			set_hash_type(char *str, uint32_t *opts)
 		*opts |= OPT_SHA256;
 	else
 	{
-		if (str[0] == '-'  && ft_strchr(str, 'h'))
+		if (str[0] == '-' && ft_strchr(str, 'h'))
 			*opts |= OPT_H;
 		else
-			ft_printf("ft_ssl: '%s' is an invalid command.\n", str);
+			ft_fdprintf(2, "ft_ssl: '%s' is an invalid command.\n", str);
 		*opts |= NULL_HASH;
 	}
 	return (*opts);
 }
 
-t_arg		*get_args(int ac, char **av, uint32_t *opts)
+t_arg			*get_args(int ac, char **av, uint32_t *opts)
 {
 	int		i;
 	t_arg	*arg;

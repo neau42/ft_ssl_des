@@ -6,14 +6,14 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 22:50:09 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 23:53:57 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include "libft.h"
@@ -41,9 +41,6 @@
 
 # define SIZE_BUF 0x40
 # define CHKSUM_SIZE 0x10
-
-
-
 
 typedef struct	s_arg
 {
@@ -78,16 +75,15 @@ void			short_usage(char *str);
 void			long_usage(char *str);
 void			rm_arg(t_arg *arg);
 
-int				process_null(char *str, uint32_t opts);
+int				process_stdin(char *str, uint32_t opts);
 int				process_file(char *file_name, uint32_t opts);
 int				process_string(char *str, uint32_t opts);
 
 void			init_chksum(t_chksum *sum, uint32_t opts);
-void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r);
+void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
+										uint8_t *buf);
 
-
-
-void 			algo(void *buf, t_chksum *sum, uint32_t opts);
+void			algo(void *buf, t_chksum *sum, uint32_t opts);
 void			print_chksum(t_chksum *sum, char *file_name, uint32_t opts);
 
 void			format_last_string(t_read *r, uint32_t opts, t_chksum *sum);
@@ -98,8 +94,6 @@ void			md5(const uint32_t *msg, t_chksum *r);
 ** utils?
 */
 
-uint64_t		leftrotate64(uint64_t x, int offset);
-uint32_t		leftrotate32(uint32_t x, int offset);
 uint64_t		endian_swap64(uint64_t x);
 uint32_t		endian_swap32(uint32_t x);
 void			print_memory_hex(void *data, size_t blk_size);

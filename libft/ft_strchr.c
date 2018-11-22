@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:17:45 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 13:06:13 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 23:57:00 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,3 @@ char				*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	return (NULL);
 }
-

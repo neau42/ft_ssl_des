@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_opts.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 08:26:04 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 23:43:21 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_arg			*get_opts(char *str, char *str_next, uint32_t *opts,
 		else if (*str)
 		{
 			(*opts) |= OPT_ERR;
-			ft_printf("invalid option -- \"%s\"\n", str);
+			ft_fdprintf(2, "invalid option -- \"%s\"\n", str);
 		}
 		if (!arg || *opts & OPT_ERR)
 			break ;

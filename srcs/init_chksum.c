@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 20:28:14 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 23:30:05 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	init_chksum(t_chksum *sum, uint32_t opts)
 	}
 }
 
-void	init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r)
+void	init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
+														uint8_t *buf)
 {
 	init_chksum(sum, opts);
 	if (opts & OPT_MD5)
@@ -41,4 +42,6 @@ void	init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r)
 	r->len = 0;
 	r->size = 0;
 	r->file_name = NULL;
+	r->buf = buf;
+	ft_bzero(r->buf, r->bsz);
 }

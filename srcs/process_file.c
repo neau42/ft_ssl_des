@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 21:21:56 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 23:50:26 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ void		format_last_string(t_read *r, uint32_t opts, t_chksum *sum)
 	*(uint64_t *)&r->buf[r->bsz - sizeof(uint64_t)] = (r->size);
 }
 
-static void	read_file(int fd, t_chksum	*sum, t_read *r, uint32_t opts)
+static void	read_file(int fd, t_chksum *sum, t_read *r, uint32_t opts)
 {
-	ft_bzero(r->buf, r->bsz);
 	while ((r->len = read(fd, r->buf, r->bsz)) == (int)(r->bsz))
 	{
 		algo((uint32_t *)r->buf, sum, opts);
@@ -48,32 +47,32 @@ static void	read_file(int fd, t_chksum	*sum, t_read *r, uint32_t opts)
 	format_last_string(r, opts, sum);
 }
 
-static int open_file(char *file_name)
+static int	open_file(char *file_name)
 {
 	struct stat	buf;
 	int			fd;
 
 	if ((fd = open(file_name, O_RDONLY)) < 0)
-		ft_printf("%s: No such file or directory\n", file_name);
+		ft_fdprintf(2, "%s: No such file or directory\n", file_name);
 	else if (fstat(fd, &buf) != 0)
-		ft_printf("%s: 1222 No such file or directory\n", file_name);
+		ft_fdprintf(2, "%s: 1222 No such file or directory\n", file_name);
 	else if (S_ISDIR(buf.st_mode))
-		ft_printf("ft_md5 %s: is a directory\n", file_name);
+		ft_fdprintf(2, "ft_md5 %s: is a directory\n", file_name);
 	else
 		return (fd);
 	if (fd > -1)
-		close (fd);
+		close(fd);
 	return (-1);
 }
 
-int		process_file(char *file_name, uint32_t opts)
+int			process_file(char *file_name, uint32_t opts)
 {
 	t_read		r;
 	int			fd;
 	uint8_t		buf[SIZE_BUF];
 	t_chksum	sum;
 
-	init_chksum_n_read(&sum, opts, &r);
+	init_chksum_n_read(&sum, opts, &r, (uint8_t *)&buf);
 	r.buf = buf;
 	r.file_name = file_name;
 	if ((fd = open_file(file_name)) < 0)

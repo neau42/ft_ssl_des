@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_string.c                                :+:      :+:    :+:   */
+/*   process_string.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 06:18:57 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 23:52:15 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-char *format_final_name(char *str, uint64_t size)
+char	*format_final_name(char *str, uint64_t size)
 {
 	char	*final_name;
 
@@ -31,9 +31,7 @@ int		process_string(char *str, uint32_t opts)
 	t_chksum	sum;
 	char		*final_name;
 
-	init_chksum_n_read(&sum, opts, &r);
-	r.buf = buf;
-	ft_bzero(r.buf, r.bsz);
+	init_chksum_n_read(&sum, opts, &r, (uint8_t *)buf);
 	while ((r.len = ft_strlen(&str[r.size])) > SIZE_BUF)
 	{
 		ft_memcpy(r.buf, &str[r.size], SIZE_BUF);

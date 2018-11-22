@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usage.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/22 16:05:11 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 23:42:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void		short_usage(char *str)
 {
-	ft_printf("usage:\n%s <md5|sha256> [-hpqrs] file ...\n", str);
+	ft_fdprintf(2, "usage:\n%s <md5|sha256> [-hpqrs] file ...\n", str);
 }
 
 void		long_usage(char *str)
 {
 	short_usage(str);
-	ft_printf("Message Digest commands:"
+	ft_fdprintf(2, "Message Digest commands:"
 	"\n md5: to use the md5 message digest algorithm."
 	"\n sha256: to use the sha256 message digest algorithm."
 	"\n-h: help."

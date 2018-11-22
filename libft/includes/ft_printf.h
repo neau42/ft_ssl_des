@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/27 16:09:45 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/20 13:49:43 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 23:58:58 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@
 # define F_L_PLUS  0x04
 # define F_L_MOINS 0x08
 # define F_L_SPACE 0x10
-
 
 typedef struct	s_flags
 {
