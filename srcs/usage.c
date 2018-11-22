@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/22 06:12:01 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 16:05:11 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void		short_usage(char *str)
 void		long_usage(char *str)
 {
 	short_usage(str);
-	ft_printf("\nMessage Digest commands:"
-	"\n md5: to use the md5 message digest md5rithm"
-	"\n sha256: to use the sha256 message digest md5rithm"
+	ft_printf("Message Digest commands:"
+	"\n md5: to use the md5 message digest algorithm."
+	"\n sha256: to use the sha256 message digest algorithm."
 	"\n-h: help."
 	"\n-p: echo STDIN to STDOUT and append the checksum to STDOUT."
 	"\n-q: quiet mode."

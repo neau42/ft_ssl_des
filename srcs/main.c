@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 02:24:01 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 16:23:07 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	print_arg(t_arg *arg, uint32_t opts)
 		arg = arg->next;
 	}
 	ft_printf("opts:   \n%0.32b\n", opts);
-	if (opts & MD5_HASH)
+	if (opts & OPT_MD5)
 		ft_printf("HASH MD5 ");
-	else if (opts & SHA256_HASH)
+	else if (opts & OPT_SHA256)
 		ft_printf("HASH SHA256 ");
 	else if (opts & NULL_HASH)
 		ft_printf("HASH NULL ");
@@ -68,14 +68,13 @@ int		main(int ac, char **av)
 		return 1;
 	}
 	arg = get_args(ac, av, &opts);
-	if (opts & (OPT_ERR | OPT_H | NULL_HASH))
+	if (opts & (OPT_ERR | OPT_H | NULL_HASH) || (opts & GET_HASH) == 0)
 	{
 		(opts & OPT_H) ? long_usage(av[0]) : short_usage(av[0]);
 		rm_arg(arg);
 		return (1);
 	}
 	parse_args(arg, opts);
-	// print_arg(arg, opts);
 	rm_arg(arg);
 	return (0);
 }

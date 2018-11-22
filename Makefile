@@ -6,19 +6,21 @@
 #    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/22 05:07:00 by no               ###   ########.fr        #
+#    Updated: 2018/11/22 18:13:07 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ssl
 
 SRC =	srcs/md5.c\
+		srcs/algo.c\
 		srcs/main.c\
 		srcs/utils.c\
 		srcs/usage.c\
 		srcs/rm_data.c\
 		srcs/get_args.c\
 		srcs/get_opts.c\
+		srcs/init_chksum.c\
 		srcs/process_file.c\
 		srcs/process_string.c
 

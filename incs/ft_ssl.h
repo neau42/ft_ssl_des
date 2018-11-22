@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 06:29:34 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 18:13:20 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,21 @@
 # include "libft.h"
 # include "ft_printf.h"
 
-# define OPT_ERR 0x1
-# define OPT_H 0x2
-# define OPT_P 0x4
-# define OPT_Q 0x8
-# define OPT_R 0x10
-# define OPT_S 0x20
-# define OPT_FILE 0x40
+# define MD5 0x0
+# define SHA356 0x1
+
+# define OPT_ERR  0x10000000
+# define OPT_H    0x20000000
+# define OPT_P    0x40000000
+# define OPT_Q    0x80000000
+# define OPT_R    0x1000000
+# define OPT_S    0x2000000
+# define OPT_FILE 0x4000000
+
+# define NULL_HASH 0x0
+# define OPT_MD5 0x1
+# define OPT_SHA256 0x2
+# define GET_HASH (OPT_SHA256 | OPT_MD5)
 
 # define NULL_TYPE 0x0
 # define FILE_TYPE 0x1
@@ -34,9 +42,8 @@
 # define SIZE_BUF 0x40
 # define CHKSUM_SIZE 0x10
 
-# define MD5_HASH 0x10000000
-# define SHA256_HASH 0x20000000
-# define NULL_HASH 0x40000000
+
+
 
 typedef struct	s_arg
 {
@@ -52,6 +59,7 @@ typedef	struct	s_read
 	uint64_t	size;
 	int			len;
 	uint8_t		bsz;
+	char		*file_name;
 
 }				t_read;
 
@@ -74,7 +82,13 @@ int				process_null(char *str, uint32_t opts);
 int				process_file(char *file_name, uint32_t opts);
 int				process_string(char *str, uint32_t opts);
 
-void			md5(uint32_t *msg, t_chksum *r);
+void			init_chksum(t_chksum *sum, uint32_t opts);
+
+
+void 			algo(void *buf, t_chksum *sum, uint32_t opts);
+void			print_chksum(t_chksum *sum, char *file_name, uint32_t opts);
+
+void			md5(const uint32_t *msg, t_chksum *r);
 
 /*
 ** utils?

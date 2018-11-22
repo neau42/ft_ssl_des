@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/20 05:24:31 by no               ###   ########.fr       */
+/*   Updated: 2018/11/22 08:15:42 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ t_arg		*get_file_name(t_arg *arg, char *name_file, uint32_t *opts)
 uint32_t			set_hash_type(char *str, uint32_t *opts)
 {
 	if (!ft_strcmp(str, "MD5") || !ft_strcmp(str, "md5"))
-		*opts |= MD5_HASH;
+		*opts |= OPT_MD5;
 	else if (!ft_strcmp(str, "SHA256") || !ft_strcmp(str, "sha256"))
-		*opts |= SHA256_HASH;
+		*opts |= OPT_SHA256;
 	else
 	{
 		if (str[0] == '-'  && ft_strchr(str, 'h'))
 			*opts |= OPT_H;
 		else
-			ft_printf("bad type: '%s'\n", str);
+			ft_printf("ft_ssl: '%s' is an invalid command.\n", str);
 		*opts |= NULL_HASH;
 	}
 	return (*opts);
