@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 21:12:58 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 22:50:09 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef	struct	s_read
 typedef union	u_chksum
 {
 	uint32_t md5[4];
-	uint32_t sha256[5];
+	uint32_t sha256[8];
 
 }				t_chksum;
 

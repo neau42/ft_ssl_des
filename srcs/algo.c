@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 22:13:30 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 22:55:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,18 @@ void		algo(void *buf, t_chksum *sum, uint32_t opts)
 
 void		print_chksum(t_chksum *sum, char *file_name, uint32_t opts)
 {
-	if (file_name)
-		ft_printf("%s(%s)= %08x%08x%08x%08x\n",
-		((opts & GET_HASH) == OPT_MD5)? "MD5" : "SHA256",
-		file_name, endian_swap32(sum->md5[0]), endian_swap32(sum->md5[1]), endian_swap32(sum->md5[2]), endian_swap32(sum->md5[3]));
-	else
+	if (opts & OPT_MD5)
+	{
+		if (file_name)
+			ft_printf("%s(%s)= ", "MD5", file_name);
+		ft_printf("%08x%08x%08x%08x\n", endian_swap32(sum->md5[0]),
+			endian_swap32(sum->md5[1]), endian_swap32(sum->md5[2]),
+			endian_swap32(sum->md5[3]));
+	}
+	else if (opts & OPT_SHA256)
+	{
+		if (file_name)
+			ft_printf("%s(%s)= ", "SHA256", file_name);
 		ft_printf("%08x%08x%08x%08x\n", endian_swap32(sum->md5[0]), endian_swap32(sum->md5[1]), endian_swap32(sum->md5[2]), endian_swap32(sum->md5[3]));
+	}
 }

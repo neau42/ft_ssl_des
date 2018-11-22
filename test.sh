@@ -12,5 +12,5 @@ for e in `ls f_*` ; do
 # echo -n "`cat $e`" | openssl md5 
 done
 
-#rm f_*
+rm f_*
 
