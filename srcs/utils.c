@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 01:27:15 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 05:08:11 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void				print_memory_hex(void *data, size_t blk_size)
 		ft_printf("\n|\t");
 		while (size < blk_size)
 		{
-			ft_printf("%08b(%02x) ", str[size], str[size]);
+			ft_printf("%  4p:%08b ", str[size], str[size]);
 			if (++size % 4 == 0)
 			{
 				while (size2 < size)

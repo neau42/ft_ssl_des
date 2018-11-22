@@ -3,38 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   md5.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 15:03:17 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 02:24:28 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 06:49:37 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-// uint32_t k1[64];
-// while (++i < 64)
-//	k1[i] = floor(fabs(sin(i + 1)) * 0x100000000);
-
-// int32_t ft_f(int32_t b, int32_t c, int32_t d)
-// {
-// 	return ((b & c) | (~b & d));
-// }
-
-// int32_t ft_g(int32_t b, int32_t c, int32_t d)
-// {
-// 	return ((b & d) | (c & ~d));
-// }
-
-// int32_t ft_h(int32_t b, int32_t c, int32_t d)
-// {
-// 	return (b ^ c ^ d);
-// }
-
-// int32_t ft_i(int32_t b, int32_t c, int32_t d)
-// {
-// 	return (c ^ (b | ~d));
-// }
 
 static uint32_t		*get_constant_k(void)
 {
@@ -54,62 +30,53 @@ static uint32_t		*get_constant_k(void)
 	return (k);
 }
 
-static uint32_t		*get_constant_s(void)
+static void		    init_vars(uint32_t **k, uint32_t **s, uint32_t *abcdfgi,
+					t_chksum *r)
 {
-	static uint32_t s[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
+	static uint32_t t[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
 		7, 12, 17, 22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9,
 		14, 20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11,
 		16, 23, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
 
-	return (s);
-}
-
-void init_vars(uint32_t **k, uint32_t **s, uint32_t *abcdfgi, t_result *r)
-{
-	*k = get_constant_k();
-	*s = get_constant_s();
+	if (!*s)
+	{
+		*k = get_constant_k();
+		*s = t;
+	}
 	abcdfgi[0] = r->md5[0];
 	abcdfgi[1] = r->md5[1];
 	abcdfgi[2] = r->md5[2];
 	abcdfgi[3] = r->md5[3];
-	abcdfgi[6] = 0;
+	abcdfgi[6] = -1;
 }
 
-void	algo(uint32_t *msg, uint32_t opts, t_result *r)
+void				md5(uint32_t *msg, t_chksum *sum)
 {
-	uint32_t	*s;
-	uint32_t	*k;
-	uint32_t	vars[7];
+	static uint32_t	*s = NULL;
+	static uint32_t	*k = NULL;
+	uint32_t		abcdf[7];
 
-	init_vars(&k, &s, vars, r);
-	(void)opts;
+	init_vars(&k, &s, abcdf, sum);
 	print_memory_hex(msg, SIZE_BUF);
-	while (vars[6] < 64)
+	while (++abcdf[6] < 64)
 	{
-		if (vars[6] <= 15 && ((vars[5] = vars[6]) || 1))
-			vars[4] = (vars[1] & vars[2]) | (~vars[1] & vars[3]);
-		else if (vars[6] <= 31 && ((vars[5] = (5 * vars[6] + 1) % 16) || 1))
-			vars[4] = (vars[1] & vars[3]) | (vars[2] & ~vars[3]) ;
-		else if (vars[6] <= 47 && ((vars[5] = (3 * vars[6] + 5) % 16) || 1))
-			vars[4] = vars[1] ^ vars[2] ^ vars[3];
-		else if ((vars[5] = (7 * vars[6]) % 16) || 1)
-			vars[4] = (vars[2] ^ (vars[1] | ~vars[3])) ;
-		vars[4] = vars[4] + vars[0] + k[vars[6]] + msg[vars[5]];
-		vars[0] = vars[3];
-		vars[3] = vars[2];
-		vars[2] = vars[1];
-		vars[1] += (vars[4] << s[vars[6]]) | (vars[4] >> (32 - s[vars[6]]));
-		vars[6]++;
+		if (abcdf[6] <= 15 && ((abcdf[5] = abcdf[6]) || 1))
+			abcdf[4] = (abcdf[1] & abcdf[2]) | (~abcdf[1] & abcdf[3]);
+		else if (abcdf[6] <= 31 && ((abcdf[5] = (5 * abcdf[6] + 1) % 16) || 1))
+			abcdf[4] = (abcdf[1] & abcdf[3]) | (abcdf[2] & ~abcdf[3]) ;
+		else if (abcdf[6] <= 47 && ((abcdf[5] = (3 * abcdf[6] + 5) % 16) || 1))
+			abcdf[4] = abcdf[1] ^ abcdf[2] ^ abcdf[3];
+		else if ((abcdf[5] = (7 * abcdf[6]) % 16) || 1)
+			abcdf[4] = (abcdf[2] ^ (abcdf[1] | ~abcdf[3]));
+		abcdf[4] = abcdf[4] + abcdf[0] + k[abcdf[6]] + msg[abcdf[5]];
+		abcdf[0] = abcdf[3];
+		abcdf[3] = abcdf[2];
+		abcdf[2] = abcdf[1];
+		abcdf[1] += (abcdf[4] << s[abcdf[6]]) | (abcdf[4] >> (32 - s[abcdf[6]]));
 	}
-	r->md5[0] += vars[0];
-	r->md5[1] += vars[1];
-	r->md5[2] += vars[2];
-	r->md5[3] += vars[3];
-	r->md5[0] = endian_swap32(r->md5[0]);
-	r->md5[1] = endian_swap32(r->md5[1]);
-	r->md5[2] = endian_swap32(r->md5[2]);
-	r->md5[3] = endian_swap32(r->md5[3]);
-	ft_printf("MD5(vide)= %x%x%x%x\n", r->md5[0], r->md5[1], r->md5[2], r->md5[3]);
-	ft_printf("~~~~~~~~~~~~~~~~~\n");
+	sum->md5[0] = endian_swap32(sum->md5[0] + abcdf[0]);
+	sum->md5[1] = endian_swap32(sum->md5[1] + abcdf[1]);
+	sum->md5[2] = endian_swap32(sum->md5[2] + abcdf[2]);
+	sum->md5[3] = endian_swap32(sum->md5[3] + abcdf[3]);
 }
  

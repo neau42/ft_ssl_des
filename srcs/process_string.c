@@ -15,7 +15,7 @@
 int		process_string(char *str, uint32_t opts)
 {
 	ft_printf("process_string\n");
-	ft_printf("\tEXEC ALGO on '%s'\n", str);
+	ft_printf("\tEXEC md5 on '%s'\n", str);
     (void)str, (void)opts;
 
 	return (0);

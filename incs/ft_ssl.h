@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 01:21:05 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 06:29:34 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
+#include <sys/stat.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include "libft.h"
@@ -47,18 +48,19 @@ typedef struct	s_arg
 
 typedef	struct	s_read
 {
-	int			len;
+	uint8_t		*buf;
 	uint64_t	size;
-	uint8_t		buf[SIZE_BUF];
+	int			len;
+	uint8_t		bsz;
 
 }				t_read;
 
-typedef union	u_result
+typedef union	u_chksum
 {
 	uint32_t md5[4];
 	uint32_t sha256[5];
 
-}				t_result;
+}				t_chksum;
 
 t_arg			*get_args(int ac, char **av, uint32_t *opts);
 t_arg			*get_opts(char *str, char *str_next, uint32_t *opts,
@@ -72,18 +74,16 @@ int				process_null(char *str, uint32_t opts);
 int				process_file(char *file_name, uint32_t opts);
 int				process_string(char *str, uint32_t opts);
 
+void			md5(uint32_t *msg, t_chksum *r);
+
 /*
 ** utils?
 */
 
 uint64_t		leftrotate64(uint64_t x, int offset);
 uint32_t		leftrotate32(uint32_t x, int offset);
-
 uint64_t		endian_swap64(uint64_t x);
 uint32_t		endian_swap32(uint32_t x);
-
 void			print_memory_hex(void *data, size_t blk_size);
-
-void			algo(uint32_t *msg, uint32_t opts, t_result *r);
 
 #endif
