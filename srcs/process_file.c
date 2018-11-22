@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 01:45:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 02:23:00 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,19 @@ void		format_last_string(t_read *r, uint32_t opts, t_result *res)
 		}
 	}
 	// *(uint64_t *)((r->buf) + SIZE_BUF - sizeof(uint64_t)) = (r->size); //endian_swap64(size) ??
-	*(uint64_t *)&r->buf[SIZE_BUF - sizeof(uint64_t)] = r->size;
-	uint64_t test;
-	test = ((*(uint64_t *)((r->buf) + SIZE_BUF - sizeof(uint64_t))));
-	ft_printf("\033[94m\nsize:\t\t{%064b} = %d\033[0m\n", r->size, r->size);
-	ft_printf("\033[94mtest:\t\t{%064b} = %d\033[0m\n",test,test);
-	algo((uint32_t *)r->buf, opts, res);
+	
+	
+	int i = 0;
+	while (i < 64)
+	{
+		*(uint64_t *)&r->buf[SIZE_BUF - sizeof(uint64_t)] = 0x1ULL << i;
+		uint64_t test;
+		test = ((*(uint64_t *)((r->buf) + SIZE_BUF - sizeof(uint64_t))));
+		// ft_printf("\033[94m\nsize:\t\t{%064b} = %d\033[0m\n", r->size, r->size);
+		ft_printf("\033[94mtest:\t\t{%064llb} = %lld\033[0m\n",test, test);
+		algo((uint32_t *)r->buf, opts, res);
+		i++;
+	}
 }
 
 void init_result(t_result *r, uint32_t opts)

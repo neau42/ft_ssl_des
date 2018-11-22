@@ -6,16 +6,16 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/21 18:56:31 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/22 02:24:01 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void print_arg(t_arg *arg, uint32_t opts)
+void	print_arg(t_arg *arg, uint32_t opts)
 {
-	t_arg *first;
-	int i = 0;
+	t_arg	*first;
+	int 	i = 0;
 
 	first = arg;
 	ft_printf("arg:\n");
@@ -46,8 +46,8 @@ void print_arg(t_arg *arg, uint32_t opts)
 void	parse_args(t_arg *arg, uint32_t opts)
 {
 	t_arg *first;
-	static int  (*fcts[3])(char *, uint32_t ) =
-        { process_null, process_file, process_string};
+	static int (*fcts[3])(char *, uint32_t ) = {
+		process_null, process_file, process_string};
 
 	first = arg;
 	while (arg)
