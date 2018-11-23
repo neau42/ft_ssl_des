@@ -6,7 +6,7 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/22 20:25:52 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/11/23 03:18:14 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SRC =	srcs/md5.c\
 		srcs/main.c\
 		srcs/utils.c\
 		srcs/usage.c\
+		srcs/sha256.c\
 		srcs/rm_data.c\
 		srcs/get_args.c\
 		srcs/get_opts.c\
