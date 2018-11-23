@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/23 22:34:39 by no               ###   ########.fr       */
+/*   Updated: 2018/11/24 00:13:10 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		print_chksum(t_chksum *sum, char *file_name, uint32_t opts)
 		if (file_name && (!(opts & (OPT_Q | OPT_R))))
 			ft_printf("%s(%s)= ", "MD5", file_name);
 			print_md5sum(sum->md5);
-		if (opts & OPT_R)
+		if (opts & (OPT_R) && !(opts & OPT_Q) && file_name)
 			ft_printf(" %s", file_name);
 		ft_printf("\n");
 	}
@@ -63,7 +63,7 @@ void		print_chksum(t_chksum *sum, char *file_name, uint32_t opts)
 		if (file_name && (!(opts & (OPT_Q | OPT_R))))
 			ft_printf("%s(%s)= ", "SHA256", file_name);
 		print_sha256sum(sum->sha256);
-		if (opts & OPT_R)
+		if (opts & (OPT_R) && !(opts & OPT_Q) && file_name)
 			ft_printf(" %s", file_name);
 		ft_printf("\n");
 	}
