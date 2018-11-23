@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   process_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 23:50:26 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/23 22:30:37 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
+
+void			set_size_in_chunk(t_read *r, uint32_t opts)
+{
+
+	if (opts & OPT_SHA256)
+		*(uint64_t *)&r->buf[r->bsz - sizeof(uint64_t)] = endian_swap64(r->size);
+	if (opts & OPT_MD5)
+		*(uint64_t *)&r->buf[r->bsz - sizeof(uint64_t)] = r->size;
+
+
+}
 
 void		format_last_string(t_read *r, uint32_t opts, t_chksum *sum)
 {
@@ -32,7 +43,7 @@ void		format_last_string(t_read *r, uint32_t opts, t_chksum *sum)
 		r->len = 0;
 		r->buf[0] = (1 << 7);
 	}
-	*(uint64_t *)&r->buf[r->bsz - sizeof(uint64_t)] = (r->size);
+	set_size_in_chunk(r, opts);
 }
 
 static void	read_file(int fd, t_chksum *sum, t_read *r, uint32_t opts)
@@ -54,7 +65,7 @@ static int	open_file(char *file_name)
 
 	if ((fd = open(file_name, O_RDONLY)) < 0)
 		ft_fdprintf(2, "%s: No such file or directory\n", file_name);
-	else if (fstat(fd, &buf) != 0)
+	else if (fstat(fd, &buf))
 		ft_fdprintf(2, "%s: 1222 No such file or directory\n", file_name);
 	else if (S_ISDIR(buf.st_mode))
 		ft_fdprintf(2, "ft_md5 %s: is a directory\n", file_name);

@@ -3,51 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/25 16:24:10 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 23:56:11 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/23 19:01:29 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	memsetpart64(uint64_t **src, uint64_t **dst, uint64_t *n)
+void		*ft_fast_memcpy(void *dst, const void *src, size_t n)
 {
-	(*n) -= sizeof(uint64_t);
-	*((*src)++) = *((*dst)++);
-}
+	size_t			*d;
+	const size_t	*s;
+	size_t			i;
+	size_t			len;
 
-static void	memsetpart32(uint32_t **src, uint32_t **dst, uint32_t *n)
-{
-	(*n) -= sizeof(uint32_t);
-	*((*src)++) = *((*dst)++);
-}
-
-static void	memsetpart16(uint16_t **src, uint16_t **dst, uint16_t *n)
-{
-	(*n) -= sizeof(uint16_t);
-	*((*src)++) = *((*dst)++);
-}
-
-static void	memsetpart8(uint8_t **src, uint8_t **dst, uint32_t *n)
-{
-	(*n)--;
-	*((*src)++) = *((*dst)++);
+	d = dst;
+	s = src;
+	i = 0;
+	len = n / sizeof(size_t);
+	while (i < len)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dst);
 }
 
 void		*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	void	*ret;
+	char		*d;
+	const char	*s;
+	size_t		i;
 
-	ret = dst;
-	while (n >= sizeof(uint64_t))
-		memsetpart64((uint64_t **)&dst, (uint64_t **)&src, (uint64_t *)&n);
-	while (n >= sizeof(uint32_t))
-		memsetpart32((uint32_t **)&dst, (uint32_t **)&src, (uint32_t *)&n);
-	while (n >= sizeof(uint16_t))
-		memsetpart16((uint16_t **)&dst, (uint16_t **)&src, (uint16_t *)&n);
-	while (n >= sizeof(uint8_t))
-		memsetpart8((uint8_t **)&dst, (uint8_t **)&src, (uint32_t *)&n);
-	return (ret);
+	if ((size_t)dst % sizeof(size_t) == 0 &&
+			(size_t)src % sizeof(size_t) == 0 && n % sizeof(size_t) == 0)
+		return (ft_fast_memcpy(dst, src, n));
+	i = 0;
+	d = dst;
+	s = src;
+	while (i < n)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dst);
 }
