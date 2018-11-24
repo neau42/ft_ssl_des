@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/23 03:51:05 by no               ###   ########.fr       */
+/*   Updated: 2018/11/24 06:02:41 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@
 # define NULL_HASH 0x0
 # define OPT_MD5 0x1
 # define OPT_SHA256 0x2
-# define GET_HASH 0xF
+# define OPT_HASHTEST 0x3
+# define GET_HASH 0x7
 
 # define NULL_TYPE 0x0
 # define FILE_TYPE 0x1
@@ -86,11 +87,10 @@ void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
 void			algo(void *buf, t_chksum *sum, uint32_t opts);
 void			print_chksum(t_chksum *sum, char *file_name, uint32_t opts);
 
-void			format_last_string(t_read *r, uint32_t opts, t_chksum *sum);
+void			format_last_chunk(t_read *r, uint32_t opts, t_chksum *sum);
 
 void			md5(const uint32_t *msg, t_chksum *r);
 void			sha256(const uint32_t *msg, t_chksum *sum);
-
 
 /*
 ** utils?
@@ -98,6 +98,7 @@ void			sha256(const uint32_t *msg, t_chksum *sum);
 
 uint64_t		endian_swap64(uint64_t x);
 uint32_t		endian_swap32(uint32_t x);
+uint32_t		r_rot(uint32_t n, unsigned int c);
 void			print_memory_hex(void *data, size_t blk_size);
 
 #endif

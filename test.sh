@@ -1,47 +1,87 @@
 #!/bin/zsh
 
+FILE_FT_MD5="ft_sslMD5.out"
+FILE_OP_MD5="opensslMD5.out"
+FILE_FT_SHA="ft_sslSHA.out"
+FILE_OP_SHA="opensslSHA.out"
+TEST_DIR="test/"
+
 if [ $# -ne 1 ] ; then
   echo "usage: $0 nb_files_to_generate"
   exit 1
 fi
 
-echo -n "generate $1 random files ."
+echo -n "generate $1 random files\n"
 for a in {1..$1} ; do
-  cat /dev/urandom | base64 -b $(( ( RANDOM % 1042 ) + $a )) | head -n $(( ( RANDOM % 12 ) + 1)) > f_$a
+  cat /dev/urandom | base64 -b $(( ( RANDOM % $a ) + 1 )) | head -n $(( ( RANDOM % ( $a / 3 + 1 ) ) + 1 )) > ${TEST_DIR}f_$a
   if [ $(( $a % 10 )) -eq 0 ]; then
     echo -n "."
   fi
 done
 
 echo "\n" 
-echo "test MD5:" | tee ft_sllMD5.out | tee opensslMD5.out
+echo "\n - - - - - - - - TEST FILE - - - - - - - - -"
+echo "test MD5:" | tee ${TEST_DIR}$FILE_FT_MD5 | tee ${TEST_DIR}$FILE_OP_MD5
 a=0
 
-for e in `ls f_*` ; do
-  echo -n "`cat $e`" | ./ft_ssl md5 -q | cut -d' ' -f2 >> ft_sllMD5.out
-  echo -n "`cat $e`" | openssl md5 | cut -d' ' -f2 >> opensslMD5.out
-  ((a++))
+for e in `ls ${TEST_DIR}f_*` ; do
    if [ $(( $a % 10 )) -eq 0 ]; then
     echo -n "."
     fi
-done
-echo "\ndiff:" 
-diff ft_sllMD5.out opensslMD5.out
-
-
-echo "test SHA256:" | tee ft_sllSHA.out | tee opensslSHA.out
-a=0
-for e in `ls f_*` ; do
-  echo -n "`cat $e`" | ./ft_ssl sha256 -q | cut -d' ' -f2 >> ft_sllSHA.out
-  echo -n "`cat $e`" | openssl sha256 | cut -d' ' -f2 >> opensslSHA.out
   ((a++))
+  echo "$e:" >>  ${TEST_DIR}$FILE_FT_MD5  >> ${TEST_DIR}$FILE_OP_MD5;  
+  ./ft_ssl md5 -q $e >> ${TEST_DIR}$FILE_FT_MD5
+  openssl md5 $e | cut -d' ' -f2 >> ${TEST_DIR}$FILE_OP_MD5
+done
+echo "\n" 
+diff ${TEST_DIR}$FILE_FT_MD5 ${TEST_DIR}$FILE_OP_MD5
+
+
+echo "test SHA256:" | tee ${TEST_DIR}$FILE_FT_SHA | tee ${TEST_DIR}$FILE_OP_SHA
+a=0
+for e in `ls ${TEST_DIR}f_*` ; do
   if [ $(( $a % 10 )) -eq 0 ]; then
     echo -n "."
   fi
+  ((a++))
+  echo "$e:" >>  ${TEST_DIR}$FILE_FT_SHA  >> ${TEST_DIR}$FILE_OP_SHA;
+  ./ft_ssl sha256 -q $e >> ${TEST_DIR}$FILE_FT_SHA
+  openssl sha256 $e | cut -d' ' -f2 >> ${TEST_DIR}$FILE_OP_SHA
 done
-echo "\ndiff:" 
-diff  ft_sllSHA.out opensslSHA.out
-echo "" 
+echo "\n" 
+diff ${TEST_DIR}$FILE_FT_SHA ${TEST_DIR}$FILE_OP_SHA
+echo "\n - - - - - - - - TEST STRING - - - - - - - -"
 
-rm f_*
-#rm ft_sllMD5.out ft_sllSHA.out  opensslMD5.out opensslSHA.out
+echo "test MD5:" | tee ${TEST_DIR}$FILE_FT_MD5 | tee ${TEST_DIR}$FILE_OP_MD5
+a=0
+for e in  `ls ${TEST_DIR}f_*` ; do
+  if [ $(( $a % 10 )) -eq 0 ]; then
+    echo -n "."
+  fi
+  ((a++))
+  str="`cat $e`";
+  echo "$e:" >>  ${TEST_DIR}$FILE_FT_MD5  >> ${TEST_DIR}$FILE_OP_MD5 2>&1;
+  ./ft_ssl md5 -q -s $str >> ${TEST_DIR}$FILE_FT_MD5 2>&1;
+  md5 -q -s $str >> ${TEST_DIR}$FILE_OP_MD5 2>&1;
+done
+echo "\n" 
+diff ${TEST_DIR}$FILE_FT_MD5 ${TEST_DIR}$FILE_OP_MD5
+
+
+echo "test SHA:" | tee ${TEST_DIR}$FILE_FT_SHA | tee ${TEST_DIR}$FILE_OP_SHA
+a=0
+for e in  `ls ${TEST_DIR}f_*` ; do
+  if [ $(( $a % 10 )) -eq 0 ]; then
+    echo -n "."
+  fi
+  ((a++))
+  str="`cat $e`";
+  echo "$e:" >>  ${TEST_DIR}$FILE_FT_SHA  >> ${TEST_DIR}$FILE_OP_SHA 2>&1;
+  ./ft_ssl sha256 -q -s $str >> ${TEST_DIR}$FILE_FT_SHA 2>&1;
+  echo -n "`cat $e`" | shasum -a 256 | cut -d' ' -f1 >> ${TEST_DIR}$FILE_OP_SHA 2>&1;
+done
+echo "\n" 
+diff ${TEST_DIR}$FILE_FT_SHA ${TEST_DIR}$FILE_OP_SHA
+
+#rm ${TEST_DIR}f_*
+#rm $FILE_FT_MD5 ft_sslSHA  $FILE_OP_MD5 opensslSHA

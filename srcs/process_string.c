@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 00:19:24 by no               ###   ########.fr       */
+/*   Updated: 2018/11/24 06:02:40 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		process_string(char *str, uint32_t opts)
 	}
 	ft_memcpy(r.buf, &str[r.size], r.len);
 	r.size = ((r.size + r.len) * 8);
-	format_last_string(&r, opts, &sum);
+	format_last_chunk(&r, opts, &sum);
 	algo(r.buf, &sum, opts);
 	final_name = format_final_name(str, r.size / 8);
 	print_chksum(&sum, final_name, opts);

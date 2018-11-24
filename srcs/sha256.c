@@ -6,20 +6,11 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 15:03:17 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 00:02:24 by no               ###   ########.fr       */
+/*   Updated: 2018/11/24 03:46:56 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-static uint32_t	r_rot(uint32_t n, unsigned int c)
-{
-	unsigned int mask;
-
-	mask = (CHAR_BIT*sizeof(n) - 1);
-	c &= mask;
-	return (n >> c) | (n<<( (-c)&mask ));
-}
 
 void			init_schedule_array(uint32_t *w, const uint32_t *msg)
 {
@@ -34,30 +25,33 @@ void			init_schedule_array(uint32_t *w, const uint32_t *msg)
 	i = 15;
 	while (++i < 64)
 		w[i] = w[i - 16] + (r_rot(w[i - 15], 7)	^ r_rot(w[i - 15], 18)
-			^ (w[i - 15] >> 3)) + w[i - 7] + 
-			(r_rot(w[i - 2], 17) ^ r_rot(w[i - 2], 19) ^ (w[i - 2] >> 10));
+		^ (w[i - 15] >> 3)) + w[i - 7] + 
+		(r_rot(w[i - 2], 17) ^ r_rot(w[i - 2], 19) ^ (w[i - 2] >> 10));
 }
 
-void			sha_loop(uint32_t *abcdefgh, const uint32_t ki, uint32_t wi)
+void			sha_loop(uint32_t *abcd, const uint32_t *k, uint32_t *w)
 {
 	uint32_t	temp1;
 	uint32_t	temp2;
+	int			i;
 
-	temp1 = abcdefgh[7]
-	+ (r_rot(abcdefgh[4], 6) ^ r_rot(abcdefgh[4], 11) ^ r_rot(abcdefgh[4], 25))
-	+ ((abcdefgh[4] & abcdefgh[5]) ^ ((~abcdefgh[4]) & abcdefgh[6])) + ki + wi;
-	temp2 =
-	(r_rot(abcdefgh[0], 2) ^ r_rot(abcdefgh[0], 13) ^ r_rot(abcdefgh[0], 22))
-	+ ((abcdefgh[0] & abcdefgh[1])
-		^ (abcdefgh[0] & abcdefgh[2]) ^ (abcdefgh[1] & abcdefgh[2]));
-	abcdefgh[7] = abcdefgh[6];
-	abcdefgh[6] = abcdefgh[5];
-	abcdefgh[5] = abcdefgh[4];
-	abcdefgh[4] = abcdefgh[3] + temp1;
-	abcdefgh[3] = abcdefgh[2];
-	abcdefgh[2] = abcdefgh[1];
-	abcdefgh[1] = abcdefgh[0];
-	abcdefgh[0] = temp1 + temp2;
+	i =	-1;
+	while (++i < 64)
+	{
+		temp1 = abcd[7]
+		+ (r_rot(abcd[4], 6) ^ r_rot(abcd[4], 11) ^ r_rot(abcd[4], 25))
+		+ ((abcd[4] & abcd[5]) ^ ((~abcd[4]) & abcd[6])) + k[i] + w[i];
+		temp2 = (r_rot(abcd[0], 2) ^ r_rot(abcd[0], 13) ^ r_rot(abcd[0], 22))
+		+ ((abcd[0] & abcd[1]) ^ (abcd[0] & abcd[2]) ^ (abcd[1] & abcd[2]));
+		abcd[7] = abcd[6];
+		abcd[6] = abcd[5];
+		abcd[5] = abcd[4];
+		abcd[4] = abcd[3] + temp1;
+		abcd[3] = abcd[2];
+		abcd[2] = abcd[1];
+		abcd[1] = abcd[0];
+		abcd[0] = temp1 + temp2;
+	}
 }
 
 void			sha256(const uint32_t *msg, t_chksum *sum)
@@ -80,9 +74,7 @@ void			sha256(const uint32_t *msg, t_chksum *sum)
 
 	ft_memcpy(abcdefgh, sum->sha256, sizeof(uint32_t) * 8);
 	init_schedule_array((uint32_t *)w, msg);
-	i =	-1;
-	while (++i < 64)
-		sha_loop(abcdefgh, k[i], w[i]);
+	sha_loop(abcdefgh, k, w);
 	i = -1;
 	while (++i < 8)
 		sum->sha256[i] += abcdefgh[i];

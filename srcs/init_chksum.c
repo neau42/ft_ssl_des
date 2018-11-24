@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/23 22:15:11 by no               ###   ########.fr       */
+/*   Updated: 2018/11/24 05:31:25 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 void	init_chksum(t_chksum *sum, uint32_t opts)
 {
-	if (opts & OPT_MD5)
+	
+	if ((opts & GET_HASH) == OPT_MD5)
 	{
 		sum->md5[0] = 0x67452301;
 		sum->md5[1] = 0xEFCDAB89;
 		sum->md5[2] = 0x98BADCFE;
 		sum->md5[3] = 0x10325476;
 	}
-	else if (opts & OPT_SHA256)
+	else if ((opts & GET_HASH) == OPT_SHA256)
 	{
 		// sum->sha256[0] = endian_swap32(0x6a09e667);
 		// sum->sha256[1] = endian_swap32(0xbb67ae85);
@@ -46,9 +47,9 @@ void	init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
 														uint8_t *buf)
 {
 	init_chksum(sum, opts);
-	if (opts & OPT_MD5)
-		r->bsz = 64;
-	else
+	// if ((opts & GET_HASH) == OPT_MD5)
+	// 	r->bsz = 64;
+	// else if ((opts & GET_HASH) == OPT_SHA256)
 		r->bsz = 64;
 	r->len = 0;
 	r->size = 0;

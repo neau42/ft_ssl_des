@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/22 23:47:13 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/24 05:23:38 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static uint32_t	set_hash_type(char *str, uint32_t *opts)
 		*opts |= OPT_MD5;
 	else if (!ft_strcmp(str, "SHA256") || !ft_strcmp(str, "sha256"))
 		*opts |= OPT_SHA256;
+	else if (!ft_strcmp(str, "coucou") || !ft_strcmp(str, "coucou"))
+		*opts |= OPT_HASHTEST;
 	else
 	{
 		if (str[0] == '-' && ft_strchr(str, 'h'))

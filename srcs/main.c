@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 23:54:50 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/24 07:00:01 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ void	parse_args(t_arg *arg, uint32_t opts)
 		process_stdin, process_file, process_string};
 
 	first = arg;
-	if (opts & OPT_P || !(opts & OPT_FILE))
+	if (opts & OPT_P || !arg->type)
 	{
 		fcts[0](arg->str, opts);
 		opts |= OPT_FILE;
-		opts &= ~OPT_P;
+		// opts &= ~OPT_P;
 	}
-	while (arg)
+	while (arg && arg->type)
 	{
 		fcts[(int)arg->type](arg->str, opts);
 		arg = arg->next;
@@ -74,7 +74,7 @@ int		main(int ac, char **av)
 		return (1);
 	}
 	arg = get_args(ac, av, &opts);
-	if (opts & (OPT_ERR | OPT_H | NULL_HASH) || (opts & GET_HASH) == 0)
+	if (opts & (OPT_ERR | OPT_H) || (opts & GET_HASH) == NULL_HASH)
 	{
 		(opts & OPT_H) ? long_usage(av[0]) : short_usage(av[0]);
 		rm_arg(arg);
