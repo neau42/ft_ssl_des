@@ -13,7 +13,7 @@ fi
 
 mkdir $TEST_DIR 2>&-
 
-echo -n "generate $1 random files\n"
+echo -n "generate $1 random files\n."
 for a in {1..$1} ; do
 	cat /dev/urandom | base64 -b $(( ( RANDOM % $a ) + 1 )) | head -n $(( ( RANDOM % ( $a / 6 + 1 ) ) + 1 )) > ${TEST_DIR}f_$a
 	if [ $(( $a % 10 )) -eq 0 ]; then
@@ -107,82 +107,67 @@ fi
 
 echo "\033[92m\n\n- - - - - - SUBJECT EXAMPLE - - - - - -\033[0m"
 
+echo "\techo \"pickle rick\" | ./ft_ssl md5"
 echo "pickle rick" | ./ft_ssl md5
 echo ""
+
+echo "\techo \"Do not pity the dead, Harry.\" | ./ft_ssl md5 -p"
 echo "Do not pity the dead, Harry." | ./ft_ssl md5 -p
 echo ""
+
+echo "\techo \"Pity the living.\" | ./ft_ssl md5 -q -r"
 echo "Pity the living." | ./ft_ssl md5 -q -r
 echo ""
+
+echo "\t\"And above all,\" > file"
 echo "And above all," > file
 echo ""
+
+echo "\t./ft_ssl md5 file"
 ./ft_ssl md5 file
 echo ""
+echo "\t./ft_ssl md5 -r file"
 ./ft_ssl md5 -r file
 echo ""
+
+echo "\techo \"be sure to handle edge cases carefully\" | ./ft_ssl md5 -p file"
 echo "be sure to handle edge cases carefully" | ./ft_ssl md5 -p file
 echo ""
+
+echo "\techo \"some of this will not make sense at first\" | ./ft_ssl md5 file"
 echo "some of this will not make sense at first" | ./ft_ssl md5 file
 echo ""
+
+echo "\techo \"but eventually you will understand\" | ./ft_ssl md5 -p -r file"
 echo "but eventually you will understand" | ./ft_ssl md5 -p -r file
 echo ""
+
+echo "\techo \"GL HF let's go\" | ./ft_ssl md5 -p -s \"foo\" file"
 echo "GL HF let's go" | ./ft_ssl md5 -p -s "foo" file
 echo ""
+
+echo "\techo \"one more thing\" | ./ft_ssl md5 -r -p -s \"foo\" file -s \"bar\""
 echo "one more thing" | ./ft_ssl md5 -r -p -s "foo" file -s "bar"
 echo ""
+
+echo "\techo \"just to be extra clear\" | ./ft_ssl md5 -r -q -p -s \"foo\" file"
 echo "just to be extra clear" | ./ft_ssl md5 -r -q -p -s "foo" file
 echo ""
 
+
+echo "\techo \"https://www.youtube.com/watch?v=w-5yAtMtrSM\" > big_smoke_order_remix"
 echo "https://www.youtube.com/watch?v=w-5yAtMtrSM" > big_smoke_order_remix
+echo "\t./ft_ssl sha256 -q big_smoke_order_remix"
 ./ft_ssl sha256 -q big_smoke_order_remix
 echo ""
-openssl sha256 big_smoke_order_remix
+
+echo "\topenssl sha -sha256 big_smoke_order_remix"
+openssl sha -sha256 big_smoke_order_remix
 echo ""
+
+echo "\t./ft_ssl sha256 -s \"wubba lubba dub dub\""
 ./ft_ssl sha256 -s "wubba lubba dub dub"
 echo ""
 
-echo "\033[92m- - - - - - TEST ON BIG FILE - - - - - -\n\033[0m"
-echo "generate one big file"
-cat /dev/urandom | base64 -b 1360  | head -n 100 > big_f
-echo "size: `ls -lh big_f | awk -F' ' '{print $5}'`"
-
-echo "\033[92m\n- - - - - - - - SHA256 - - - - - - - -\033[0m"
-echo "\033[94mecho -n \"\`cat big_file\`\" | shasum -a 256\t\t\t\t\t\t\t\t\t(__STANDARD__)\033[0m"
-echo -n "`cat big_f`" | shasum -a 256
-
-echo "\033[94m\necho -n \"\`cat big_file\`\" | ./ft_ssl sha256  -q\t\t\t\t\t\t(__STDIN__)\033[0m"
-echo -n "`cat big_f`" | ./ft_ssl sha256 -q
-
-echo "\033[94m\n./ft_ssl sha256 -s \"\`big_file\`\"\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__STRING__)\033[0m"
-./ft_ssl sha256 -s "`cat big_f`" -q
-
-echo "\033[94m\nshasum -a 256 big_file\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__STANDARD__)\033[0m"
-shasum -a 256 big_f
-echo "\033[94m\n./ft_ssl sha256 -r big_file\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__FILE__)\033[0m"
-./ft_ssl sha256 -r big_f
-
-echo "\033[92m\n\n- - - - - - - - MD5 - - - - - - - -\033[0m"
-echo "\033[94mecho -n \"\`cat big_file\`\" | md5\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__STANDARD__)\033[0m"
-echo -n "`cat big_f`" | md5
-
-echo "\033[94m\necho -n \"\`cat big_file\`\" | ./ft_ssl md5  -q\t\t\t\t\t\t\t\t(__STDIN__)\033[0m"
-echo -n "`cat big_f`" | ./ft_ssl md5 -q
-
-echo "\033[94mmd5 -s \"\`cat big_f\`\"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__STANDARD__)\033[0m"
-md5 -q -s "`cat big_f`"
-
-echo "\033[94m\n./ft_ssl md5 -s \"\`big_file\`\"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__STRING__)\033[0m"
-./ft_ssl md5 -q -s "`cat big_f`" 
-
-echo "\033[94m\nmd5 -r big_file\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__STANDARD__)\033[0m"
-md5 -r big_f
-echo "\033[94m\n./ft_ssl md5 -r big_file\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(__FILE__)\033[0m"
-./ft_ssl md5 -r big_f
-
-echo "\033[94m\necho \"Salut et merci\" | md5 -rp -s coucou big_f\t\t\t(__STANDARD__)\033[0m"
-echo "Salut et merci" | md5 -rp -s coucou big_f
-echo "\033[94m\necho \"Salut et merci\" | ./ft_ssl md5 -rp -s coucou big_f\t(__FILE__)\033[0m"
-echo "Salut et merci" | ./ft_ssl md5 -rp -s coucou big_f
-
-
-rm file big_smoke_order_remix big_f
+rm -f file big_smoke_order_remix big_f
 rm ${TEST_DIR}*

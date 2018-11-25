@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/29 16:49:16 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 22:36:39 by no               ###   ########.fr       */
+/*   Updated: 2018/11/25 22:49:13 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int			ft_isdigit(int c);
 int			ft_isprint(int c);
 int			ft_itoa_base_buffer(long double val, int base, char *buf);
 void		*ft_memcpy(void *dst, const void *str, size_t n);
-// void		*ft_memset(void *s, uint8_t c, size_t n);
 void		*ft_memset(void *b, int c, size_t len);
 size_t		ft_strlen(const char *str);
 char		*ft_strstr(const char *s1, const char *s2);

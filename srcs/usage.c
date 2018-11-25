@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/22 23:42:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/26 00:31:28 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void		long_usage(char *str)
 	"\n md5: to use the md5 message digest algorithm."
 	"\n sha256: to use the sha256 message digest algorithm."
 	"\n-h: help."
+	"\n-i: info, print chuck."
 	"\n-p: echo STDIN to STDOUT and append the checksum to STDOUT."
 	"\n-q: quiet mode."
 	"\n-r: reverse the format of the output."

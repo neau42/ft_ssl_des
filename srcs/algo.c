@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 02:29:53 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/26 00:30:32 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void		ft_null(const uint32_t *buf, t_chksum *sum)
 {
 	(void)buf;
 	(void)sum;
-	ft_printf("___________________ft_null______________\n");
 }
 
 void		algo(void *buf, t_chksum *sum, uint32_t opts)
@@ -24,6 +23,8 @@ void		algo(void *buf, t_chksum *sum, uint32_t opts)
 	static void (*fcts[7])(const uint32_t *, t_chksum *) = {
 		ft_null, md5, sha256, ft_null, ft_null, ft_null, ft_null};
 
+	if (opts & OPT_I)
+		print_memory_hex(buf, 64);
 	fcts[opts & GET_HASH](buf, sum);
 }
 

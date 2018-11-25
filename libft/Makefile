@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
+#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/27 07:13:00 by nboulaye          #+#    #+#              #
-#    Updated: 2018/11/25 21:57:48 by no               ###   ########.fr        #
+#    Updated: 2018/11/25 22:48:01 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ SRC =	$(SRCL)\
 		$(addprefix $(SRCSPATH), $(SR))\
 		$(addprefix $(OPT_PATH), $(OPT))\
 
-WFLAGS = -Wall -Werror -Wextra -O3
+WFLAGS = -Wall -Werror -Wextra
 
 LFLAGS = -L libft/ -lft
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_opts.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 09:13:01 by no               ###   ########.fr       */
+/*   Updated: 2018/11/25 23:19:16 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_arg			*get_opts(char *str, char *str_next, uint32_t *opts,
 			(*opts) |= OPT_Q;
 		else if (*str == 'r')
 			(*opts) |= OPT_R;
+		else if (*str == 'i')
+			(*opts) |= OPT_I;
 		else if (*str == 's' && !(*opts & OPT_S))
 			arg = get_string(str_next, arg, opts);
 		else if (*str)
