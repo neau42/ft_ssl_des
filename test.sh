@@ -155,7 +155,7 @@ echo ""
 
 echo "\033[92m- - - - - - TEST ON BIG FILE - - - - - -\n\033[0m"
 echo "generate one big file"
-cat /dev/urandom | base64 -b 4242  | head -n110 > big_f
+cat /dev/urandom | base64 -b 4242  | head -n4242 > big_f
 
 echo "\033[92m\n- - - - - - - - SHA256 - - - - - - - -\033[0m"
 echo "\033[94mecho -n \"\`cat big_file\`\" |  | shasum -a 256\t\t\t\t\t(__STANDARD__)\033[0m"

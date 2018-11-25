@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 02:38:14 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/25 03:58:30 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ void	init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
 														uint8_t *buf)
 {
 	init_chksum(sum, opts);
-	// if ((opts & GET_HASH) == OPT_MD5)
-	// 	r->bsz = 64;
-	// else if ((opts & GET_HASH) == OPT_SHA256)
-	r->bsz = 64;
+	if ((opts & GET_HASH) == OPT_MD5)
+		r->bsz = 64;
+	else if ((opts & GET_HASH) == OPT_SHA256)
+		r->bsz = 64;
 	r->len = 0;
 	r->size = 0;
 	r->file_name = NULL;
