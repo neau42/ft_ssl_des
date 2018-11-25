@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 06:02:41 by no               ###   ########.fr       */
+/*   Updated: 2018/11/25 02:54:56 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 # include <sys/stat.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <errno.h>
 # include "libft.h"
 # include "ft_printf.h"
-
-# define MD5 0x0
-# define SHA356 0x1
 
 # define OPT_ERR  0x10000000
 # define OPT_H    0x20000000
@@ -63,9 +61,8 @@ typedef	struct	s_read
 
 typedef union	u_chksum
 {
-	uint32_t md5[4];
-	uint32_t sha256[8];
-
+	uint32_t	md5[4];
+	uint32_t	sha256[8];
 }				t_chksum;
 
 t_arg			*get_args(int ac, char **av, uint32_t *opts);

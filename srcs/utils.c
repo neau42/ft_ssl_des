@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 03:44:20 by no               ###   ########.fr       */
+/*   Updated: 2018/11/25 02:42:45 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ uint32_t			r_rot(uint32_t n, unsigned int c)
 {
 	unsigned int mask;
 
-	mask = (CHAR_BIT*sizeof(n) - 1);
+	mask = (8 * sizeof(n) - 1);
 	c &= mask;
-	return (n >> c) | (n<<( (-c)&mask ));
+	return (n >> c) | (n << (-c & mask));
 }
 
 static void			print_last_memory_hex(size_t len, size_t size, size_t size2,
@@ -55,7 +55,7 @@ static void			print_last_memory_hex(size_t len, size_t size, size_t size2,
 	i = len;
 	while (i--)
 		ft_printf(" ");
-	ft_printf("|");
+	ft_printf("|\n");
 }
 
 void				print_memory_hex(void *data, size_t blk_size)
@@ -85,5 +85,4 @@ void				print_memory_hex(void *data, size_t blk_size)
 		}
 	}
 	print_last_memory_hex(size - size2, size, size2, str);
-	ft_printf("\n");
 }

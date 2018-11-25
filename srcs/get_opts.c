@@ -6,27 +6,11 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/22 23:43:21 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/25 02:30:14 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-// static uint32_t	get_opt_int(char **str)
-// {
-// 	uint32_t	count;
-
-// 	(*str)++;
-// 	while (**str && **str == ' ')
-// 		(*str)++;
-// 	if ((count = ft_atoi(*str)))
-// 	{
-// 		while (ft_isdigit(**str))
-// 			(*str)++;
-// 		(*str)--;
-// 	}
-// 	return (count);
-// }
 
 static t_arg	*get_string(char *str, t_arg *arg, uint32_t *opts)
 {

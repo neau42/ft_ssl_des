@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 15:27:26 by no               ###   ########.fr       */
+/*   Updated: 2018/11/25 02:29:53 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,26 @@ void		ft_null(const uint32_t *buf, t_chksum *sum)
 	(void)sum;
 	ft_printf("___________________ft_null______________\n");
 }
-void		ft_test(const uint32_t *buf, t_chksum *sum)
-{
-	(void)buf;
-	(void)sum;
-	ft_printf("___________________ft_test coucou ______________\n");
-}
 
 void		algo(void *buf, t_chksum *sum, uint32_t opts)
 {
-	static void (*fcts[7])(const uint32_t *, t_chksum *) =
-	{ft_null, md5, sha256, ft_test, ft_null, ft_null, ft_null};
+	static void (*fcts[7])(const uint32_t *, t_chksum *) = {
+		ft_null, md5, sha256, ft_null, ft_null, ft_null, ft_null};
 
 	fcts[opts & GET_HASH](buf, sum);
-	// print_memory_hex(buf, 64);
 }
 
 void		print_sha256sum(uint32_t *sum)
 {
-		ft_printf("%08x%08x%08x%08x%08x%08x%08x%08x", sum[0], sum[1],
-		sum[2], sum[3], sum[4], sum[5], sum[6], sum[7]);
+	ft_printf("%08x%08x%08x%08x%08x%08x%08x%08x", sum[0], sum[1],
+	sum[2], sum[3], sum[4], sum[5], sum[6], sum[7]);
 }
 
 void		print_md5sum(uint32_t *sum)
 {
-		ft_printf("%08x%08x%08x%08x", endian_swap32(sum[0]),
-		endian_swap32(sum[1]), endian_swap32(sum[2]),
-		endian_swap32(sum[3]));
+	ft_printf("%08x%08x%08x%08x", endian_swap32(sum[0]),
+	endian_swap32(sum[1]), endian_swap32(sum[2]),
+	endian_swap32(sum[3]));
 }
 
 void		print_chksum(t_chksum *sum, char *file_name, uint32_t opts)
@@ -53,7 +46,7 @@ void		print_chksum(t_chksum *sum, char *file_name, uint32_t opts)
 	{
 		if (file_name && (!(opts & (OPT_Q | OPT_R))))
 			ft_printf("%s(%s)= ", "MD5", file_name);
-			print_md5sum(sum->md5);
+		print_md5sum(sum->md5);
 		if (file_name && (opts & (OPT_R | OPT_Q)) == OPT_R)
 			ft_printf(" %s", file_name);
 		ft_printf("\n");

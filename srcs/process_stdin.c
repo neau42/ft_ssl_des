@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_stdin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 07:03:09 by no               ###   ########.fr       */
+/*   Updated: 2018/11/25 02:55:51 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void		read_stdin(uint32_t opts)
 int			process_stdin(char *str, uint32_t opts)
 {
 	(void)str;
-	ft_printf("process_stdin\n");
 	if ((read(STDIN_FILENO, NULL, 0) < 0)
 	&& ft_fdprintf(2, "Read Error in (stdin)\n"))
 		return (1);
