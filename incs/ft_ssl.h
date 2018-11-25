@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 04:09:09 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/25 10:22:01 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,12 @@
 # define OPT_R    0x1000000
 # define OPT_S    0x2000000
 # define OPT_FILE 0x4000000
+#define CHKSUM_SIZE_MD5 (4 * sizeof(uint32_t))
+#define CHKSUM_SIZE_SHA (8 * sizeof(uint32_t))
 
 # define NULL_HASH 0x0
 # define OPT_MD5 0x1
 # define OPT_SHA256 0x2
-# define OPT_HASHTEST 0x3
 # define GET_HASH 0x7
 
 # define NULL_TYPE 0x0
@@ -45,7 +46,6 @@ typedef struct	s_arg
 {
 	char			type;
 	char			*str;
-	char			*file;
 	struct s_arg	*next;
 }				t_arg;
 

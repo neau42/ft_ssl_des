@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/24 05:23:38 by no               ###   ########.fr       */
+/*   Updated: 2018/11/25 09:11:51 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ t_arg			*init_arg(void)
 		return (NULL);
 	arg->type = NULL_TYPE;
 	arg->str = NULL;
-	arg->file = NULL;
 	arg->next = NULL;
 	return (arg);
 }
@@ -41,8 +40,6 @@ static uint32_t	set_hash_type(char *str, uint32_t *opts)
 		*opts |= OPT_MD5;
 	else if (!ft_strcmp(str, "SHA256") || !ft_strcmp(str, "sha256"))
 		*opts |= OPT_SHA256;
-	else if (!ft_strcmp(str, "coucou") || !ft_strcmp(str, "coucou"))
-		*opts |= OPT_HASHTEST;
 	else
 	{
 		if (str[0] == '-' && ft_strchr(str, 'h'))

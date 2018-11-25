@@ -6,7 +6,7 @@
 #    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/27 07:13:00 by nboulaye          #+#    #+#              #
-#    Updated: 2018/11/23 19:02:39 by no               ###   ########.fr        #
+#    Updated: 2018/11/25 21:57:48 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ SRC =	$(SRCL)\
 		$(addprefix $(SRCSPATH), $(SR))\
 		$(addprefix $(OPT_PATH), $(OPT))\
 
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -Wall -Werror -Wextra -O3
 
 LFLAGS = -L libft/ -lft
 

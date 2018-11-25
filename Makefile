@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
+#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/23 03:18:14 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/11/25 21:57:39 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ SRC =	srcs/md5.c\
 		srcs/process_stdin.c\
 		srcs/process_string.c
 
-FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb
+FLAGS = -Wall -Werror -Wextra -O3
+#-fsanitize=address -g -ggdb
 
 INC_PATH = incs/
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 15:24:02 by nboulaye          #+#    #+#             */
-/*   Updated: 2015/12/22 14:44:05 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/25 07:53:12 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,6 @@ char				*ft_strncpy(char *dst, const char *src, size_t n)
 		src++;
 		n--;
 	}
-	while (n)
-	{
-		dst[i] = '\0';
-		i++;
-		n--;
-	}
+	ft_bzero(&dst[i], n);
 	return (dst);
 }
