@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/25 09:11:51 by no               ###   ########.fr       */
+/*   Updated: 2018/11/26 04:05:34 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,20 @@ static t_arg	*get_file_name(t_arg *arg, char *name_file, uint32_t *opts)
 	return (arg->next);
 }
 
-static uint32_t	set_hash_type(char *str, uint32_t *opts)
+static uint32_t	get_command(char *str, uint32_t *opts)
 {
 	if (!ft_strcmp(str, "MD5") || !ft_strcmp(str, "md5"))
 		*opts |= OPT_MD5;
 	else if (!ft_strcmp(str, "SHA256") || !ft_strcmp(str, "sha256"))
 		*opts |= OPT_SHA256;
+	else if (!ft_strcmp(str, "BASE64") || !ft_strcmp(str, "base64"))
+		*opts |= OPT_BASE64;
+	else if (!ft_strcmp(str, "DES") || !ft_strcmp(str, "des"))
+		*opts |= OPT_DES;
+	else if (!ft_strcmp(str, "DES-ECB") || !ft_strcmp(str, "des-ecb"))
+		*opts |= OPT_ECB;
+	else if (!ft_strcmp(str, "DES-CBC") || !ft_strcmp(str, "des-cbc"))
+		*opts |= OPT_CBC;
 	else
 	{
 		if (str[0] == '-' && ft_strchr(str, 'h'))
@@ -62,7 +70,7 @@ t_arg			*get_args(int ac, char **av, uint32_t *opts)
 	if (!(arg = init_arg()))
 		return (NULL);
 	first = arg;
-	if (set_hash_type(av[1], opts) & NULL_HASH)
+	if ((get_command(av[1], opts) & GET_HASH) == NULL_HASH)
 		return (first);
 	while (++i < ac)
 	{

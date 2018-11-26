@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 23:19:36 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/26 05:26:29 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,34 @@
 # define OPT_H    0x20000000
 # define OPT_P    0x40000000
 # define OPT_Q    0x80000000
-# define OPT_R    0x1000000
-# define OPT_S    0x2000000
-# define OPT_FILE 0x4000000
-# define OPT_I    0x8000000
+# define OPT_R     0x1000000
+# define OPT_S     0x2000000
+# define OPT_FILE  0x4000000
+# define OPT_DD    0x8000000
+
+# define OPT_D      0x100000
+# define OPT_E      0x200000
+# define OPT_I      0x400000
+# define OPT_O      0x800000
+
+# define OPT_A       0x10000
+# define OPT_K       0x20000
+# define OPT_V       0x30000
+
+
+
+
 # define CHKSUM_SIZE_MD5 (4 * sizeof(uint32_t))
 # define CHKSUM_SIZE_SHA (8 * sizeof(uint32_t))
 
-# define NULL_HASH 0x0
-# define OPT_MD5 0x1
+# define NULL_HASH  0x0
+# define OPT_MD5    0x1
 # define OPT_SHA256 0x2
-# define GET_HASH 0x7
+# define OPT_BASE64 0x3
+# define OPT_DES    0x4
+# define OPT_ECB    0x5
+# define OPT_CBC    0x6
+# define GET_HASH   0x7
 
 # define NULL_TYPE 0x0
 # define FILE_TYPE 0x1
@@ -42,6 +59,31 @@
 
 # define SIZE_BUF 0x40
 # define CHKSUM_SIZE 0x10
+
+# define B64_ENCODE 0
+# define B64_DECODE 1
+
+# define DES_ENCODE 0
+# define DES_DECODE 1
+
+
+typedef struct	s_base64
+{
+	char		type; //B64_ENCODE || B64_DECODE
+	char		*input;
+	char		*output;
+}				t_base64;
+
+typedef struct	s_des
+{
+	char 		type;//DES_ENCODE || DES_DECODE
+	char		*input;
+	char		*output;
+	char		*key;
+	char		*pass;
+	char		*salt;
+	char		*vector;
+}				t_des;
 
 typedef struct	s_arg
 {
