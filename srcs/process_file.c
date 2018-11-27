@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 10:21:31 by no               ###   ########.fr       */
+/*   Updated: 2018/11/27 04:41:25 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,14 @@ static int	read_file(char *file_name, t_chksum *sum, t_read *r, uint32_t opts)
 	return (0);
 }
 
-int			process_file(char *file_name, uint32_t opts)
+int			process_file(t_arg *arg, uint32_t opts)
 {
 	t_read		r;
 	uint8_t		buf[SIZE_BUF];
 	t_chksum	sum;
+	char		*file_name;
 
+	file_name = arg->str;
 	init_chksum_n_read(&sum, opts, &r, (uint8_t *)&buf);
 	r.buf = buf;
 	r.file_name = file_name;

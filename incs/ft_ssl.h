@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/26 05:26:29 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 04:51:11 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@
 # define OPT_K       0x20000
 # define OPT_V       0x30000
 
-
-
-
 # define CHKSUM_SIZE_MD5 (4 * sizeof(uint32_t))
 # define CHKSUM_SIZE_SHA (8 * sizeof(uint32_t))
 
@@ -53,12 +50,15 @@
 # define OPT_CBC    0x6
 # define GET_HASH   0x7
 
-# define NULL_TYPE 0x0
-# define FILE_TYPE 0x1
+# define NULL_TYPE   0x0
+# define FILE_TYPE   0x1
 # define STRING_TYPE 0x2
+# define BASE64_TYPE 0x3
+# define DES_TYPE    0x4
+# define ECB_TYPE    0x5
+# define CBC_TYPE    0x6
 
 # define SIZE_BUF 0x40
-# define CHKSUM_SIZE 0x10
 
 # define B64_ENCODE 0
 # define B64_DECODE 1
@@ -69,14 +69,14 @@
 
 typedef struct	s_base64
 {
-	char		type; //B64_ENCODE || B64_DECODE
+	char		type; //B64_ENCODE(default zero) || B64_DECODE
 	char		*input;
 	char		*output;
 }				t_base64;
 
 typedef struct	s_des
 {
-	char 		type;//DES_ENCODE || DES_DECODE
+	char		type;//DES_ENCODE(default zero) || DES_DECODE
 	char		*input;
 	char		*output;
 	char		*key;
@@ -85,10 +85,18 @@ typedef struct	s_des
 	char		*vector;
 }				t_des;
 
+typedef struct	s_base
+{
+	char		type;
+	char		*input;
+	char		*output;
+}				t_base;
+
 typedef struct	s_arg
 {
 	char			type;
 	char			*str;
+	t_base			*base;	
 	struct s_arg	*next;
 }				t_arg;
 
@@ -109,16 +117,25 @@ typedef union	u_chksum
 }				t_chksum;
 
 t_arg			*get_args(int ac, char **av, uint32_t *opts);
-t_arg			*get_opts(char *str, char *str_next, uint32_t *opts,
+// t_arg			*get_opts(char *str, char *str_next, uint32_t *opts,
+// 								t_arg *arg);
+t_arg			*get_md_option(char *str, char *str_next, uint32_t *opts,
 								t_arg *arg);
-t_arg			*init_arg(void);
+void			get_base64_option(char *str, char *str_next, uint32_t *opts,
+						t_base *base);
+void			get_des_option(char *str, char *str_next, uint32_t *opts,
+						t_base *base);
+
+	t_arg *init_arg(void);
 void			short_usage(char *str);
 void			long_usage(char *str);
 void			rm_arg(t_arg *arg);
 
-int				process_stdin(char *str, uint32_t opts);
-int				process_file(char *file_name, uint32_t opts);
-int				process_string(char *str, uint32_t opts);
+int				process_stdin(t_arg *arg, uint32_t opts);
+int				process_file(t_arg *arg, uint32_t opts);
+int				process_string(t_arg *arg, uint32_t opts);
+int				process_base64(t_arg *arg, uint32_t opts);
+
 
 void			init_chksum(t_chksum *sum, uint32_t opts);
 void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
@@ -140,5 +157,7 @@ uint64_t		endian_swap64(uint64_t x);
 uint32_t		endian_swap32(uint32_t x);
 uint32_t		r_rot(uint32_t n, unsigned int c);
 void			print_memory_hex(void *data, size_t blk_size);
+
+void print_arg(t_arg *arg, uint32_t opts);
 
 #endif

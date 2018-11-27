@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 15:03:17 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/24 21:07:42 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 01:31:41 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,11 @@
 
 void			init_schedule_array(uint32_t *w, const uint32_t *msg)
 {
-	const uint8_t	*p;
-	int				i;
+	int i;
 
 	i = -1;
-	p = (const uint8_t *)msg - 4;
-	while (++i < 16 && (p += 4))
-		w[i] = (uint32_t)p[0] << 24 | (uint32_t)p[1] << 16 |
-			(uint32_t)p[2] << 8 | (uint32_t)p[3];
+	while (++i < 16)
+		w[i] = endian_swap32(msg[i]);
 	i = 15;
 	while (++i < 64)
 		w[i] = w[i - 16] + (r_rot(w[i - 15], 7) ^ r_rot(w[i - 15], 18)

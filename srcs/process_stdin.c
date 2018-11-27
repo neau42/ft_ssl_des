@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_stdin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 10:21:35 by no               ###   ########.fr       */
+/*   Updated: 2018/11/27 04:41:46 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void		read_stdin(uint32_t opts)
 	print_chksum(&sum, r.file_name, opts);
 }
 
-int			process_stdin(char *str, uint32_t opts)
+int			process_stdin(t_arg *arg, uint32_t opts)
 {
-	(void)str;
+	(void)arg;
 	if ((read(STDIN_FILENO, NULL, 0) < 0)
 	&& ft_fdprintf(2, "Read Error in (stdin)\n"))
 		return (1);

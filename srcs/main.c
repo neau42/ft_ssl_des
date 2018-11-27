@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/26 04:58:10 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 04:49:07 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,45 @@ void	print_arg(t_arg *arg, uint32_t opts)
 	{
 		if (arg->type == NULL_TYPE)
 			ft_printf("[%d]: type: 'NULL_TYPE', str: '%s'\n", i++, arg->str);
-		else
-			ft_printf("[%d]: type: '%s', str: '%s'\n", i++, arg->type == FILE_TYPE ? "FILE" : "STING", arg->str);
+		else if (arg->type == FILE_TYPE)
+			ft_printf("[%d]: type: '%s', str: '%s'\n", i++, "FILE", arg->str);
+		else if (arg->type == STRING_TYPE)
+			ft_printf("[%d]: type: '%s', str: '%s'\n", i++, "STING", arg->str);
+		else if (arg->type == BASE64_TYPE)
+		{
+			ft_printf("[%d]: type: '%s', str: '%s'\n", i++, "BASE64", arg->str);
+			ft_printf("->input : '%s'\n", ((t_base64 *)arg->base)->input);
+			ft_printf("->output: '%s'\n", ((t_base64 *)arg->base)->output);
+		}
+		else if (arg->type == DES_TYPE)
+		{
+			ft_printf("[%d]: type: '%s', str: '%s'\n", i++, "DES", arg->str);
+			ft_printf("->input : '%s'\n", ((t_des *)arg->base)->input);
+			ft_printf("->output: '%s'\n", ((t_des *)arg->base)->output);
+			ft_printf("->pass: '%s'\n", ((t_des *)arg->base)->pass);
+			ft_printf("->key: '%s'\n", ((t_des *)arg->base)->key);
+			ft_printf("->vector: '%s'\n", ((t_des *)arg->base)->vector);
+			ft_printf("->salt: '%s'\n", ((t_des *)arg->base)->salt);
+		}
+
 		arg = arg->next;
 	}
 	ft_printf("opts:   \n%0.32b\n", opts);
-	if (opts & OPT_MD5)
+	if (((opts) & GET_HASH) == OPT_MD5)
 		ft_printf("HASH MD5 ");
-	else if (opts & OPT_SHA256)
+	if (((opts) & GET_HASH) == OPT_SHA256)
 		ft_printf("HASH SHA256 ");
-	else if (opts & NULL_HASH)
+	if (((opts) & GET_HASH) == NULL_HASH)
 		ft_printf("HASH NULL ");
-		ft_printf("opts:");
+	if (((opts) & GET_HASH) == OPT_BASE64)
+		ft_printf("HASH BASE64 ");
+	if (((opts) & GET_HASH) == OPT_DES)
+		ft_printf("HASH DES ");
+	if (((opts) & GET_HASH) == OPT_ECB)
+		ft_printf("HASH ECB ");
+	if (((opts) & GET_HASH) == OPT_CBC)
+		ft_printf("HASH CBC ");
+	ft_printf("opts:");
 	if (opts & OPT_A) ft_printf(" - A");
 	if (opts & OPT_D) ft_printf(" - D");
 	if (opts & OPT_DD) ft_printf(" - DD");
@@ -51,21 +78,46 @@ void	print_arg(t_arg *arg, uint32_t opts)
 	printf("\n");
 }
 
+int		process_des(t_arg *arg, uint32_t opts)
+{
+	(void)arg;
+	(void)opts;
+	ft_printf("process_des\n");
+	return(0);
+}
+
+int		process_des_ecb(t_arg *arg, uint32_t opts)
+{
+	(void)arg;
+	(void)opts;
+	ft_printf("process_desECB\n");
+	return(0);
+}
+
+int		process_des_cbc(t_arg *arg, uint32_t opts)
+{
+	(void)arg;
+	(void)opts;
+	ft_printf("process_des CBC\n");
+	return(0);
+}
+
+
 void	parse_args(t_arg *arg, uint32_t opts)
 {
 	t_arg		*first;
-	static int	(*fcts[3])(char *, uint32_t) = {
-		process_stdin, process_file, process_string};
+	static int (*fcts[7])(t_arg * arg, uint32_t) = {
+		process_stdin, process_file, process_string, process_base64, process_des, process_des_ecb, process_des_cbc};
 
 	first = arg;
-	if (opts & OPT_P || !arg->type)
+	if ((arg->type <= STRING_TYPE && (opts & OPT_P)) || !arg->type)
 	{
-		fcts[0](arg->str, opts);
+		fcts[0](arg, opts);
 		opts |= OPT_FILE;
 	}
 	while (arg && arg->type)
 	{
-		fcts[(int)arg->type](arg->str, opts);
+		fcts[(int)arg->type](arg, opts);
 		arg = arg->next;
 	}
 }
@@ -84,11 +136,12 @@ int		main(int ac, char **av)
 	if (opts & (OPT_ERR | OPT_H) || (opts & GET_HASH) == NULL_HASH)
 	{
 		(opts & OPT_H) ? long_usage(av[0]) : short_usage(av[0]);
+		print_arg(arg, opts);
 		rm_arg(arg);
 		return (1);
 	}
 	print_arg(arg, opts);
-	// parse_args(arg, opts);
+	parse_args(arg, opts);
 	rm_arg(arg);
 	return (0);
 }

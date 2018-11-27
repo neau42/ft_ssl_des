@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/26 04:05:34 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 04:31:39 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_arg			*init_arg(void)
 		return (NULL);
 	arg->type = NULL_TYPE;
 	arg->str = NULL;
+	arg->base = NULL;
 	arg->next = NULL;
 	return (arg);
 }
@@ -59,6 +60,68 @@ static uint32_t	get_command(char *str, uint32_t *opts)
 	return (*opts);
 }
 
+t_arg *arg_error(uint32_t *opts, char *str, t_arg *first)
+{
+	(*opts) |= OPT_ERR;
+	ft_fdprintf(2, "invalid option -- \"%s\"\n", str);
+	return (first);
+}
+
+t_base		*init_base(uint32_t *opts, t_arg *arg)
+{
+	if ((*opts & GET_HASH) == OPT_BASE64)
+	{
+		arg->type = BASE64_TYPE;
+		return ((t_base *)ft_memalloc(sizeof(t_base64)));
+	}
+	else if ((*opts & GET_HASH) == OPT_DES)
+	{
+		arg->type = DES_TYPE;
+		return ((t_base *)ft_memalloc(sizeof(t_des)));
+	}
+	else if ((*opts & GET_HASH) == OPT_ECB)
+	{
+		arg->type = ECB_TYPE;
+		return ((t_base *)ft_memalloc(sizeof(t_des)));
+	}
+	else if ((*opts & GET_HASH) == OPT_CBC)
+	{
+		arg->type = CBC_TYPE;
+		return ((t_base *)ft_memalloc(sizeof(t_des)));
+	}
+	*opts |= OPT_ERR;
+	return (NULL);
+}
+
+t_arg			*get_base_opts(int ac, char **av, uint32_t *opts, t_arg *arg)
+{
+	int			i;
+	static void	(*fcts[4])(char *, char *, uint32_t *, t_base *) = {
+		get_base64_option,
+		get_des_option,
+		get_des_option,
+		get_des_option };
+
+	i = 1;
+	if (!(arg->base = init_base(opts, arg)))
+		return (arg);
+	while (++i < ac)
+	{
+		if (av[i][0] != '-'
+		|| (!av[i][1] || (av[i][1] == '-' && !av[i][2] && ++i)))
+			break ;
+		fcts[(GET_HASH & *opts) - OPT_BASE64](&av[i][1], av[i + 1],
+											opts, (t_base*)arg->base);
+		if (*opts & OPT_ERR)
+			return (arg);
+		else if (*opts & OPT_S && i++)
+			*opts ^= OPT_S;
+	}
+	if (i < ac)
+		return (arg_error(opts, av[i], arg));
+	return (arg);
+}
+
 t_arg			*get_args(int ac, char **av, uint32_t *opts)
 {
 	int		i;
@@ -72,17 +135,17 @@ t_arg			*get_args(int ac, char **av, uint32_t *opts)
 	first = arg;
 	if ((get_command(av[1], opts) & GET_HASH) == NULL_HASH)
 		return (first);
+	if (((*opts) & GET_HASH) >= OPT_BASE64)
+		return (get_base_opts(ac, av, opts, first));
 	while (++i < ac)
-	{
 		if (av[i][0] != '-'
 		|| (!av[i][1] || (av[i][1] == '-' && !av[i][2] && ++i)))
 			break ;
-		arg = get_opts(&av[i][1], av[i + 1], opts, arg);
-		if (!arg || *opts & OPT_ERR)
+		else if (!(arg = get_md_option(&av[i][1], av[i + 1], opts, arg))
+		|| *opts & OPT_ERR)
 			return (first);
-		if (*opts & OPT_S && i++)
+		else if (*opts & OPT_S && i++)
 			*opts ^= OPT_S;
-	}
 	while (i < ac)
 		arg = get_file_name(arg, av[i++], opts);
 	return (first);

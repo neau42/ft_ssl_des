@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_string.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 10:21:44 by no               ###   ########.fr       */
+/*   Updated: 2018/11/27 04:43:47 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,15 @@ char	*format_final_name(char *str, uint64_t size)
 	return (final_name);
 }
 
-int		process_string(char *str, uint32_t opts)
+int		process_string(t_arg *arg, uint32_t opts)
 {
 	uint8_t		buf[SIZE_BUF];
 	t_read		r;
 	t_chksum	sum;
 	char		*final_name;
+	char		*str;
 
+	str = arg->str;
 	init_chksum_n_read(&sum, opts, &r, (uint8_t *)buf);
 	while ((r.len = ft_strlen(&str[r.size])) > SIZE_BUF)
 	{
