@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 05:12:16 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 05:33:30 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@
 # define OPT_I      0x400000
 # define OPT_O      0x800000
 
-# define OPT_A       0x10000
-# define OPT_K       0x20000
-# define OPT_V       0x30000
+# define OPT_A       0x80000
+# define OPT_K       0x40000
+# define OPT_V       0x20000
 
 # define CHKSUM_SIZE_MD5 (4 * sizeof(uint32_t))
 # define CHKSUM_SIZE_SHA (8 * sizeof(uint32_t))
