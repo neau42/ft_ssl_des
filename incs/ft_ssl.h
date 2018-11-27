@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 04:51:11 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 05:12:16 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ typedef struct	s_base64
 	char		type; //B64_ENCODE(default zero) || B64_DECODE
 	char		*input;
 	char		*output;
+	int			fd_i;
+	int			fd_o;
 }				t_base64;
 
 typedef struct	s_des
@@ -79,6 +81,8 @@ typedef struct	s_des
 	char		type;//DES_ENCODE(default zero) || DES_DECODE
 	char		*input;
 	char		*output;
+	int			fd_i;
+	int			fd_o;
 	char		*key;
 	char		*pass;
 	char		*salt;
@@ -88,8 +92,6 @@ typedef struct	s_des
 typedef struct	s_base
 {
 	char		type;
-	char		*input;
-	char		*output;
 }				t_base;
 
 typedef struct	s_arg

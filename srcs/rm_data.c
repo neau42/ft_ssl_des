@@ -6,13 +6,13 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 04:16:38 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 05:11:44 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void free_des(t_des *base)
+static void	free_des(t_des *base)
 {
 	if (base->pass)
 		free(base->pass);
@@ -24,19 +24,24 @@ void free_des(t_des *base)
 		free(base->vector);
 }
 
-void	rm_arg(t_arg *arg)
+static void	free_base(t_base64 *b)
+{
+	if (b->input)
+		free(b->input);
+	if (b->output)
+		free(b->output);
+	if (b->type >= DES_TYPE)
+		free_des((t_des *)b);
+	free(b);
+}
+
+void		rm_arg(t_arg *arg)
 {
 	if (arg)
 	{
 		if (arg->type >= BASE64_TYPE)
 		{
-			if (arg->base->input)
-				free(arg->base->input);
-			if (arg->base->output)
-				free(arg->base->output);
-			if (arg->type >= DES_TYPE)
-				free_des((t_des *)arg->base);
-			free(arg->base);
+			free_base((t_base64 *)arg->base);
 			arg->base = NULL;
 		}
 		ft_strdel(&arg->str);
