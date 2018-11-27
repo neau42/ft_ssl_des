@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_base64.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 05:29:05 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 18:44:40 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		get_output_file(char *file_name)
 
 	if (file_name)
 	{
-		fd = open(file_name, O_WRONLY);
+		fd = open(file_name, O_WRONLY | O_CREAT, 0644);
 		if (fd < 0)
 			ft_fdprintf(2, "ft_ssl: %s: No such file or directory\n", file_name);
 		else

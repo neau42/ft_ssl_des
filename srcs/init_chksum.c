@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init_chksum.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 22:50:46 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 18:48:51 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void	init_chksum(t_chksum *sum, uint32_t opts)
+static void	init_chksum(t_chksum *sum, uint32_t opts)
 {
 	static uint32_t chksum[GET_HASH][8] = { {0x00000000},
 		{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476},

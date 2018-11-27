@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_opts.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 04:33:48 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 18:41:05 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,20 @@ t_arg			*get_md_option(char *str, char *str_next, uint32_t *opts,
 	return (arg);
 }
 
+char		*ft_cpy_string(char* old_str, char *new_str, uint32_t *opts)
+{
+	char	*ptr;
+
+	ptr = NULL;
+	if (old_str)
+		free(old_str);
+	if (new_str)
+		ptr = ft_strdup(new_str);
+	if (!ptr)
+		*opts |= OPT_ERR;
+	return (ptr);
+}
+
 void		get_base64_option(char *str, char *str_next, uint32_t *opts,
 				t_base *b)
 {
@@ -67,14 +81,14 @@ void		get_base64_option(char *str, char *str_next, uint32_t *opts,
 	base = (t_base64 *)b;
 	if (*str == 'h')
 		(*opts) |= OPT_H;
-	else if (*str == 'd' && ((*opts &= (0xFFFFFFFF ^ OPT_E)) || 1))
+	else if (*str == 'd' && (*opts &= (0xFFFFFFFF ^ OPT_E)))
 		(*opts) |= OPT_D;
-	else if (*str == 'e' && ((*opts &= (0xFFFFFFFF ^ OPT_D)) || 1))
+	else if (*str == 'e' && (*opts &= (0xFFFFFFFF ^ OPT_D)))
 		(*opts) |= OPT_E;
 	else if (*str == 'i' && (*opts |= (OPT_I | OPT_S)))
-		base->input = ft_strdup(str_next);
+		base->input = ft_cpy_string(base->input, str_next, opts);
 	else if (*str == 'o' && (*opts |= (OPT_O | OPT_S)))
-		base->output = ft_strdup(str_next);
+		base->output = ft_cpy_string(base->output, str_next, opts);
 	else if (*str)
 		ft_opt_err(opts, str);
 	if (str[1])
@@ -91,22 +105,22 @@ void		get_des_option(char *str, char *str_next, uint32_t *opts,
 		(*opts) |= OPT_H;
 	else if (*str == 'a')
 		(*opts) |= OPT_A;
-	else if (*str == 'd' && ((*opts &= (0xFFFFFFFF ^ OPT_E)) || 1))
+	else if (*str == 'd' && (*opts &= (0xFFFFFFFF ^ OPT_E)))
 		(*opts) |= OPT_D;
-	else if (*str == 'e' && ((*opts &= (0xFFFFFFFF ^ OPT_D)) || 1))
+	else if (*str == 'e' && (*opts &= (0xFFFFFFFF ^ OPT_D)))
 		(*opts) |= OPT_E;
 	else if (*str == 'i' && (*opts |= (OPT_I | OPT_S)))
-		base->input = ft_strdup(str_next);
+		base->input = ft_cpy_string(base->input, str_next, opts);
 	else if (*str == 'o' && (*opts |= (OPT_O | OPT_S)))
-		base->output = ft_strdup(str_next);
+		base->output = ft_cpy_string(base->output, str_next, opts);
 	else if (*str == 'k' && (*opts |= (OPT_K | OPT_S)))
-		base->key = ft_strdup(str_next);
+		base->key = ft_cpy_string(base->key, str_next, opts);
 	else if (*str == 'p' && (*opts |= (OPT_P | OPT_S)))
-		base->pass = ft_strdup(str_next);
+		base->pass = ft_cpy_string(base->pass, str_next, opts);
 	else if (*str == 's' && (*opts |= (OPT_S | OPT_S)))
-		base->salt = ft_strdup(str_next);
+		base->salt = ft_cpy_string(base->salt, str_next, opts);
 	else if (*str == 'v' && (*opts |= (OPT_V | OPT_S)))
-		base->vector = ft_strdup(str_next);
+		base->vector = ft_cpy_string(base->vector, str_next, opts);
 	else if (*str)
 		ft_opt_err(opts, str);
 	if (str[1])
