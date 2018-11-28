@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/28 03:00:47 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/28 05:30:14 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,44 +55,77 @@ void	close_fds(t_base64 *base)
 		close(base->fd_o);
 }
 
-void b64_algo_decode(t_base64 *base, char *buf, int size, char *tab)//bufsize = 4
+void b64_decode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 4
 {
 	char val[3];
-	char idx[4];
+	char	idx[4];
+	int		size;
+	char	*ptr;
 
-	idx[0] = buf[0];
-	idx[1] = buf[1];
-	idx[2] = buf[2];
-	idx[3] = buf[3];
-	// val[1] = 
-	// val[2] = 
+	if (!(size = len % 4))
+		size = 4;
+	if ((ptr = ft_strchr(tab, buf[0])))
+		idx[0] = ptr - tab;
+	else
+		return ;
+	if ((ptr = ft_strchr(tab, buf[1])))
+		idx[1] = ptr - tab;
+	else
+		idx[1] = 0;
+	if ((ptr = ft_strchr(tab, buf[2])))
+		idx[2] = ptr - tab;
+	else
+		idx[2] = 0;
+	if ((ptr = ft_strchr(tab, buf[3])))
+		idx[3] = ptr - tab;
+	else
+		idx[3] = 0;
 
-	// val[0] = (buf[0] >> 2);
-	// val[1] = (((buf[0] & 0x3) << 4) + (buf[1] >> 4));
-	// val[2] = (((buf[1] & 0x0F) << 2) + (buf[2] >> 6));
-	// val[3] = buf[2] & 0x3F;
-	int i = -1;
-	while (++i < (size + 1))
-		ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
-	while (size % 4)
-	{
-		ft_fdprintf(base->fd_o, "=");
-		size++;
-	}
+	val[0] = (idx[0] << 2) + ((idx[1] & 0x30) >> 4);
+	val[1] = ((idx[1] & 0xF) << 4) + ((idx[2] & 0x3C) >> 2);
+	val[2] = idx[3] + ((idx[2] & 0x3) << 6);
+	ft_fdprintf(base->fd_o, "%c%c%c", val[0], val[1], val[2]);
+	ft_bzero(buf, 64);
 }
 
-void	b64_algo_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
+void	b64_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
 {
-	char		val[4];
-	int			size;
+	char	val[4];
+	int		size;
+	int		i;
+	int test;
 
-	val[0] = (buf[0] >> 2);
-	val[1] = (((buf[0] & 0x3) << 4) + (buf[1] >> 4));
-	val[2] = (((buf[1] & 0x0F) << 2) + (buf[2] >> 6));
-	val[3] = buf[2] & 0x3F;
-	int i = -1;
+	test = 0;
+	while (test < len - 3)
+	{
+		val[0] = (buf[test] >> 2);
+		val[1] = (((buf[test] & 0x3) << 4) + (buf[test + 1] >> 4));
+		val[2] = (((buf[test + 1] & 0x0F) << 2) + (buf[test + 2] >> 6));
+		val[3] = buf[test + 2] & 0x3F;
+		i = -1;
+		while (++i < 4)
+			ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
+		test += 3;
+		if ((test % 16) == 0)
+			ft_fdprintf(base->fd_o, "\n");
+	}
+	i = -1;
+
+	if (test - len > 0)
+	{
+		val[0] = (buf[test] >> 2);
+		val[1] = ((buf[test] & 0x3) << 4);
+	}
+	if (test - len > 1)
+		val[1] += (buf[test + 1] >> 4);
+	if (test - len > 2)
+	{
+		val[2] = (((buf[test + 1] & 0x0F) << 2) + (buf[test + 2] >> 6));
+		val[3] = buf[test + 2] & 0x3F;
+	}
 	if (!(size = len % 3))
 		size = 3;
+	ft_printf(" (size: %d, len: %d, test = %d) ", size, len, test);
 	while (++i < (size + 1))
 		ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
 	while (size % 3)
@@ -100,21 +133,49 @@ void	b64_algo_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
 		ft_fdprintf(base->fd_o, "=");
 		size++;
 	}
-	if ((len % 16) == 0)
+	if ((test % 16) == 0)
 		ft_fdprintf(base->fd_o, "\n");
+	ft_bzero(buf, 64);
 }
 
+void base64_decode_encode(char *tab, t_base64 *base, uint32_t opts)
+{
+	char buf[64];
+	int buf_size;
+	int len;
+	int read_size = ((opts & OPT_D)) ? 4 : 64;
+
+	len = 0;
+	ft_bzero(buf, 64);
+	if (base->fd_i != 0)
+		while ((buf_size = read(base->fd_i, &buf, read_size)) == read_size)
+		{
+			((opts & OPT_D)) ? b64_decode(base, buf, buf_size, tab) : b64_encode(base, buf, buf_size, tab);
+		}
+	else
+		while ((buf_size = read(base->fd_i, &buf, read_size)) > 0)
+		{
+			if (buf_size < read_size)
+				buf[buf_size] = '\0';
+			((opts & OPT_D)) ? b64_decode(base, buf, buf_size, tab) : b64_encode(base, buf, buf_size, tab);
+			ft_bzero(buf, 64);
+		}
+	if (buf_size > 0)
+	{
+		ft_printf("buf_size > 0\n");
+		// buf[buf_size] = '\0';
+		((opts & OPT_D)) ? b64_decode(base, buf, buf_size, tab) : b64_encode(base, buf, buf_size, tab);
+	}
+	if (!(opts & OPT_D))
+		ft_fdprintf(base->fd_o, "\n");
+}
 int		process_base64(t_arg *arg, uint32_t opts)
 {
 	static char tab[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 						"0123456789+/";
 	t_base64	*base;
-	char		buf[10];
-	int			buf_size;
-	int			len;
 
 	(void)opts;
-	len = 0;
 	base = (t_base64 *)arg->base;
 	if ((base->fd_i = get_input_file(base->input)) < 0
 	|| (base->fd_o = get_output_file(base->output)) < 0)
@@ -122,22 +183,7 @@ int		process_base64(t_arg *arg, uint32_t opts)
 		close_fds(base);
 		return (1);
 	}
-	if (base->fd_i != 0)
-		while ((buf_size = read(base->fd_i, &buf, 3)) == 3)
-			b64_algo_encode(base, buf, (len += buf_size), tab);
-	else
-		while ((buf_size = read(base->fd_i, &buf, 3)) > 0)
-		{
-			if (buf_size < 3)
-				buf[buf_size] = 0;
-			b64_algo_encode(base, buf, (len += buf_size), tab);
-		}
-	if (buf_size > 0)
-	{
-		buf[buf_size] = '\0';
-		b64_algo_encode(base, buf, (len += buf_size), tab);
-	}
-	ft_fdprintf(base->fd_o, "\n");
+	base64_decode_encode(tab, base, opts);
 	close_fds(base);
 	return (0);
 }

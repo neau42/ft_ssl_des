@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 18:48:30 by no               ###   ########.fr       */
+/*   Updated: 2018/11/28 03:11:13 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,16 @@
 
 # define SIZE_BUF 0x40
 
-# define B64_ENCODE 0
-# define B64_DECODE 1
+// # define B64_ENCODE 0
+// # define B64_DECODE 1
 
-# define DES_ENCODE 0
-# define DES_DECODE 1
+// # define DES_ENCODE 0
+// # define DES_DECODE 1
 
 
 typedef struct	s_base64
 {
-	char		type; //B64_ENCODE(default zero) || B64_DECODE
+	char		type;
 	char		*input;
 	char		*output;
 	int			fd_i;
@@ -78,7 +78,7 @@ typedef struct	s_base64
 
 typedef struct	s_des
 {
-	char		type;//DES_ENCODE(default zero) || DES_DECODE
+	char		type;
 	char		*input;
 	char		*output;
 	int			fd_i;
