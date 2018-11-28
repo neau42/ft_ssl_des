@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 05:33:30 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 18:48:30 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void			get_base64_option(char *str, char *str_next, uint32_t *opts,
 void			get_des_option(char *str, char *str_next, uint32_t *opts,
 						t_base *base);
 
-	t_arg *init_arg(void);
+t_arg			*init_arg(void);
 void			short_usage(char *str);
 void			long_usage(char *str);
 void			rm_arg(t_arg *arg);
@@ -138,8 +138,7 @@ int				process_file(t_arg *arg, uint32_t opts);
 int				process_string(t_arg *arg, uint32_t opts);
 int				process_base64(t_arg *arg, uint32_t opts);
 
-
-void			init_chksum(t_chksum *sum, uint32_t opts);
+// void			init_chksum(t_chksum *sum, uint32_t opts);
 void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
 										uint8_t *buf);
 

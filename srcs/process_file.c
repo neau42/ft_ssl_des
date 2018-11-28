@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 04:41:25 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/27 20:42:12 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ static int	read_file(char *file_name, t_chksum *sum, t_read *r, uint32_t opts)
 		ft_bzero(r->buf, r->bsz);
 		r->size += (r->bsz * 8);
 	}
-	if ((errno)
-	&& ft_fdprintf(2, "ft_ssl: %s: %s\n", file_name, strerror(errno)))
+	if (errno)
 	{
+		ft_fdprintf(2, "ft_ssl: %s: %s\n", file_name, strerror(errno));
 		close(fd);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 04:49:07 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/28 02:34:31 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,14 @@ void	print_arg(t_arg *arg, uint32_t opts)
 
 		arg = arg->next;
 	}
-	ft_printf("opts:   \n%0.32b\n", opts);
-	if (((opts) & GET_HASH) == OPT_MD5)
-		ft_printf("HASH MD5 ");
-	if (((opts) & GET_HASH) == OPT_SHA256)
-		ft_printf("HASH SHA256 ");
-	if (((opts) & GET_HASH) == NULL_HASH)
-		ft_printf("HASH NULL ");
-	if (((opts) & GET_HASH) == OPT_BASE64)
-		ft_printf("HASH BASE64 ");
-	if (((opts) & GET_HASH) == OPT_DES)
-		ft_printf("HASH DES ");
-	if (((opts) & GET_HASH) == OPT_ECB)
-		ft_printf("HASH ECB ");
-	if (((opts) & GET_HASH) == OPT_CBC)
-		ft_printf("HASH CBC ");
+	ft_printf("opts:   \n%0.32b\nHASH: ", opts);
+	if (((opts) & GET_HASH) == OPT_MD5) ft_printf("MD5 ");
+	if (((opts) & GET_HASH) == OPT_SHA256) ft_printf("SHA256 ");
+	if (((opts) & GET_HASH) == NULL_HASH) ft_printf("NULL ");
+	if (((opts) & GET_HASH) == OPT_BASE64) ft_printf("BASE64 ");
+	if (((opts) & GET_HASH) == OPT_DES) ft_printf("DES ");
+	if (((opts) & GET_HASH) == OPT_ECB) ft_printf("ECB ");
+	if (((opts) & GET_HASH) == OPT_CBC) ft_printf("CBC ");
 	ft_printf("opts:");
 	if (opts & OPT_A) ft_printf(" - A");
 	if (opts & OPT_D) ft_printf(" - D");
@@ -107,7 +100,8 @@ void	parse_args(t_arg *arg, uint32_t opts)
 {
 	t_arg		*first;
 	static int (*fcts[7])(t_arg * arg, uint32_t) = {
-		process_stdin, process_file, process_string, process_base64, process_des, process_des_ecb, process_des_cbc};
+		process_stdin, process_file, process_string, process_base64,
+		process_des, process_des_ecb, process_des_cbc};
 
 	first = arg;
 	if ((arg->type <= STRING_TYPE && (opts & OPT_P)) || !arg->type)
@@ -140,7 +134,7 @@ int		main(int ac, char **av)
 		rm_arg(arg);
 		return (1);
 	}
-	print_arg(arg, opts);
+	// print_arg(arg, opts);
 	parse_args(arg, opts);
 	rm_arg(arg);
 	return (0);
