@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/28 05:30:14 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/30 00:35:29 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,26 +106,27 @@ void	b64_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
 		while (++i < 4)
 			ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
 		test += 3;
-		if ((test % 16) == 0)
-			ft_fdprintf(base->fd_o, "\n");
+		// if ((test % 16) == 0)
+		// 	ft_fdprintf(base->fd_o, "\n");
 	}
 	i = -1;
-
-	if (test - len > 0)
+	if (len - test > 0)
 	{
 		val[0] = (buf[test] >> 2);
 		val[1] = ((buf[test] & 0x3) << 4);
 	}
-	if (test - len > 1)
-		val[1] += (buf[test + 1] >> 4);
-	if (test - len > 2)
+	if (len - test > 1)
 	{
-		val[2] = (((buf[test + 1] & 0x0F) << 2) + (buf[test + 2] >> 6));
+		val[1] += (buf[test + 1] >> 4);
+		val[2] = ((buf[test + 1] & 0x0F) << 2) ;
+	}
+	if (len - test > 2)
+	{
+		val[2] += (buf[test + 2] >> 6);
 		val[3] = buf[test + 2] & 0x3F;
 	}
 	if (!(size = len % 3))
 		size = 3;
-	ft_printf(" (size: %d, len: %d, test = %d) ", size, len, test);
 	while (++i < (size + 1))
 		ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
 	while (size % 3)
@@ -133,8 +134,8 @@ void	b64_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
 		ft_fdprintf(base->fd_o, "=");
 		size++;
 	}
-	if ((test % 16) == 0)
-		ft_fdprintf(base->fd_o, "\n");
+	// if ((test % 16) == 0)
+		// ft_fdprintf(base->fd_o, "\n");
 	ft_bzero(buf, 64);
 }
 
@@ -143,7 +144,7 @@ void base64_decode_encode(char *tab, t_base64 *base, uint32_t opts)
 	char buf[64];
 	int buf_size;
 	int len;
-	int read_size = ((opts & OPT_D)) ? 4 : 64;
+	int read_size = ((opts & OPT_D)) ? 4 : 60;
 
 	len = 0;
 	ft_bzero(buf, 64);
