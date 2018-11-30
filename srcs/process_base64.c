@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/30 00:35:29 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/11/30 00:47:18 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,43 +88,48 @@ void b64_decode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 4
 	ft_bzero(buf, 64);
 }
 
-void	b64_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
+void		get_b64_value(char *val, char *buf, int test, int len)
 {
-	char	val[4];
-	int		size;
-	int		i;
-	int test;
-
-	test = 0;
-	while (test < len - 3)
+	if (len - test > 2)
 	{
 		val[0] = (buf[test] >> 2);
 		val[1] = (((buf[test] & 0x3) << 4) + (buf[test + 1] >> 4));
 		val[2] = (((buf[test + 1] & 0x0F) << 2) + (buf[test + 2] >> 6));
 		val[3] = buf[test + 2] & 0x3F;
-		i = -1;
-		while (++i < 4)
-			ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
-		test += 3;
-		// if ((test % 16) == 0)
-		// 	ft_fdprintf(base->fd_o, "\n");
 	}
-	i = -1;
-	if (len - test > 0)
+	else if (len - test > 1)
+	{
+		val[0] = (buf[test] >> 2);
+		val[1] = (((buf[test] & 0x3) << 4) + (buf[test + 1] >> 4));
+		val[2] = ((buf[test + 1] & 0x0F) << 2);
+	}
+	else if (len - test > 0)
 	{
 		val[0] = (buf[test] >> 2);
 		val[1] = ((buf[test] & 0x3) << 4);
 	}
-	if (len - test > 1)
+}
+
+void	b64_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
+{
+	char	val[4];
+	int		size;
+	int		i;
+	int		test;
+
+	test = 0;
+	while (test < len - 3)
 	{
-		val[1] += (buf[test + 1] >> 4);
-		val[2] = ((buf[test + 1] & 0x0F) << 2) ;
+		get_b64_value(val, buf, test, len);
+		i = -1;
+		while (++i < 4)
+			ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
+		test += 3;
+		if ((test % 16) == 0)
+			ft_fdprintf(base->fd_o, "\n");
 	}
-	if (len - test > 2)
-	{
-		val[2] += (buf[test + 2] >> 6);
-		val[3] = buf[test + 2] & 0x3F;
-	}
+	i = -1;
+	get_b64_value(val, buf, test, len);
 	if (!(size = len % 3))
 		size = 3;
 	while (++i < (size + 1))
@@ -135,7 +140,7 @@ void	b64_encode(t_base64 *base, char *buf, int len, char *tab)//bufsize = 3
 		size++;
 	}
 	// if ((test % 16) == 0)
-		// ft_fdprintf(base->fd_o, "\n");
+	// 	ft_fdprintf(base->fd_o, "\n");
 	ft_bzero(buf, 64);
 }
 
