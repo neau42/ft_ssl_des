@@ -205,7 +205,7 @@ if [ "`diff -q 1.out 2.out`" = "" ]; then
 	echo "no Diff in base64 encode tests"
 else
 	echo "Diff:"
-	diff diff 1.out 2.out
+	diff 1.out 2.out
 fi
 
 rm -f file big_smoke_order_remix big_f 1.out 2.out

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
+#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/27 07:13:00 by nboulaye          #+#    #+#              #
-#    Updated: 2018/11/27 03:02:14 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/12/01 05:14:21 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRCL =	ft_atoi.c\
 	ft_capitaliz.c\
 	ft_isdigit.c\
 	ft_isprint.c\
+	ft_isspace.c\
 	ft_itoa_base_buffer.c\
 	ft_memcpy.c\
 	ft_memset.c\
