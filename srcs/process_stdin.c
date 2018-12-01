@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_stdin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 04:41:46 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/01 09:23:21 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		read_stdin(uint32_t opts)
 {
-	uint8_t		buf[SIZE_BUF];
+	uint8_t		buf[MD_BUF_SIZE];
 	t_read		r;
 	t_chksum	sum;
 

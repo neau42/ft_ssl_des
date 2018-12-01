@@ -169,10 +169,7 @@ echo ""
 # ./ft_ssl sha256 -s "wubba lubba dub dub"
 # echo ""
 
-
-
-
-
+echo "\n\033[92m - - - - - - - - TEST BASE64 ENCODE - - - - - - - - -\033[0m"
 
 
 prog="openssl" ;
@@ -207,6 +204,16 @@ else
 	echo "Diff:"
 	diff 1.out 2.out
 fi
+
+echo "\n\033[92m - - - - - - - - TEST BASE64 ENCODE // DECODE - - - - - - - - -\033[0m"
+
+i=0;
+for str in "" "1" "12" "123" "1234" "12345" "123456" "1234567" "`cat /dev/urandom | base64 -b 63 | head -n 1`"  "`cat /dev/urandom | base64 -b 64 | head -n 1`" "`cat /dev/urandom | base64 -b 142 | head -n 1`" "salut et merci" "`cat Makefile`" "`cat ft_ssl`" ; do
+if [ "`echo -n $str | ./ft_ssl base64 -e | ./ft_ssl base64 -d`" = "$str" ]; then
+	printf "no diff with str $i encode/decode base64\n"
+else
+	printf "ERROR dif with %10.10s encode/decode base64\n" "$str"
+fi ; ((i++)) ; done
 
 rm -f file big_smoke_order_remix big_f 1.out 2.out
 rm ${TEST_DIR}*

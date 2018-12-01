@@ -6,13 +6,13 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 04:44:47 by no               ###   ########.fr       */
+/*   Updated: 2018/12/01 09:21:14 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void		get_b64_value(char *val, uint8_t *buf, int test, int len)
+static void	get_b64_value(char *val, uint8_t *buf, int test, int len)
 {
 	if (len - test > 2)
 	{
@@ -35,7 +35,7 @@ void		get_b64_value(char *val, uint8_t *buf, int test, int len)
 	}
 }
 
-void b64_ecode_last_block(t_base64 *base, char *tab, char *val, int len)
+static void	b64_ecode_last_block(t_base64 *base, char *tab, char *val, int len)
 {
 	int		size;
 	int		i;
@@ -52,7 +52,7 @@ void b64_ecode_last_block(t_base64 *base, char *tab, char *val, int len)
 	}
 }
 
-void	b64_encode(t_base64 *base, char *buf, int len, char *tab)
+static void	b64_encode_buffer(t_base64 *base, char *buf, int len, char *tab)
 {
 	char	val[4];
 	int		i;
@@ -71,5 +71,17 @@ void	b64_encode(t_base64 *base, char *buf, int len, char *tab)
 	get_b64_value(val, (uint8_t *)buf, test, len);
 	b64_ecode_last_block(base, tab, val, len);
 	ft_printf("\n");
-	ft_bzero((uint8_t *)buf, 64);
+	ft_bzero((uint8_t *)buf, B64_ENC_BUF_SIZE);
+}
+
+void		b64_encode(char *tab, t_base64 *base)
+{
+	char buf[B64_ENC_BUF_SIZE];
+	int buf_size;
+	int len;
+
+	len = 0;
+	ft_bzero(buf, B64_ENC_BUF_SIZE);
+	while ((buf_size = read(base->fd_i, &buf, B64_ENC_BUF_SIZE)) > 0)
+		b64_encode_buffer(base, buf, buf_size, tab);
 }

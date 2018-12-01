@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 04:42:46 by no               ###   ########.fr       */
+/*   Updated: 2018/12/01 09:23:35 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@
 # define ECB_TYPE    0x5
 # define CBC_TYPE    0x6
 
-# define SIZE_BUF 0x40
+# define MD_BUF_SIZE      64
+# define B64_ENC_BUF_SIZE 48
+# define B64_DEC_BUF_SIZE 64
 
 // # define B64_ENCODE 0
 // # define B64_DECODE 1
@@ -150,7 +152,13 @@ void			format_last_chunk(t_read *r, uint32_t opts, t_chksum *sum);
 void			md5(const uint32_t *msg, t_chksum *r);
 void			sha256(const uint32_t *msg, t_chksum *sum);
 
-void			b64_encode(t_base64 *base, char *buf, int len, char *tab);
+void			b64_encode(char *tab, t_base64 *base);
+void			b64_decode(char *tab, t_base64 *base);
+
+
+// void			b64_encode(t_base64 *base, char *buf, int len, char *tab);
+// void			b64_decode(t_base64 *base, char *buf, int size, char *tab);
+
 
 
 /*

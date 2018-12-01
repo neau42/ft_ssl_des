@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_string.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 04:43:47 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/01 09:23:21 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*format_final_name(char *str, uint64_t size)
 
 int		process_string(t_arg *arg, uint32_t opts)
 {
-	uint8_t		buf[SIZE_BUF];
+	uint8_t		buf[MD_BUF_SIZE];
 	t_read		r;
 	t_chksum	sum;
 	char		*final_name;
@@ -34,12 +34,12 @@ int		process_string(t_arg *arg, uint32_t opts)
 
 	str = arg->str;
 	init_chksum_n_read(&sum, opts, &r, (uint8_t *)buf);
-	while ((r.len = ft_strlen(&str[r.size])) > SIZE_BUF)
+	while ((r.len = ft_strlen(&str[r.size])) > MD_BUF_SIZE)
 	{
-		ft_memcpy(r.buf, &str[r.size], SIZE_BUF);
+		ft_memcpy(r.buf, &str[r.size], MD_BUF_SIZE);
 		algo(r.buf, &sum, opts);
 		ft_bzero(r.buf, r.bsz);
-		r.size += SIZE_BUF;
+		r.size += MD_BUF_SIZE;
 	}
 	ft_memcpy(r.buf, &str[r.size], r.len);
 	r.size = ((r.size + r.len) * 8);
