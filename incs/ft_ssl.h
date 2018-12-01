@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/28 03:11:13 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/01 04:42:46 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,9 @@ void			format_last_chunk(t_read *r, uint32_t opts, t_chksum *sum);
 
 void			md5(const uint32_t *msg, t_chksum *r);
 void			sha256(const uint32_t *msg, t_chksum *sum);
+
+void			b64_encode(t_base64 *base, char *buf, int len, char *tab);
+
 
 /*
 ** utils?

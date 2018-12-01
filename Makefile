@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
+#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/11/27 04:49:21 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/12/01 04:44:24 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC =	srcs/md5.c\
 		srcs/process_file.c\
 		srcs/process_stdin.c\
 		srcs/process_base64.c\
+		srcs/base64_encode.c\
 		srcs/process_string.c
 
 FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb

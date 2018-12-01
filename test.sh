@@ -155,19 +155,58 @@ echo "just to be extra clear" | ./ft_ssl md5 -r -q -p -s "foo" file
 echo ""
 
 
-echo "\techo \"https://www.youtube.com/watch?v=w-5yAtMtrSM\" > big_smoke_order_remix"
-echo "https://www.youtube.com/watch?v=w-5yAtMtrSM" > big_smoke_order_remix
-echo "\t./ft_ssl sha256 -q big_smoke_order_remix"
-./ft_ssl sha256 -q big_smoke_order_remix
-echo ""
+# echo "\techo \"https://www.youtube.com/watch?v=w-5yAtMtrSM\" > big_smoke_order_remix"
+# echo "https://www.youtube.com/watch?v=w-5yAtMtrSM" > big_smoke_order_remix
+# echo "\t./ft_ssl sha256 -q big_smoke_order_remix"
+# ./ft_ssl sha256 -q big_smoke_order_remix
+# echo ""
 
-echo "\topenssl sha -sha256 big_smoke_order_remix"
-openssl sha -sha256 big_smoke_order_remix
-echo ""
+# echo "\topenssl sha -sha256 big_smoke_order_remix"
+# openssl sha -sha256 big_smoke_order_remix
+# echo ""
 
-echo "\t./ft_ssl sha256 -s \"wubba lubba dub dub\""
-./ft_ssl sha256 -s "wubba lubba dub dub"
-echo ""
+# echo "\t./ft_ssl sha256 -s \"wubba lubba dub dub\""
+# ./ft_ssl sha256 -s "wubba lubba dub dub"
+# echo ""
 
-rm -f file big_smoke_order_remix big_f
+
+
+
+
+
+
+prog="openssl" ;
+echo  -n "cou" | $prog base64 -e > 1.out;
+echo  -n "couc" | $prog base64 -e >> 1.out;
+echo  -n "couco" | $prog base64 -e >> 1.out;
+echo  -n "coucou" | $prog base64 -e >> 1.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poisson" | $prog base64 -e >> 1.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poisso" | $prog base64 -e >> 1.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poiss" | $prog base64 -e >> 1.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le pois" | $prog base64 -e >> 1.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poisson111111111111111111111111111112222222222222222222222209876543210" | $prog base64 -e >> 1.out;
+
+
+prog="./ft_ssl" ;
+echo  -n "cou" | $prog base64 -e > 2.out;
+echo  -n "couc" | $prog base64 -e >> 2.out;
+echo  -n "couco" | $prog base64 -e >> 2.out;
+echo  -n "coucou" | $prog base64 -e >> 2.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poisson" | $prog base64 -e >> 2.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poisso" | $prog base64 -e >> 2.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poiss" | $prog base64 -e >> 2.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le pois" | $prog base64 -e >> 2.out;
+echo  -n "abcdefghiklmnopqrstuvwxz1234567890_salut et merci pour le poisson111111111111111111111111111112222222222222222222222209876543210" | $prog base64 -e >> 2.out;
+
+openssl base64 -e -in Makefile >> 1.out
+./ft_ssl base64 -e -i Makefile >> 2.out
+
+if [ "`diff -q 1.out 2.out`" = "" ]; then
+	echo "no Diff in base64 encode tests"
+else
+	echo "Diff:"
+	diff diff 1.out 2.out
+fi
+
+rm -f file big_smoke_order_remix big_f 1.out 2.out
 rm ${TEST_DIR}*
