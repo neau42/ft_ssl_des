@@ -208,11 +208,46 @@ fi
 echo "\n\033[92m - - - - - - - - TEST BASE64 ENCODE // DECODE - - - - - - - - -\033[0m"
 
 i=0;
-for str in "" "1" "12" "123" "1234" "12345" "123456" "1234567" "`cat /dev/urandom | base64 -b 63 | head -n 1`"  "`cat /dev/urandom | base64 -b 64 | head -n 1`" "`cat /dev/urandom | base64 -b 142 | head -n 1`" "salut et merci" "`cat Makefile`" "`cat ft_ssl`" ; do
+
+for str in ""\
+			"`cat /dev/urandom | base64 -b 1 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 2 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 3 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 4 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 5 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 6 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 7 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 8 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 9 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 10 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 12 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 42 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 43 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 44 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 62 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 63 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 64 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 65 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 66 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 67 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 68 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 69 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 70 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 125 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 126 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 127 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 129 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 130 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 131 | head -n 1`"\
+			"`cat /dev/urandom | base64 -b 132 | head -n 1`"\
+			"`cat Makefile`"\
+			"`cat ft_ssl`" ; do
 if [ "`echo -n $str | ./ft_ssl base64 -e | ./ft_ssl base64 -d`" = "$str" ]; then
 	printf "no diff with str $i encode/decode base64\n"
 else
-	printf "ERROR dif with %10.10s encode/decode base64\n" "$str"
+	printf "\033[31mERROR\033[0m dif with %10.10s encode/decode base64\n" "$str"
 fi ; ((i++)) ; done
 
 rm -f file big_smoke_order_remix big_f 1.out 2.out
