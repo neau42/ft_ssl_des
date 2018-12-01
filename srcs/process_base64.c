@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 08:45:52 by no               ###   ########.fr       */
+/*   Updated: 2018/12/01 09:03:55 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ void	close_fds(t_base64 *base)
 
 void	print_n_init_static(t_base64 *base, uint8_t *val, int *i)
 {
-	if (*i >= 1)
-		ft_fdprintf(base->fd_o, "%c", val[0]);
-	if (*i >= 2)
-		ft_fdprintf(base->fd_o, "%c", val[1]);
-	if (*i >= 3)
-		ft_fdprintf(base->fd_o, "%c", val[2]);
+	if (*i == 1)
+		write(base->fd_o, val, 1);
+	else if (*i == 2)
+		write(base->fd_o, val, 2);
+	else if (*i == 3)
+		write(base->fd_o, val, 3);
 	*i = 0;
 	val[0] = 0;
 	val[1] = 0;
@@ -105,7 +105,6 @@ int		get_one_chars(t_base64 *base, char c, char *tab)
 	else if (c == '=')
 	{
 		get_b64_decode_value(base, 0, 1);
-		ft_fdprintf(2, "11return   pour c : '%c'(%u)\n",c, c); 
 		return (1);
 	}
 	else if ((ptr = ft_strchr(tab, c)))

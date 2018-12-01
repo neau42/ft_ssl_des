@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/28 03:57:47 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/01 08:59:03 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int		main(int ac, char **av)
 	t_arg		*arg;
 	uint32_t	opts;
 
+	// setlocale(LC_ALL, "en_US");
 	if (ac < 2)
 	{
 		short_usage(av[0]);
