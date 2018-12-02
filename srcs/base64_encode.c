@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base64_encode.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 09:21:14 by no               ###   ########.fr       */
+/*   Updated: 2018/12/02 05:00:58 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	get_b64_value(char *val, uint8_t *buf, int test, int len)
 		val[0] = (buf[test] >> 2);
 		val[1] = (((buf[test] & 0x3) << 4) + (buf[test + 1] >> 4));
 		val[2] = ((buf[test + 1] & 0x0F) << 2);
-
 	}
 	else if (len - test > 0)
 	{
@@ -76,9 +75,9 @@ static void	b64_encode_buffer(t_base64 *base, char *buf, int len, char *tab)
 
 void		b64_encode(char *tab, t_base64 *base)
 {
-	char buf[B64_ENC_BUF_SIZE];
-	int buf_size;
-	int len;
+	char	buf[B64_ENC_BUF_SIZE];
+	int		buf_size;
+	int		len;
 
 	len = 0;
 	ft_bzero(buf, B64_ENC_BUF_SIZE);

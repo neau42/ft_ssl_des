@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
+#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/12/01 09:08:21 by no               ###   ########.fr        #
+#    Updated: 2018/12/02 07:58:10 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,8 @@ SRC =	srcs/md5.c\
 		srcs/rm_data.c\
 		srcs/get_args.c\
 		srcs/get_opts.c\
+		srcs/get_io_file.c\
+		srcs/process_des.c\
 		srcs/init_chksum.c\
 		srcs/process_file.c\
 		srcs/process_stdin.c\

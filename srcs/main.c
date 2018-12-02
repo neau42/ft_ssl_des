@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 08:59:03 by no               ###   ########.fr       */
+/*   Updated: 2018/12/02 11:01:26 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,6 @@ void	print_arg(t_arg *arg, uint32_t opts)
 	printf("\n");
 }
 
-int		process_des(t_arg *arg, uint32_t opts)
-{
-	(void)arg;
-	(void)opts;
-	ft_printf("process_des\n");
-	return(0);
-}
-
 int		process_des_ecb(t_arg *arg, uint32_t opts)
 {
 	(void)arg;
@@ -121,7 +113,6 @@ int		main(int ac, char **av)
 	t_arg		*arg;
 	uint32_t	opts;
 
-	// setlocale(LC_ALL, "en_US");
 	if (ac < 2)
 	{
 		short_usage(av[0]);

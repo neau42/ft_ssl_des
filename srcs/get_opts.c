@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_opts.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/27 18:41:05 by no               ###   ########.fr       */
+/*   Updated: 2018/12/02 05:13:06 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_arg			*get_md_option(char *str, char *str_next, uint32_t *opts,
 	return (arg);
 }
 
-char		*ft_cpy_string(char* old_str, char *new_str, uint32_t *opts)
+char			*ft_cpy_string(char *old_str, char *new_str, uint32_t *opts)
 {
 	char	*ptr;
 
@@ -73,7 +73,7 @@ char		*ft_cpy_string(char* old_str, char *new_str, uint32_t *opts)
 	return (ptr);
 }
 
-void		get_base64_option(char *str, char *str_next, uint32_t *opts,
+void			get_base64_option(char *str, char *str_next, uint32_t *opts,
 				t_base *b)
 {
 	t_base64 *base;
@@ -95,7 +95,7 @@ void		get_base64_option(char *str, char *str_next, uint32_t *opts,
 		ft_opt_err(opts, str);
 }
 
-void		get_des_option(char *str, char *str_next, uint32_t *opts,
+void			get_des_option(char *str, char *str_next, uint32_t *opts,
 						t_base *b)
 {
 	t_des	*base;
@@ -126,18 +126,3 @@ void		get_des_option(char *str, char *str_next, uint32_t *opts,
 	if (str[1])
 		ft_opt_err(opts, str);
 }
-
-// t_arg			*get_opts(char *str, char *str_next, uint32_t *opts,
-// 				t_arg *arg)
-// {
-// 	static t_arg *(*fcts[7])(char *, char *, uint32_t *, t_arg *) = {
-// 		NULL,
-// 		get_md_option,
-// 		get_md_option,
-// 		get_base64_option,
-// 		get_des_option,
-// 		get_des_option,
-// 		get_des_option };
-
-// 	return (fcts[((GET_HASH & *opts))](str, str_next, opts, arg));
-// }

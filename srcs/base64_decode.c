@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base64_decode.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 09:22:23 by no               ###   ########.fr       */
+/*   Updated: 2018/12/02 04:59:58 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,20 @@ static void	print_n_init_static(t_base64 *base, uint8_t *val, int *i)
 	val[2] = 0;
 }
 
-static void	get_b64_decode_value(t_base64 * base, uint8_t idx, int op)
+static void	get_b64_decode_value(t_base64 *base, uint8_t idx, int op)
 {
 	static uint8_t	val[3] = {0};
 	static int		i = 0;
 
 	if (op)
 	{
-		i-=1;
-		print_n_init_static(base, val, &i);	
+		i -= 1;
+		print_n_init_static(base, val, &i);
 	}
 	else if (i == 3)
 	{
 		val[2] += idx;
-		print_n_init_static(base, val, &i);	
+		print_n_init_static(base, val, &i);
 	}
 	else if (i == 2)
 	{
@@ -54,7 +54,6 @@ static void	get_b64_decode_value(t_base64 * base, uint8_t idx, int op)
 	else if (i == 0)
 		val[i++] = (idx << 2);
 }
-
 
 static int	get_one_chars(t_base64 *base, char c, char *tab)
 {
@@ -73,7 +72,7 @@ static int	get_one_chars(t_base64 *base, char c, char *tab)
 		get_b64_decode_value(base, ptr - tab, 0);
 	else
 	{
-		ft_fdprintf(2, "22return   pour c : '%c'(%u)\n",c, c); 
+		ft_fdprintf(2, "22return   pour c : '%c'(%u)\n", c, c);
 		return (1);
 	}
 	return (0);
@@ -81,9 +80,10 @@ static int	get_one_chars(t_base64 *base, char c, char *tab)
 
 static int	valid_chunk(char *buf, int *len, char *tab)
 {
-	int i = -1;
-	char *ptr;
+	int		i;
+	char	*ptr;
 
+	i = -1;
 	while (++i < *len)
 	{
 		if (ft_isspace(buf[i]) || buf[i] == '=')

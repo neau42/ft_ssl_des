@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
+#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/27 07:13:00 by nboulaye          #+#    #+#              #
-#    Updated: 2018/12/01 05:14:21 by no               ###   ########.fr        #
+#    Updated: 2018/12/02 09:24:41 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,36 +32,40 @@ SR =	ft_printf.c\
 		do_not_specifier.c
 
 SRCL =	ft_atoi.c\
-	ft_bzero.c\
-	ft_capitaliz.c\
-	ft_isdigit.c\
-	ft_isprint.c\
-	ft_isspace.c\
-	ft_itoa_base_buffer.c\
-	ft_memcpy.c\
-	ft_memset.c\
-	ft_strstr.c\
-	ft_strcmp.c\
-	ft_strncat.c\
-	ft_strdup.c\
-	ft_strnew.c\
-	ft_strncmp.c\
-	ft_strncpy.c\
-	ft_memalloc.c\
-	ft_strlen.c\
-	ft_memmove.c\
-	ft_strdel.c\
-	ft_strjoin.c\
-	ft_strjoin_free.c\
-	ft_strcpy.c\
-	ft_strcat.c\
-	ft_strchr.c\
-	ft_strrchr.c\
-	ft_strrnchr.c\
-	ft_strlast.c\
-	ft_memchr.c\
-	ft_strsplit.c\
-	ft_strsplit_first.c
+		ft_atoh.c\
+		ft_bzero.c\
+		ft_capitaliz.c\
+		ft_isdigit.c\
+		ft_isprint.c\
+		ft_isspace.c\
+		ft_ishexdigit.c\
+		ft_itoa_base_buffer.c\
+		ft_memcpy.c\
+		ft_memset.c\
+		ft_strstr.c\
+		ft_strcmp.c\
+		ft_strncat.c\
+		ft_strdup.c\
+		ft_strnew.c\
+		ft_strncmp.c\
+		ft_strncpy.c\
+		ft_memalloc.c\
+		ft_strlen.c\
+		ft_memmove.c\
+		ft_strdel.c\
+		ft_strjoin.c\
+		ft_strjoin_free.c\
+		ft_strcpy.c\
+		ft_strcat.c\
+		ft_strchr.c\
+		ft_strrchr.c\
+		ft_strrnchr.c\
+		ft_strlast.c\
+		ft_memchr.c\
+		ft_strsplit.c\
+		ft_strsplit_first.c\
+		ft_toupper.c\
+		ft_tolower.c
 
 SRC =	$(SRCL)\
 		$(addprefix $(SRCSPATH), $(SR))\

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/26 04:25:44 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/02 05:02:14 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		short_usage(char *str)
 	"[options] file ...\n", str);
 }
 
-static void 	usage_option(void)
+static void	usage_option(void)
 {
 	ft_fdprintf(2, "\n\nCipher options:"
 	"\nbase64:"
