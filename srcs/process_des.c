@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 12:55:25 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 16:59:30 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		valid_key_n_vector(t_des *des)
 		ft_fdprintf(2, "non-hex digit\ninvalid hex key value");
 		return (0);
 	}
-	if (!valid_hex_value(des->vector))
+	if (!valid_hex_value(des->vector))// if des-ecb
 	{
 		ft_fdprintf(2, "non-hex digit\ninvalid hex vector value");
 		return (0);
@@ -97,7 +97,6 @@ uint64_t		gen_key(char *pass, uint64_t salt)
 		ft_fdprintf(2, "malloc error\n");
 		exit (42);
 	}
-
 	ft_printf("\tsalt X: %llX, salt S: '%s', pass: '%s', concat: '%s'\n", salt, salt_buf, pass, arg.str);
 	// ft_pbkdf2();
 	free(arg.str);
