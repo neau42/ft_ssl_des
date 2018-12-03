@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/02 07:58:38 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 11:18:30 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ typedef struct	s_des
 	char		*pass;
 	char		*salt;
 	char		*vector;
+	uint64_t	key_val;
+	uint64_t	vec_val;
+	uint64_t	salt_val;
 }				t_des;
 
 typedef struct	s_base

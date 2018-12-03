@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/02 10:26:59 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 11:31:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,35 @@ int		valid_key_n_vector(t_des *des)
 	return (1);
 }
 
+int valid_params(t_des *des)
+{
+	if (!des->pass && !des->key)
+	{
+		if (!ft_getpass(des))
+			return (0);
+	}
+	else if (des->key)
+	{
+		if (!des->pass && !(valid_key_n_vector(des)))
+			return (0);
+	}
+	return (1);
+}
+
+uint64_t		gen_key(uint64_t salt)
+{
+	(void)salt;
+	return (0x0123456789);
+}
+
+void gen_key_vec_salt(t_des *des)
+{
+	des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
+			: ft_atoh_rpadd(des->salt);
+	des->key_val = (!des->key) ? gen_key(des->salt_val)
+			: ft_atoh_rpadd(des->key);
+}
+
 int		process_des(t_arg *arg, uint32_t opts)
 {
 	t_des	*des;
@@ -76,31 +105,23 @@ int		process_des(t_arg *arg, uint32_t opts)
 	ft_printf("process_des\n");
 	des = (t_des *)arg->base;
 	if ((des->fd_i = get_input_file(des->input)) < 0
-	|| (des->fd_o = get_output_file(des->output)) < 0)
+	|| (des->fd_o = get_output_file(des->output)) < 0
+	|| !valid_params(des))
 	{
 		close_fds(des);
 		return (1);
 	}
-	if (!des->pass && !des->key)
-	{
-		if (!ft_getpass(des))
-		{
-			close_fds(des);
-			return (1);
-		}
-	}
-	else if (des->key)
-	{
-		if (!(valid_key_n_vector(des)))
-		{
-			close_fds(des);
-			return (1);
-		}
-	}
+	ft_printf("KEY: %llx\nVECTOR: %llx\nSALT: %llx\npass: %s\n",
+		(des->key) ? ft_atoh_rpadd(des->key) : -1,
+		(des->vector) ? ft_atoh_rpadd(des->vector) : -1,
+		(des->salt) ? ft_atoh_rpadd(des->salt) : -1,
+		des->pass);
 
-
+	gen_key_vec_salt(des);
 	ft_printf("process_des ...........\n");
-	ft_printf("KEY: %llx\nVECTOR: %llx\nSALT: %llx\npass: %s\n", ft_atoh_rpadd(des->key), ft_atoh_rpadd(des->vector), ft_atoh_rpadd(des->salt), des->pass);
+
+	ft_printf("KEY: %llx\nVECTOR: %llx\nSALT: %llx\npass: %s\n",
+			  (des->key_val), (des->vec_val), (des->salt_val), des->pass);
 
 	close_fds(des);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/02 04:59:58 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 10:35:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,7 @@ static int	get_one_chars(t_base64 *base, char c, char *tab)
 	else if ((ptr = ft_strchr(tab, c)))
 		get_b64_decode_value(base, ptr - tab, 0);
 	else
-	{
-		ft_fdprintf(2, "22return   pour c : '%c'(%u)\n", c, c);
 		return (1);
-	}
 	return (0);
 }
 
@@ -89,10 +86,7 @@ static int	valid_chunk(char *buf, int *len, char *tab)
 		if (ft_isspace(buf[i]) || buf[i] == '=')
 			;
 		else if (!(ptr = ft_strchr(tab, buf[i])))
-		{
-			ft_fdprintf(2, "not valide: '%c'\n", buf[i]);
 			return (0);
-		}
 	}
 	return (1);
 }

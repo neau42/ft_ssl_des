@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/02 08:00:39 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 10:32:06 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		process_base64(t_arg *arg, uint32_t opts)
 	t_base64	*base;
 	static char	tab[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-	"0123456789+/";// thx norminette -_-|
+	"0123456789+/";
 	base = (t_base64 *)arg->base;
 	if ((base->fd_i = get_input_file(base->input)) < 0
 	|| (base->fd_o = get_output_file(base->output)) < 0)

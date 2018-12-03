@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/02 11:01:26 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 11:37:01 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ int		main(int ac, char **av)
 		short_usage(av[0]);
 		return (1);
 	}
+	srand((uint32_t)&main);
 	arg = get_args(ac, av, &opts);
 	if (opts & (OPT_ERR | OPT_H) || (opts & GET_HASH) == NULL_HASH)
 	{
