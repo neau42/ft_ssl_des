@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 11:37:01 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 12:53:28 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	print_arg(t_arg *arg, uint32_t opts)
 	if (opts & OPT_R) ft_printf(" - R");
 	if (opts & OPT_S) ft_printf(" - S");
 	if (opts & OPT_V) ft_printf(" - V");
-	printf("\n");
+	ft_printf("\n");
 }
 
 int		process_des_ecb(t_arg *arg, uint32_t opts)

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/26 18:34:35 by nboulaye          #+#    #+#             */
-/*   Updated: 2016/08/30 20:28:38 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/03 12:20:22 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ int		ft_itoa_base_buffer(long double val, int base, char *buf)
 	unsignn = (val < 0) ? -val : val;
 	ft_bzero(buf, nbdigit + 1);
 	nbdigit_ret = nbdigit;
-	buf[--nbdigit] = (unsignn % base > 9) ? (unsignn % base + 'a' - 10)
+	buf[--nbdigit] = (unsignn % base > 9) ? (unsignn % base + 'A' - 10)
 		: (unsignn % base + '0');
 	while ((unsignn = unsignn / base) > 0)
-		buf[--nbdigit] = (unsignn % base > 9) ? (unsignn % base + 'a' - 10)
+		buf[--nbdigit] = (unsignn % base > 9) ? (unsignn % base + 'A' - 10)
 			: (unsignn % base + '0');
 	if (val < 0 && base == 10)
 		buf[0] = '-';
