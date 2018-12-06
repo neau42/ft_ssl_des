@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/29 16:49:16 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/02 09:44:08 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/06 10:35:03 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int			ft_isprint(int c);
 int			ft_isspace(int c);
 int			ft_ishexdigit(int c);
 int			ft_itoa_base_buffer(long double val, int base, char *buf);
+int			ft_itoa_base_buffer_upper(long double val, int base, char *buf);
 void		*ft_memcpy(void *dst, const void *str, size_t n);
 void		*ft_memset(void *b, int c, size_t len);
 size_t		ft_strlen(const char *str);

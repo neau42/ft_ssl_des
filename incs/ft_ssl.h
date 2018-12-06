@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 11:18:30 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/06 10:28:05 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef	struct	s_read
 
 typedef union	u_chksum
 {
+	int			err;
 	uint32_t	md5[4];
 	uint32_t	sha256[8];
 }				t_chksum;
@@ -127,23 +128,23 @@ t_arg			*init_arg(void);
 void			short_usage(char *str);
 void			long_usage(char *str);
 void			rm_arg(t_arg *arg);
-int				process_stdin(t_arg *arg, uint32_t opts);
-int				process_file(t_arg *arg, uint32_t opts);
-int				process_string(t_arg *arg, uint32_t opts);
+t_chksum		process_stdin(t_arg *arg, uint32_t opts, uint8_t print);
+t_chksum		process_file(t_arg *arg, uint32_t opts, uint8_t print);
+t_chksum		process_string(t_arg *arg, uint32_t opts, uint8_t print);
 
 int				get_input_file(char *file_name);
 int				get_output_file(char *file_name);
 
 
-int				process_des(t_arg *arg, uint32_t opts);
+t_chksum		process_des(t_arg *arg, uint32_t opts, uint8_t print);
 
-int				process_base64(t_arg *arg, uint32_t opts);
+t_chksum		process_base64(t_arg *arg, uint32_t opts, uint8_t print);
 void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
 										uint8_t *buf);
 void			algo(void *buf, t_chksum *sum, uint32_t opts);
 void			print_chksum(t_chksum *sum, char *file_name, uint32_t opts);
 void			format_last_chunk(t_read *r, uint32_t opts, t_chksum *sum);
-void			md5(const uint32_t *msg, t_chksum *r);
+void			md5(const uint32_t *msg, t_chksum *sum);
 void			sha256(const uint32_t *msg, t_chksum *sum);
 void			b64_encode(char *tab, t_base64 *base);
 void			b64_decode(char *tab, t_base64 *base);

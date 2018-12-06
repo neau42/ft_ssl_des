@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   process_stdin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 09:23:21 by no               ###   ########.fr       */
+/*   Updated: 2018/12/06 10:29:35 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void		read_stdin(uint32_t opts)
+t_chksum		read_stdin(uint32_t opts, uint8_t print)
 {
 	uint8_t		buf[MD_BUF_SIZE];
 	t_read		r;
@@ -34,15 +34,16 @@ void		read_stdin(uint32_t opts)
 	r.size *= 8;
 	format_last_chunk(&r, opts, &sum);
 	algo((uint32_t *)r.buf, &sum, opts);
-	print_chksum(&sum, r.file_name, opts);
+	if (print)
+		print_chksum(&sum, r.file_name, opts);
+	return (sum);
 }
 
-int			process_stdin(t_arg *arg, uint32_t opts)
+t_chksum	process_stdin(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	(void)arg;
 	if ((read(STDIN_FILENO, NULL, 0) < 0)
 	&& ft_fdprintf(2, "Read Error in (stdin)\n"))
-		return (1);
-	read_stdin(opts);
-	return (0);
+		return ((t_chksum)0);
+	return (read_stdin(opts, print));
 }

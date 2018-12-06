@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 16:59:30 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/06 19:19:11 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,41 +83,90 @@ int valid_params(t_des *des)
 	return (1);
 }
 
-uint64_t		gen_key(char *pass, uint64_t salt)
+char			*sum_to_str(t_chksum *sum, char *pass)
 {
-	char		salt_buf[17];
+	char		tmp[8][16];
+	char		*ret;
+	int			i;
+	int			len;
+
+	len = 0;
+	i = 0;
+	while (i < 8)
+	{
+		ft_itoa_base_buffer_upper(sum->sha256[i], 16, tmp[i]);
+		len += ft_strlen(tmp[i]);
+		// ft_printf("tmp[%d] :: '%s', len: %d\n", i, tmp[i], len);
+		i++;
+	}
+	len += ft_strlen(pass);
+	if (!(ret = ft_strnew(len)))
+		return (NULL);
+	ft_strcpy(ret, pass);
+	i = 0;
+	while (i < 8)
+		ft_strcat(ret, tmp[i++]);
+	return (ret);
+}
+
+uint64_t		ft_pbkdf_maison(uint32_t hashtype, char *pass, uint64_t salt, int iter)
+{
+	char		salt_buf[64];
+	char		iter_buf[16];
 	t_arg		arg;
+	t_chksum	sum;
+	uint64_t	result;
+	int i;
 
 	arg.type = STRING_TYPE;
 	arg.base = NULL;
 	arg.next = NULL;
-	ft_itoa_base_buffer(salt, 16, salt_buf);
+	ft_itoa_base_buffer_upper(salt, 16, salt_buf);
+	ft_itoa_base_buffer(iter, 10, iter_buf);
+	i = ft_strlen(salt_buf) + ft_strlen(iter_buf);
+	ft_printf("test concat iter withSalt, len: %d , (iter & 0xFF): %d ", i, (iter & 0xFF));
+	ft_strcat(salt_buf, iter_buf);
 	if (!(arg.str = ft_strjoin(pass, salt_buf)))
 	{
 		ft_fdprintf(2, "malloc error\n");
 		exit (42);
 	}
-	ft_printf("\tsalt X: %llX, salt S: '%s', pass: '%s', concat: '%s'\n", salt, salt_buf, pass, arg.str);
-	// ft_pbkdf2();
+	sum = process_string(&arg, hashtype, 0);
+	// ft_printf("|%08x%08x%08x%08x%08x%08x%08x%08x|\n", sum.sha256[0], sum.sha256[1],
+	// sum.sha256[2], sum.sha256[3], sum.sha256[4], sum.sha256[5], sum.sha256[6], sum.sha256[7]);
 	free(arg.str);
-	return (0x0123456789012345);
+	while (--iter > 0)
+	{
+		arg.str = sum_to_str(&sum, pass);
+		// ft_printf("tmpStr:: '%s'\n", arg.str);
+		sum = process_string(&arg, hashtype, 0);
+		// ft_printf("chksum: TMP[%d]: ", iter);
+		ft_printf("|%08x%08x%08x%08x%08x%08x%08x%08x|\n", sum.sha256[0], sum.sha256[1],
+			sum.sha256[2], sum.sha256[3], sum.sha256[4], sum.sha256[5], sum.sha256[6], sum.sha256[7]);
+		free(arg.str);
+	}
+	ft_printf("|%08x%08x%08x%08x%08x%08x%08x%08x|\n", sum.sha256[0], sum.sha256[1],
+		sum.sha256[2], sum.sha256[3], sum.sha256[4], sum.sha256[5], sum.sha256[6], sum.sha256[7]);
+
+	result = sum.sha256[1] + ((uint64_t)sum.sha256[0] << 32);
+	return (result);
 }
 
-void gen_key_vec_salt(t_des *des)
+void		gen_key_vec_salt(t_des *des)
 {
-	
 	des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
 			: ft_atoh_rpadd(des->salt);
-	des->key_val = (!des->key) ? gen_key(des->pass, des->salt_val)
+	des->key_val = (!des->key) ? ft_pbkdf_maison(OPT_SHA256, des->pass, des->salt_val, 1000)
 			: ft_atoh_rpadd(des->key);
 	des->vec_val = ft_atoh_rpadd(des->vector);
 }
 
-int		process_des(t_arg *arg, uint32_t opts)
+t_chksum	process_des(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_des		*des;
 
 	(void)opts;
+	(void)print;
 	ft_printf("process_des\n");
 	des = (t_des *)arg->base;
 	if ((des->fd_i = get_input_file(des->input)) < 0
@@ -125,7 +174,7 @@ int		process_des(t_arg *arg, uint32_t opts)
 	|| !valid_params(des))
 	{
 		close_fds(des);
-		return (1);
+		return ((t_chksum)0);
 	}
 	// ft_printf("KEY: %llx\nVECTOR: %llx\nSALT: %llx\npass: %s\n",
 	// 	(des->key) ? ft_atoh_rpadd(des->key) : -1,
@@ -137,7 +186,6 @@ int		process_des(t_arg *arg, uint32_t opts)
 
 	ft_printf("KEY: %016.16llX\nVECTOR: %016.16llX\nSALT: %016.16llX\npass: %s\n",
 			  (des->key_val), (des->vec_val), (des->salt_val), des->pass);
-
 	close_fds(des);
-	return (0);
+	return ((t_chksum)1);
 }

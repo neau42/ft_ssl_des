@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 12:53:28 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/06 10:31:00 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,39 +71,41 @@ void	print_arg(t_arg *arg, uint32_t opts)
 	ft_printf("\n");
 }
 
-int		process_des_ecb(t_arg *arg, uint32_t opts)
+t_chksum	process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	(void)arg;
 	(void)opts;
+	(void)print;
 	ft_printf("process_desECB\n");
-	return(0);
+	return((t_chksum)0);
 }
 
-int		process_des_cbc(t_arg *arg, uint32_t opts)
+t_chksum	process_des_cbc(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	(void)arg;
 	(void)opts;
+	(void)print;
 	ft_printf("process_des CBC\n");
-	return(0);
+	return ((t_chksum)0);
 }
 
 
 void	parse_args(t_arg *arg, uint32_t opts)
 {
 	t_arg		*first;
-	static int (*fcts[7])(t_arg * arg, uint32_t) = {
+	static t_chksum (*fcts[7])(t_arg * arg, uint32_t, uint8_t) = {
 		process_stdin, process_file, process_string, process_base64,
 		process_des, process_des_ecb, process_des_cbc};
 
 	first = arg;
 	if ((arg->type <= STRING_TYPE && (opts & OPT_P)) || !arg->type)
 	{
-		fcts[0](arg, opts);
+		fcts[0](arg, opts, 1);
 		opts |= OPT_FILE;
 	}
 	while (arg && arg->type)
 	{
-		fcts[(int)arg->type](arg, opts);
+		fcts[(int)arg->type](arg, opts, 1);
 		arg = arg->next;
 	}
 }

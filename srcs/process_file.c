@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/01 09:23:22 by no               ###   ########.fr       */
+/*   Updated: 2018/12/06 10:28:49 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	read_file(char *file_name, t_chksum *sum, t_read *r, uint32_t opts)
 	return (0);
 }
 
-int			process_file(t_arg *arg, uint32_t opts)
+t_chksum	process_file(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_read		r;
 	uint8_t		buf[MD_BUF_SIZE];
@@ -100,8 +100,9 @@ int			process_file(t_arg *arg, uint32_t opts)
 	r.buf = buf;
 	r.file_name = file_name;
 	if (read_file(file_name, &sum, &r, opts))
-		return (1);
+		return ((t_chksum)0);
 	algo((uint32_t *)r.buf, &sum, opts);
-	print_chksum(&sum, r.file_name, opts);
-	return (0);
+	if (print)
+		print_chksum(&sum, r.file_name, opts);
+	return (sum);
 }

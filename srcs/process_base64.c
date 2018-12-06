@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 10:32:06 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/06 10:31:46 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,21 @@ static void	close_fds(t_base64 *base)
 		close(base->fd_o);
 }
 
-int		process_base64(t_arg *arg, uint32_t opts)
+t_chksum	process_base64(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_base64	*base;
 	static char	tab[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 	"0123456789+/";
+	(void)print;
 	base = (t_base64 *)arg->base;
 	if ((base->fd_i = get_input_file(base->input)) < 0
 	|| (base->fd_o = get_output_file(base->output)) < 0)
 	{
 		close_fds(base);
-		return (1);
+		return ((t_chksum)0);
 	}
 	((opts & OPT_D)) ? b64_decode(tab, base) : b64_encode(tab, base);
 	close_fds(base);
-	return (0);
+	return ((t_chksum)1);
 }
