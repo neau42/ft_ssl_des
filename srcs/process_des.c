@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/06 19:19:11 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/07 20:14:58 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ uint64_t		ft_pbkdf_maison(uint32_t hashtype, char *pass, uint64_t salt, int iter
 	i = ft_strlen(salt_buf) + ft_strlen(iter_buf);
 	ft_printf("test concat iter withSalt, len: %d , (iter & 0xFF): %d ", i, (iter & 0xFF));
 	ft_strcat(salt_buf, iter_buf);
+	ft_printf("test concat iter withSalt, len: %d , (iter & 0xFF): %d ", i, (iter & 0xFF));
 	if (!(arg.str = ft_strjoin(pass, salt_buf)))
 	{
 		ft_fdprintf(2, "malloc error\n");
@@ -141,8 +142,8 @@ uint64_t		ft_pbkdf_maison(uint32_t hashtype, char *pass, uint64_t salt, int iter
 		// ft_printf("tmpStr:: '%s'\n", arg.str);
 		sum = process_string(&arg, hashtype, 0);
 		// ft_printf("chksum: TMP[%d]: ", iter);
-		ft_printf("|%08x%08x%08x%08x%08x%08x%08x%08x|\n", sum.sha256[0], sum.sha256[1],
-			sum.sha256[2], sum.sha256[3], sum.sha256[4], sum.sha256[5], sum.sha256[6], sum.sha256[7]);
+		// ft_printf("|%08x%08x%08x%08x%08x%08x%08x%08x|\n", sum.sha256[0], sum.sha256[1],
+			// sum.sha256[2], sum.sha256[3], sum.sha256[4], sum.sha256[5], sum.sha256[6], sum.sha256[7]);
 		free(arg.str);
 	}
 	ft_printf("|%08x%08x%08x%08x%08x%08x%08x%08x|\n", sum.sha256[0], sum.sha256[1],
@@ -156,7 +157,7 @@ void		gen_key_vec_salt(t_des *des)
 {
 	des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
 			: ft_atoh_rpadd(des->salt);
-	des->key_val = (!des->key) ? ft_pbkdf_maison(OPT_SHA256, des->pass, des->salt_val, 1000)
+	des->key_val = (!des->key) ? ft_pbkdf_maison(OPT_SHA256, des->pass, des->salt_val, 10000)
 			: ft_atoh_rpadd(des->key);
 	des->vec_val = ft_atoh_rpadd(des->vector);
 }
