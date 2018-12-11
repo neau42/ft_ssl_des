@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 10:35:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/11 23:07:27 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ static int	get_one_chars(t_base64 *base, char c, char *tab)
 
 	if (!c)
 		return (1);
-	else if (ft_isspace(c))
-		;
+	// else if (ft_isspace(c))
+	// 	ft_printf("get_one_chars - ft_isspace NOPE\n");
 	else if (c == '=')
 	{
 		get_b64_decode_value(base, 0, 1);
@@ -75,42 +75,89 @@ static int	get_one_chars(t_base64 *base, char c, char *tab)
 	return (0);
 }
 
-static int	valid_chunk(char *buf, int *len, char *tab)
+static int format_chunk(char *tab, char *buf, int len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+		if (ft_isspace(buf[i]))
+		{
+			ft_memmove(&buf[i], &buf[i + 1], ft_strlen(&buf[i]));
+			len--;
+		}
+		else if (buf[i] == '=')
+		{
+			if ((i + 1) < len && buf[i + 1] == '=')
+			{
+				buf[i + 2] = '\0';
+				// ft_printf("0 --- i = %d\n", i);
+				return (i % 3 == 0) ? (i + 2) : -1;
+			}
+			buf[i + 1] = '\0';
+			// ft_printf("1 --- i = %d\n", i);
+			return (((i + 1) % 4) == 0) ? (i + 1) : -1;
+		}
+		else if (!(ft_strchr(tab, buf[i])))
+			return (-1);
+		else
+			i++;
+	return (len);
+}
+
+void		parse_chunk(t_base64 *base, char *tab, char *buf)
 {
 	int		i;
-	char	*ptr;
 
-	i = -1;
-	while (++i < *len)
+	i = 0;
+	while (buf[i])
 	{
-		if (ft_isspace(buf[i]) || buf[i] == '=')
-			;
-		else if (!(ptr = ft_strchr(tab, buf[i])))
-			return (0);
+		if (get_one_chars(base, buf[i], tab))
+			break ;
+		i++;
 	}
-	return (1);
 }
 
 void		b64_decode(char *tab, t_base64 *base)
 {
-	char	buf[B64_DEC_BUF_SIZE];
+	char	buf[B64_DEC_BUF_SIZE + 1];
 	int		buf_size;
 	int		len;
-	int		i;
 
+	(void)base;
 	len = 0;
-	ft_bzero(buf, B64_DEC_BUF_SIZE);
-	while ((buf_size = read(base->fd_i, &buf, B64_DEC_BUF_SIZE)) > 0)
+	ft_bzero(buf, B64_DEC_BUF_SIZE + 1);
+	while ((buf_size = read(base->fd_i, &buf[len], B64_DEC_BUF_SIZE - len)) > 0)
 	{
-		i = 0;
-		if (valid_chunk(buf, &buf_size, tab))
-			while (i < buf_size)
-			{
-				if (get_one_chars(base, buf[i], tab))
-					break ;
-				i++;
-			}
-		ft_bzero(buf, 4);
-		i++;
+		if ((len = format_chunk(tab, buf, buf_size + len)) == -1)
+		{
+			len = 0;
+			ft_bzero(buf, B64_DEC_BUF_SIZE + 1);
+			continue ;
+		}
+		if (len == 64)
+		{
+			// ft_printf("buf: '%s' buf_size: %d, len: %d, strlen: %d\n", buf, buf_size, len, ft_strlen(buf));
+			parse_chunk(base, tab, buf);
+			ft_bzero(buf, B64_DEC_BUF_SIZE + 1);
+			len = 0;
+		}
 	}
+	// ft_printf("LAST: buf: '%s' buf_size: %d, len: %d, strlen: %d\n", buf, buf_size, len, ft_strlen(buf));
+	parse_chunk(base, tab, buf);
 }
+		// if (valid_chunk())
+
+
+
+		// i = 0;
+		// if ((len = valid_chunk(&buf[len], &buf_size, tab, len)) == 64)
+		// 	while (i < buf_size)
+		// 	{
+		// 		if (get_one_chars(base, buf[i], tab))
+		// 			break ;
+		// 		i++;
+		// 	}
+		// ft_bzero(buf, 4);
+		// i++;
+	// }
