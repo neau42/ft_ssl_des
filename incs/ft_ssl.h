@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/13 04:00:34 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/13 06:08:43 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ void			b64_decode(char *tab, t_base64 *base);
 uint64_t		endian_swap64(uint64_t x);
 uint32_t		endian_swap32(uint32_t x);
 uint32_t		r_rot(uint32_t n, unsigned int c);
+uint32_t		l_rot(uint32_t n, unsigned int c);
+
 void			print_memory_hex(void *data, size_t blk_size);
 void			print_arg(t_arg *arg, uint32_t opts);
 

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 02:42:45 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/13 06:13:36 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ uint32_t			r_rot(uint32_t n, unsigned int c)
 	c &= mask;
 	return (n >> c) | (n << (-c & mask));
 }
+
+uint32_t			l_rot(uint32_t n, unsigned int c)
+{
+	return (n << c) | (n >> ((sizeof n * CHAR_BIT) - c));
+	// return (n >> c) | (n << (-c & mask));
+}
+
 
 static void			print_last_memory_hex(size_t len, size_t size, size_t size2,
 					unsigned char *str)
