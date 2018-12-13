@@ -242,12 +242,12 @@ for str in ""\
 			"`cat /dev/urandom | base64 -b 130 | head -n 1`"\
 			"`cat /dev/urandom | base64 -b 131 | head -n 1`"\
 			"`cat /dev/urandom | base64 -b 132 | head -n 1`"\
-			"`cat Makefile`"\
-			"`cat ft_ssl`" ; do
+			"`cat Makefile`"
+			 ; do
 if [ "`echo -n $str | ./ft_ssl base64 -e | ./ft_ssl base64 -d`" = "$str" ]; then
 	printf "no diff with str $i encode/decode base64\n"
 else
-	printf "\033[31mERROR\033[0m dif with %10.10s encode/decode base64\n" "$str"
+	printf "\033[31mERROR\033[0m diff with %0.10s encode/decode base64\n" "$str"
 fi ; ((i++)) ; done
 
 rm -f file big_smoke_order_remix big_f 1.out 2.out
