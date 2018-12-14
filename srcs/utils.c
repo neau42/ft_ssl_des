@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/13 06:13:36 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 06:12:17 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ uint32_t			r_rot(uint32_t n, unsigned int c)
 	mask = (8 * sizeof(n) - 1);
 	c &= mask;
 	return (n >> c) | (n << (-c & mask));
+}
+
+uint32_t			l_rot28(uint32_t n, unsigned int c)
+{
+	return (((n << c) | (n >> ((sizeof n * 7) - c))) & 0xFFFFFFF);
 }
 
 uint32_t			l_rot(uint32_t n, unsigned int c)

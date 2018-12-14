@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/12/02 05:02:14 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 12:41:09 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	usage_option(void)
 	"\n -k: key in hex is the next arguement."
 	"\n -o: output file for message."
 	"\n -p: password in ascii is the next argument."
+	"\n -P: print the Vector/Key/Salt/Pass"
 	"\n -s: the salt in hex is the next argument."
 	"\n -v: initialization vector in hex is the next argument."
 	"\n");

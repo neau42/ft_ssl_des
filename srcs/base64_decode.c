@@ -6,11 +6,15 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/13 03:09:11 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 06:24:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
+
+extern char g_b64[];
+// static char g_b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+// 					  "0123456789+/";
 
 static void	flush_chunk(t_base64 *base, uint8_t *val, int *i, int *iter)
 {
@@ -50,7 +54,7 @@ static void	get_b64_decode_value(t_base64 *base, uint8_t idx, int op)
 	iter++;
 }
 
-static void	parse_chunk(t_base64 *base, char *tab, char *buf)
+static void	parse_chunk(t_base64 *base, char *buf)
 {
 	int		i;
 	char	*ptr;
@@ -64,15 +68,15 @@ static void	parse_chunk(t_base64 *base, char *tab, char *buf)
 			get_b64_decode_value(base, 0, 1);
 			break ;
 		}
-		else if ((ptr = ft_strchr(tab, buf[i])))
-			get_b64_decode_value(base, ptr - tab, 0);
+		else if ((ptr = ft_strchr(g_b64, buf[i])))
+			get_b64_decode_value(base, ptr - g_b64, 0);
 		else
 			break ;
 	if (i && !buf[i])
 		get_b64_decode_value(base, 0, 1);
 }
 
-static int	format_chunk(char *tab, char *buf, int len, char *chunk)
+static int	format_chunk(char *buf, int len, char *chunk)
 {
 	int			i;
 	static int	j = 0;
@@ -83,7 +87,7 @@ static int	format_chunk(char *tab, char *buf, int len, char *chunk)
 	{
 		if (ft_isspace(buf[i]))
 			;
-		else if (!(ft_strchr(tab, buf[i])) && buf[i] != '=')
+		else if (!(ft_strchr(g_b64, buf[i])) && buf[i] != '=')
 			return (0);
 		else
 			chunk[j++] = buf[i];
@@ -92,7 +96,7 @@ static int	format_chunk(char *tab, char *buf, int len, char *chunk)
 	return (j);
 }
 
-void		b64_decode(char *tab, t_base64 *base)
+void		b64_decode(t_base64 *base)
 {
 	char	read_buf[B64_DEC_BUF_SIZE + 1];
 	char	chunk[B64_DEC_BUF_SIZE + 1];
@@ -104,7 +108,7 @@ void		b64_decode(char *tab, t_base64 *base)
 	ft_bzero(chunk, B64_DEC_BUF_SIZE + 1);
 	while ((buf_size = read(base->fd_i, read_buf, B64_DEC_BUF_SIZE - len)) > 0)
 	{
-		if ((len = format_chunk(tab, read_buf, buf_size, chunk)) == 0)
+		if ((len = format_chunk(read_buf, buf_size, chunk)) == 0)
 		{
 			len = 0;
 			ft_bzero(chunk, B64_DEC_BUF_SIZE + 1);
@@ -112,11 +116,11 @@ void		b64_decode(char *tab, t_base64 *base)
 		}
 		else if (len == 64)
 		{
-			parse_chunk(base, tab, chunk);
+			parse_chunk(base, chunk);
 			ft_bzero(chunk, B64_DEC_BUF_SIZE + 1);
 			len = 0;
 		}
 		ft_bzero(read_buf, buf_size);
 	}
-	parse_chunk(base, tab, chunk);
+	parse_chunk(base, chunk);
 }

@@ -6,11 +6,16 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/03 10:34:21 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 07:58:48 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
+
+// static char g_b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+// 					  "0123456789+/";
+
+extern char g_b64[];
 
 static void	get_b64_value(char *val, uint8_t *buf, int tmp_len, int len)
 {
@@ -34,7 +39,7 @@ static void	get_b64_value(char *val, uint8_t *buf, int tmp_len, int len)
 	}
 }
 
-static void	b64_ecode_last_block(t_base64 *base, char *tab, char *val, int len)
+static void	b64_ecode_last_block(t_base64 *base, char *val, int len)
 {
 	int		size;
 	int		i;
@@ -43,7 +48,7 @@ static void	b64_ecode_last_block(t_base64 *base, char *tab, char *val, int len)
 		size = 3;
 	i = -1;
 	while (++i < (size + 1))
-		ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
+		ft_fdprintf(base->fd_o, "%c", g_b64[(int)val[i]]);
 	while (size % 3)
 	{
 		ft_fdprintf(base->fd_o, "=");
@@ -51,10 +56,9 @@ static void	b64_ecode_last_block(t_base64 *base, char *tab, char *val, int len)
 	}
 }
 
-static void	b64_encode_buffer(t_base64 *base, char *buf, int len, char *tab)
+void		b64_encode_buffer(t_base64 *base, char *buf, int len)
 {
 	char	val[4];
-	int		i;
 	int		tmp_len;
 
 	tmp_len = 0;
@@ -62,18 +66,16 @@ static void	b64_encode_buffer(t_base64 *base, char *buf, int len, char *tab)
 	while (tmp_len < len - 3)
 	{
 		get_b64_value(val, (uint8_t *)buf, tmp_len, len);
-		i = -1;
-		while (++i < 4)
-			ft_fdprintf(base->fd_o, "%c", tab[(int)val[i]]);
+		ft_fdprintf(base->fd_o, "%c%c%c%c", g_b64[(int)val[0]],
+			g_b64[(int)val[1]], g_b64[(int)val[2]], g_b64[(int)val[3]]);
 		tmp_len += 3;
 	}
 	get_b64_value(val, (uint8_t *)buf, tmp_len, len);
-	b64_ecode_last_block(base, tab, val, len);
-	ft_printf("\n");
-	ft_bzero((uint8_t *)buf, B64_ENC_BUF_SIZE);
+	b64_ecode_last_block(base, val, len);
+	ft_fdprintf(base->fd_o, "\n");
 }
 
-void		b64_encode(char *tab, t_base64 *base)
+void		b64_encode(t_base64 *base)
 {
 	char	buf[B64_ENC_BUF_SIZE];
 	int		buf_size;
@@ -82,5 +84,8 @@ void		b64_encode(char *tab, t_base64 *base)
 	len = 0;
 	ft_bzero(buf, B64_ENC_BUF_SIZE);
 	while ((buf_size = read(base->fd_i, &buf, B64_ENC_BUF_SIZE)) > 0)
-		b64_encode_buffer(base, buf, buf_size, tab);
+	{
+		b64_encode_buffer(base, buf, buf_size);
+		ft_bzero((uint8_t *)buf, B64_ENC_BUF_SIZE);
+	}
 }

@@ -6,18 +6,35 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/13 04:03:05 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 19:40:07 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-static void close_fds(t_des *des)
+void free_des(t_des *des)
+{
+	if (des->pass)
+		free(des->pass);
+	if (des->vector)
+		free(des->vector);
+	if (des->salt)
+		free(des->salt);
+	if (des->key)
+		free(des->key);
+	des->pass = NULL;
+	des->vector = NULL;
+	des->salt = NULL;
+	des->key = NULL;
+}
+
+static void close_n_free(t_des *des)
 {
 	if (des->fd_i != STDIN_FILENO)
 		close(des->fd_i);
 	if (des->fd_o > STDOUT_FILENO)
 		close(des->fd_o);
+	free_des(des);
 }
 
 static int	ft_getpass(t_des *des)
@@ -30,7 +47,7 @@ static int	ft_getpass(t_des *des)
 	{
 		ft_printf("Verify failure\n");
 		ft_fdprintf(2, "bad password read\n");
-		close_fds(des);
+		close_n_free(des);
 		return (0);
 	}
 	ft_printf("pass: %s\n", des->pass);
@@ -48,19 +65,19 @@ int			valid_hex_value(char *str)
 	return (1);
 }
 
-int		valid_key_n_vector(t_des *des)
+int		valid_hex_val(t_des *des)
 {
-	if (!des->vector)
+	if (des->salt && !valid_hex_value(des->salt)) // if des-cbc
 	{
-		ft_fdprintf(2, "vector undefined\n");
+		ft_fdprintf(2, "non-hex digit\ninvalid hex salt value");
 		return (0);
 	}
-	if (!valid_hex_value(des->key))
+	if (des->key && !valid_hex_value(des->key))
 	{
 		ft_fdprintf(2, "non-hex digit\ninvalid hex key value");
 		return (0);
 	}
-	if (!valid_hex_value(des->vector))// if des-ecb
+	if (des->vector && !valid_hex_value(des->vector)) // if des-cbc
 	{
 		ft_fdprintf(2, "non-hex digit\ninvalid hex vector value");
 		return (0);
@@ -77,8 +94,14 @@ int valid_params(t_des *des)
 	}
 	else if (des->key)
 	{
-		if (!des->pass && !(valid_key_n_vector(des)))
+		if (!des->pass && !des->vector) 
+		{
+			ft_fdprintf(2, "vector undefined\n");
+				return (0);
+		}
+		if (!valid_hex_val(des))
 			return (0);
+		return (1);
 	}
 	return (1);
 }
@@ -153,35 +176,55 @@ char			*sum_to_str(t_chksum *sum, char *pass)
 // 	return (result);
 // }
 
-uint64_t		ft_pbkdf(uint32_t hashtype, char *pass, uint64_t salt, int type)
+char			*concat_pass_salt(char *pass, uint64_t salt)
 {
-	char		salt_buf[64];
+	int			len;
+	char		*str;
+
+	len = ft_strlen(pass);
+	if (!(str = ft_strnew(len + 8)))
+	{
+		ft_fdprintf(2, "malloc error\n");
+		exit(42);
+	}
+	ft_strcpy(str, pass);
+	str[len + 7] = (salt & 0xFF);
+	str[len + 6] = ((salt >> 8) & 0xFF);
+	str[len + 5] = ((salt >> 16) & 0xFF);
+	str[len + 4] = ((salt >> 24) & 0xFF);
+	str[len + 3] = ((salt >> 32) & 0xFF);
+	str[len + 2] = ((salt >> 40) & 0xFF);
+	str[len + 1] = ((salt >> 48) & 0xFF);
+	str[len] = ((salt >> 56) & 0xFF);
+	return (str);
+}
+
+
+uint64_t		generate_key(uint32_t hashtype, char *pass, uint64_t salt, int type)
+{
 	t_arg		arg;
 	t_chksum	sum;
 
 	arg.type = STRING_TYPE;
 	arg.base = NULL;
 	arg.next = NULL;
-	ft_itoa_base_buffer_upper(salt, 16, salt_buf);
-	if (!(arg.str = ft_strjoin(pass, salt_buf)))
-	{
-		ft_fdprintf(2, "malloc error\n");
-		exit(42);
-	}
+	arg.str = concat_pass_salt(pass, salt);
 	sum = process_string(&arg, hashtype, 0);
 	free(arg.str);
 	if (type == 0)
-		return (sum.md5[1] + ((uint64_t)sum.md5[0] << 32));
-	return (sum.md5[3] + ((uint64_t)sum.md5[2] << 32));
+		return (endian_swap32(sum.md5[1])
+			+ ((uint64_t)endian_swap32(sum.md5[0]) << 32));
+	return (endian_swap32(sum.md5[3])
+		+ ((uint64_t)endian_swap32(sum.md5[2]) << 32));
 }
 
 void		gen_key_vec_salt(t_des *des)
 {
 	des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
 			: ft_atoh_rpadd(des->salt);
-	des->key_val = (!des->key) ? ft_pbkdf(OPT_MD5, des->pass, des->salt_val, 0)
+	des->key_val = (!des->key) ? generate_key(OPT_MD5, des->pass, des->salt_val, 0)
 			: ft_atoh_rpadd(des->key);
-	des->vec_val = (!des->vector) ? ft_pbkdf(OPT_MD5, des->pass, des->salt_val, 1)
+	des->vec_val = (!des->vector) ? generate_key(OPT_MD5, des->pass, des->salt_val, 1)
 	: ft_atoh_rpadd(des->vector);
 }
 
@@ -189,20 +232,17 @@ t_chksum	process_des(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_des		*des;
 
-	(void)opts;
 	(void)print;
-	ft_printf("process_des\n");
 	des = (t_des *)arg->base;
 	if ((des->fd_i = get_input_file(des->input)) < 0
 	|| (des->fd_o = get_output_file(des->output)) < 0
 	|| !valid_params(des))
 	{
-		close_fds(des);
+		close_n_free(des);
 		return ((t_chksum)0);
 	}
 	gen_key_vec_salt(des);
-	ft_printf("process_des ........... OPTS: %32b\n", opts);
 	algo(des, NULL, opts);
-	close_fds(des);
+	close_n_free(des);
 	return ((t_chksum)1);
 }

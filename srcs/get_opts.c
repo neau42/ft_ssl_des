@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/02 05:13:06 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 12:38:33 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ void			get_des_option(char *str, char *str_next, uint32_t *opts,
 		(*opts) |= OPT_D;
 	else if (*str == 'e' && (*opts &= (0xFFFFFFFF ^ OPT_D)))
 		(*opts) |= OPT_E;
+	else if (*str == 'P')
+		(*opts) |= OPT_PP;
 	else if (*str == 'i' && (*opts |= (OPT_I | OPT_S)))
 		base->input = ft_cpy_string(base->input, str_next, opts);
 	else if (*str == 'o' && (*opts |= (OPT_O | OPT_S)))

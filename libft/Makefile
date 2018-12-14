@@ -6,7 +6,7 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/27 07:13:00 by nboulaye          #+#    #+#              #
-#    Updated: 2018/12/02 09:24:41 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/12/14 18:13:14 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,8 @@ SRC =	$(SRCL)\
 		$(addprefix $(SRCSPATH), $(SR))\
 		$(addprefix $(OPT_PATH), $(OPT))\
 
-WFLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb
+WFLAGS = -Wall -Werror -Wextra 
+# -fsanitize=address -g -ggdb
 
 LFLAGS = -L libft/ -lft
 

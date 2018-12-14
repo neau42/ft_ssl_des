@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/06 10:29:35 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 11:47:45 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_chksum	process_stdin(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	(void)arg;
 	if ((read(STDIN_FILENO, NULL, 0) < 0)
-	&& ft_fdprintf(2, "Read Error in (stdin)\n"))
+	&& ft_fdprintf(2, "Read error on stdin\n"))
 		return ((t_chksum)0);
 	return (read_stdin(opts, print));
 }

@@ -6,28 +6,27 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/13 04:01:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/14 06:48:11 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void		ft_null(const uint32_t *buf, t_chksum *sum)
+void		ft_null(const uint32_t *buf, t_chksum *sum, uint32_t opts)
 {
 	(void)buf;
 	(void)sum;
+	(void)opts;
 }
 
 void		algo(void *buf, t_chksum *sum, uint32_t opts)
 {
-	static void (*fcts[7])(const uint32_t *, t_chksum *) = {
+	static void (*fcts[7])(const uint32_t *, t_chksum *, uint32_t) = {
 		ft_null, md5, sha256, ft_null, des_algo, ft_null, ft_null};
 
-	ft_printf("opts & GET_HASH: %d\n", opts & GET_HASH);
-	// exit(42);
 	if (opts & OPT_DD)
 		print_memory_hex(buf, 64);
-	fcts[opts & GET_HASH](buf, sum);
+	fcts[opts & GET_HASH](buf, sum, opts);
 }
 
 void		print_sha256sum(uint32_t *sum)
