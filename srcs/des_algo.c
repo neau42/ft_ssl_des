@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/15 17:49:46 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/15 18:53:24 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,9 +180,11 @@ void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 			(!(i = 0) && opts & OPT_A) ? 
 				b64_encode_buffer((t_base64 *)des, (char *)final_buf, 48) :
 				write(des->fd_o, final_buf, 48);
+		// ft_printf("%hhx.%hhx.%hhx.%hhx.%hhx.\n", final_buf[0], final_buf[1], final_buf[2], final_buf[3]);
 	}
 	if (i)
 		(opts & OPT_A) ?
 			b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) :
 			write(des->fd_o, &final_buf, i * 8);
+
 }
