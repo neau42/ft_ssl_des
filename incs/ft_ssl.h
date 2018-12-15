@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 12:39:46 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/15 18:25:07 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,9 @@ int				get_input_file(char *file_name);
 int				get_output_file(char *file_name);
 
 t_chksum		process_des(t_arg *arg, uint32_t opts, uint8_t print);
+t_chksum		process_string_custom(t_arg *arg, uint32_t opts, int len);
+
+
 
 t_chksum		process_base64(t_arg *arg, uint32_t opts, uint8_t print);
 void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,

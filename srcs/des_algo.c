@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 18:10:24 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/15 17:49:46 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 	(void)sum;
 	des = (t_des *)ptr;
 	i = 0;
-	if (!des->key)
+	if (des->pass)
 	{
 		ft_memcpy((uint8_t *)&final_buf[0], "Salted__", 8);
 		ft_memcpy((uint8_t *)&final_buf[1], (char *)&(des->salt_val), 8);
@@ -172,8 +172,9 @@ void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 		(des->key_val), (des->vec_val), (des->salt_val), des->pass);
 	gen_keytab(des->key_val, k);
 	buf = 0;
-	while (read(des->fd_i, &buf, (sizeof(uint64_t))))
+	while (read(des->fd_i, &buf, (sizeof(uint64_t))) > 0)
 	{
+
 		process_des_chunk(buf, k, &i, final_buf);
 		if (i == 6)
 			(!(i = 0) && opts & OPT_A) ? 

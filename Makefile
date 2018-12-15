@@ -6,7 +6,7 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/12/14 18:15:24 by nboulaye         ###   ########.fr        #
+#    Updated: 2018/12/15 14:21:12 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,7 @@ SRC =	srcs/md5.c\
 		srcs/process_base64.c\
 		srcs/process_string.c
 
-FLAGS = -Wall -Werror -Wextra 
-#-fsanitize=address -g -ggdb
+FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb
 
 INC_PATH = incs/
 
