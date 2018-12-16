@@ -6,11 +6,12 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/25 16:24:10 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/11/25 22:31:07 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/16 19:13:16 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 void		*ft_fast_memcpy(void *dst, const void *src, size_t n)
 {
