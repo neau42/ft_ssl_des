@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   des_algo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/15 19:11:57 by nboulaye         ###   ########.fr       */
+/*   Updated: 2018/12/16 04:03:52 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,14 +139,18 @@ uint64_t	ft_des_rounds(uint64_t msg, uint64_t *k)
 	return (left + ((uint64_t)right << 32));
 }
 
-void	process_des_chunk(uint64_t buf, uint64_t *k, int *i, uint64_t *final_buf)
+void	process_des_chunk(uint64_t buf, uint64_t *k, uint64_t *final_buf)
 {
 	uint64_t	result;
 
+
+	// ft_printf("des process: %llX\n", buf);
 	buf = endian_swap64(buf);
 	result = ft_des_rounds(permut_bits(64, 64, buf, g_ip), k);
 	result = permut_bits(64, 64, result, g_ip_rev);
-	ft_memcpy((uint8_t *)&final_buf[(*i)++], (void *)&result, 8);
+	result = endian_swap64(result);
+
+	ft_memcpy((uint8_t *)final_buf, (void *)&result, 8);
 	buf = 0;
 }
 
@@ -155,65 +159,51 @@ void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 	uint64_t	k[16];
 	t_des		*des;
 	uint64_t	buf;
-	uint64_t	final_buf[6];
-	int			i;
+	uint64_t	final_buf = 0;
 
 	(void)sum;
 	des = (t_des *)ptr;
-	i = 0;
 	if (des->pass)
 	{
-		ft_memcpy((uint8_t *)&final_buf[0], "Salted__", 8);
-		ft_memcpy((uint8_t *)&final_buf[1], (char *)&(des->salt_val), 8);
-		i = 2;
+		ft_memcpy((uint8_t *)final_buf, "Salted__", 8);
+		write(des->fd_o, &final_buf, 8);
+		ft_memcpy((uint8_t *)final_buf, (char *)&(des->salt_val), 8);
+		write(des->fd_o, &final_buf, 8);
+
 	}
 	if (opts & OPT_PP)
 	ft_fdprintf(2, "Key : %016.16llX\nVect: %016.16llX\nSalt: %016.16llX\nPass: %s\n",
 		(des->key_val), (des->vec_val), (des->salt_val), des->pass);
 	gen_keytab(des->key_val, k);
+
+
+	// 	buf = 0;
+	// uint64_t test = 0x0123456789ABCDEF;
+	// test = endian_swap64(test);
+	// process_des_chunk(test, k, &final_buf);
+	// write(des->fd_o, &final_buf[i -1], 8);
+	// ft_printf("\nTEST>>> %x.%x.%x.%x. (i= %d)\n", (final_buf[i - 1] >> 48) & 0xffff, (final_buf[i - 1] >> 32) & 0xffff, (final_buf[i - 1] >> 16) & 0xffff, final_buf[i - 1] & 0xffff, i);
+	// ft_printf("_______\n");
+
 	buf = 0;
-
-
-	uint64_t test = 0x0123456789ABCDEF;
-	ft_printf("test : %0.64llb\n", test);
-	test = permut_bits(64, 64, test, g_ip);
-	ft_printf("test : %0.64llb\n", test);
-
-	uint32_t left[17], right[17];
-
-	right[0] = test;
-	left[0] = (test >> 32);
-
-	// ft_printf("left : %0.32llb\nright: %0.32llb\n", left[0], right[0]);
-	i = 0;
-	while (++i < 17)
-	{
-		left[i] = right[i - 1];
-		right[i] = left[i - 1] ^ ft_f(right[i - 1], k[i - 1]);
-		ft_printf("------- [% .2d]\nleft : %0.32llb\nright: %0.32llb\n", i, left[i], right[i]);
-	}
-
-	uint64_t result;
-	result = left[16] + ((uint64_t)right[16] << 32);
-	result = permut_bits(64, 64, result, g_ip_rev);
-	ft_printf("[%.2d] -- result: %llx\n", i, result);
-
 	while (read(des->fd_i, &buf, (sizeof(uint64_t))) > 0)
 	{
-		ft_printf("buf: %llx\n", buf);
-		ft_printf("swap buf: %llx\n", endian_swap64(buf));
-		process_des_chunk(buf, k, &i, final_buf);
-		if (i == 6)
-			(!(i = 0) && opts & OPT_A) ? 
-				b64_encode_buffer((t_base64 *)des, (char *)final_buf, 48) :
-				write(des->fd_o, final_buf, 48);
-		ft_printf("%hhx.%hhx.%hhx.%hhx.%hhx.\n", final_buf[0], final_buf[1], final_buf[2], final_buf[3]);
+		// ft_printf("buf: %llx\n", buf);
+		// ft_printf("swap buf: %llx\n", endian_swap64(buf));
+		process_des_chunk(buf, k, &final_buf);
+		(opts & OPT_A) ? 
+			b64_encode_buffer((t_base64 *)des, (char *)final_buf, 48) :
+			write(des->fd_o, &final_buf, 8);
+		// ft_printf("\nREAD '%llx'>>> %.02llx%.02llx%.02llx%.02llx%.02llx%.02llx%.02llx%.02llx\n", buf, final_buf & 0xff, (final_buf >> 8) & 0xff, (final_buf >> 16) & 0xff, (final_buf >> 24) & 0xff, (final_buf >> 32) & 0xff, (final_buf >> 40) & 0xff, (final_buf >> 48) & 0xff, (final_buf >> 56) & 0xff);
 		buf = 0;
 	}
-	if (i)
-		(opts & OPT_A) ?
-			b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) :
-			write(des->fd_o, &final_buf, i * 8);
+	// if (i)
+	// 	(opts & OPT_A) ?
+	// 		b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) :
+	// 		write(des->fd_o, &final_buf[i - 1], 8);
+			
+
+			// write(des->fd_o, &final_buf, i * 8);
 
 
 }
