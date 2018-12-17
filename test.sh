@@ -250,5 +250,35 @@ else
 	printf "\033[31mERROR\033[0m diff with %0.10s encode/decode base64\n" "$str"
 fi ; ((i++)) ; done
 
+
+# i=0
+
+# for i in {1..257}
+# 	do str="`cat /dev/urandom | base64 -b $i | head -n 1`" 
+# 	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des  -k 4242 -v 11 | od -A n -t x1`" ]; then
+# 		printf "no diff with str $i (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
+# 	else
+# 		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\n founded: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des -k 4242  |od -A n -t x1 | sed 's/ //g'`"
+# 	fi
+# 	# ((i++))
+# 	 done
+
+str="" 
+if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des  -k 4242 -v 11 | od -A n -t x1`" ]; then
+	printf "no diff with str (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
+else
+	printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des -k 4242  |od -A n -t x1 | sed 's/ //g'`"
+fi
+for i in {1..257}
+do
+	str="`cat /dev/urandom | base64 -b $i | head -n 1`" 
+	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des  -k 4242 -v 11 | od -A n -t x1`" ]; then
+		printf "no diff with str (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
+	else
+		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des -k 4242  |od -A n -t x1 | sed 's/ //g'`"
+	fi
+done
+
+
 rm -f file big_smoke_order_remix big_f 1.out 2.out
 rm ${TEST_DIR}*
