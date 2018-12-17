@@ -6,7 +6,7 @@
 /*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/17 16:57:24 by no               ###   ########.fr       */
+/*   Updated: 2018/12/17 17:23:45 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,13 +150,26 @@ void	process_des_chunk(uint64_t buf, uint64_t *k, uint64_t *final_buf)
 	ft_memcpy((uint8_t *)final_buf, (void *)&result, 8);
 }
 
+void des_print(t_des *des, uint64_t *final_buf, int *i, uint32_t opts)
+{
+	if (*i == 6)
+	{
+		(opts & OPT_A) ?
+		b64_encode_buffer((t_base64 *)des, (char *)final_buf, 48)
+		: write(des->fd_o, final_buf, 48);
+		*i = 0;
+	}
+}
+
+
 void read_loop( t_des *des, uint64_t *k, uint64_t *final_buf, uint32_t opts)
 {
 	uint64_t	buf;
 	int			i;
 	int			read_size;
-	uint64_t padding;
-	uint64_t padding_nb;
+	uint64_t	padding;
+	uint64_t	padding_nb;
+
 	i = 0;
 	if (des->pass)
 		i = 2;
@@ -170,18 +183,12 @@ void read_loop( t_des *des, uint64_t *k, uint64_t *final_buf, uint32_t opts)
 			padding_nb = (int)(sizeof(uint64_t)) - read_size;
 			while (padding_nb-- >0)
 				buf |= (padding << (uint64_t)(64 - (padding_nb + 1) * 8));
-			// buf |= 0x0707070707070700;
 		}
 		else
 			padding = 100;
 		process_des_chunk(buf, k, &final_buf[i]);
-		// ft_printf("buf : %.16llx\n",buf);
 		i++;
-		if (i == 6)
-		{
-			(opts & OPT_A) ? b64_encode_buffer((t_base64 *)des, (char *)final_buf, 48) : write(des->fd_o, final_buf, 48);
-			i = 0;
-		}
+		des_print(des, final_buf, &i, opts);
 		buf = 0;
 	}
 	if (padding == 100)
