@@ -6,7 +6,7 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2018/12/16 18:30:27 by nboulaye         ###   ########.fr        #
+#    Updated: 2019/01/09 17:11:18 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,13 +23,13 @@ SRC =	srcs/md5.c\
 		srcs/des_algo.c\
 		srcs/get_opts.c\
 		srcs/get_io_file.c\
-		srcs/process_des.c\
 		srcs/init_chksum.c\
 		srcs/process_file.c\
 		srcs/process_stdin.c\
 		srcs/base64_encode.c\
 		srcs/base64_decode.c\
 		srcs/process_base64.c\
+		srcs/process_des_ecb.c\
 		srcs/process_string.c
 
 FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb
@@ -62,7 +62,7 @@ fclean: clean
 	make fclean -C $(LIBFT_PATH)
 	rm -f $(NAME)
 
-test: 
+test:
 
 re: fclean all
 

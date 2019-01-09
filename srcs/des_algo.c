@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/09 15:46:22 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/09 18:40:47 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,9 +216,9 @@ void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 		test = endian_swap64((uint64_t)des->salt_val);
 		ft_memcpy((uint8_t *)&final_buf[1], &test, 8);
 	}
+	gen_keytab(des->key_val, k);
 	if (opts & OPT_PP)
 	ft_fdprintf(2, "Key : %016.16llX\nVect: %016.16llX\nSalt: %016.16llX\nPass: %s\n",
 		(des->key_val), (des->vec_val), (des->salt_val), des->pass);
-	gen_keytab(des->key_val, k);
 	read_loop(des, k, final_buf, opts);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_des.c                                      :+:      :+:    :+:   */
+/*   process_des_ecb.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/09 15:58:29 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/09 23:18:07 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,19 @@ static void close_n_free(t_des *des)
 	free_des(des);
 }
 
-static int	ft_getpass(t_des *des)
+static int	ft_getpass(t_des *des, uint32_t opts)
 {
-	char	*str;
-
+	if (opts & OPT_D)
+	{
+		if (!(des->pass =
+		ft_strdup(getpass("(enter des decryption password) $> ")))
+		|| !*des->pass)
+			return (0);
+		return (1);
+	}
 	des->pass = ft_strdup(getpass("(enter des encryption password) $> "));
-	str = getpass("(Verifying - enter des encryption password:)) $> ");
-	if (!des->pass || !*des->pass || ft_strcmp(des->pass, str))
+	if (!des->pass || !*des->pass || ft_strcmp(des->pass,
+	getpass("(Verifying - enter des encryption password:)) $> ")))
 	{
 		ft_printf("Verify failure\n");
 		ft_fdprintf(2, "bad password read\n");
@@ -89,7 +95,7 @@ int valid_params(t_des *des, uint32_t opts)
 {
 	if (!des->pass && !des->key)
 	{
-		if (!ft_getpass(des))
+		if (!ft_getpass(des, opts))
 			return (0);
 	}
 	else if (des->key)
@@ -170,15 +176,51 @@ uint64_t		generate_key(uint32_t hashtype, char *pass, uint64_t salt, int type)
 	(endian_swap32(sum.md5[3]) + ((uint64_t)endian_swap32(sum.md5[2]) << 32));
 }
 
+int		get_magic_salt(int fd, uint64_t *salt_val)
+{
+	unsigned char buf[17];
+
+	ft_bzero(buf, 17);
+	if (read(fd, buf, 16) < 16)
+	{
+		ft_fdprintf(2, "error reading input file\n", buf);
+		return (1);
+	}
+	if (ft_strncmp("Salted__", (char *)buf, 8))
+	{
+		ft_fdprintf(2, "bad magic number: %s\n", buf);
+		return (1);
+	}
+	ft_fdprintf(2, "[TST] magic salt: %s\n", buf);
+	*salt_val = ((uint64_t)buf[15]
+	| (uint64_t)buf[14] << 8
+	| (uint64_t)buf[13] << 16
+	| (uint64_t)buf[12] << 24
+	| (uint64_t)buf[11] << 32
+	| (uint64_t)buf[10] << 40
+	| (uint64_t)buf[9] << 48
+	| (uint64_t)buf[8] << 56);
+	ft_fdprintf(2, "[TST] magic salt: %016llx\n", (*salt_val));
+	return (0);
+}
+
 void		gen_key_vec_salt(t_des *des, uint32_t opts)
 {
-	des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
+	if (opts & OPT_D && !des->key)
+		get_magic_salt(des->fd_i, &des->salt_val);
+	else
+		des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
 			: ft_atoh_rpadd(des->salt);
 	des->key_val = (!des->key) ? generate_key(OPT_MD5, des->pass, des->salt_val, 0)
 			: ft_atoh_rpadd(des->key);
 	if ((opts & GET_HASH) == OPT_CBC)
 		des->vec_val = (!des->vector) ? generate_key(OPT_MD5, des->pass, des->salt_val, 1)
 		: ft_atoh_rpadd(des->vector);
+}
+
+void decode_des(void)
+{
+	ft_printf("need decode -_-\n");
 }
 
 t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
@@ -195,7 +237,10 @@ t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 		return ((t_chksum)0);
 	}
 	gen_key_vec_salt(des, opts);
-	algo(des, NULL, opts);
+	if (opts & OPT_D)
+		decode_des();
+	else
+		algo(des, NULL, opts);
 	close_n_free(des);
 	return ((t_chksum)1);
 }
