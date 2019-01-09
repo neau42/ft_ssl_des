@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/15 18:30:44 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:58:29 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void		gen_key_vec_salt(t_des *des, uint32_t opts)
 		: ft_atoh_rpadd(des->vector);
 }
 
-t_chksum	process_des(t_arg *arg, uint32_t opts, uint8_t print)
+t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_des		*des;
 

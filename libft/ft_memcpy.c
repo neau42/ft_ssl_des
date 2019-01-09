@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/25 16:24:10 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/16 19:13:16 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:40:48 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void		*ft_memcpy(void *dst, const void *src, size_t n)
 	i = 0;
 	d = dst;
 	s = src;
+
 	while (i < n)
 	{
 		d[i] = s[i];

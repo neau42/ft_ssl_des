@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/15 18:25:07 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:51:26 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ typedef struct	s_arg
 {
 	char			type;
 	char			*str;
-	t_base			*base;	
+	t_base			*base;
 	struct s_arg	*next;
 }				t_arg;
 
@@ -140,7 +140,8 @@ t_chksum		process_string(t_arg *arg, uint32_t opts, uint8_t print);
 int				get_input_file(char *file_name);
 int				get_output_file(char *file_name);
 
-t_chksum		process_des(t_arg *arg, uint32_t opts, uint8_t print);
+// t_chksum		process_des(t_arg *arg, uint32_t opts, uint8_t print);
+t_chksum		process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print);
 t_chksum		process_string_custom(t_arg *arg, uint32_t opts, int len);
 
 

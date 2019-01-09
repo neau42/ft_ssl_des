@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 18:55:39 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:58:35 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ void	print_arg(t_arg *arg, uint32_t opts)
 	ft_printf("\n");
 }
 
-t_chksum	process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
+t_chksum	process_des(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	(void)arg;
 	(void)opts;
 	(void)print;
-	ft_printf("process_desECB\n");
+	ft_printf("process_des call cbc\n");
 	return((t_chksum)0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   des_algo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/17 17:23:45 by no               ###   ########.fr       */
+/*   Updated: 2019/01/09 15:46:22 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,11 +192,11 @@ void read_loop( t_des *des, uint64_t *k, uint64_t *final_buf, uint32_t opts)
 		buf = 0;
 	}
 	if (padding == 100)
-		{
-			buf |= 0x0808080808080808;
-			process_des_chunk(buf, k, &final_buf[i]);
-			i++;
-		}
+	{
+		buf |= 0x0808080808080808;
+		process_des_chunk(buf, k, &final_buf[i]);
+		i++;
+	}
 	if (i)
 		(opts & OPT_A) ? b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) : write(des->fd_o, final_buf, i * 8);
 }
@@ -206,15 +206,15 @@ void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 	uint64_t	k[16];
 	t_des		*des;
 	uint64_t	final_buf[6] = {0};
+	uint64_t	test;
 
 	(void)sum;
 	des = (t_des *)ptr;
 	if (des->pass)
 	{
 		ft_memcpy((uint8_t *)&final_buf[0], "Salted__", 8);
-		write(des->fd_o, &final_buf[0], 8);
-		ft_memcpy((uint8_t *)&final_buf[1], (char *)&(des->salt_val), 8);
-		write(des->fd_o, &final_buf[1], 8);
+		test = endian_swap64((uint64_t)des->salt_val);
+		ft_memcpy((uint8_t *)&final_buf[1], &test, 8);
 	}
 	if (opts & OPT_PP)
 	ft_fdprintf(2, "Key : %016.16llX\nVect: %016.16llX\nSalt: %016.16llX\nPass: %s\n",
