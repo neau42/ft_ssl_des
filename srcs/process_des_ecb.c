@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/09 23:18:07 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/11 14:25:53 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,15 +191,10 @@ int		get_magic_salt(int fd, uint64_t *salt_val)
 		ft_fdprintf(2, "bad magic number: %s\n", buf);
 		return (1);
 	}
-	ft_fdprintf(2, "[TST] magic salt: %s\n", buf);
-	*salt_val = ((uint64_t)buf[15]
-	| (uint64_t)buf[14] << 8
-	| (uint64_t)buf[13] << 16
-	| (uint64_t)buf[12] << 24
-	| (uint64_t)buf[11] << 32
-	| (uint64_t)buf[10] << 40
-	| (uint64_t)buf[9] << 48
-	| (uint64_t)buf[8] << 56);
+	*salt_val = ((uint64_t)buf[15] | (uint64_t)buf[14] << 8
+	| (uint64_t)buf[13] << 16 | (uint64_t)buf[12] << 24
+	| (uint64_t)buf[11] << 32 | (uint64_t)buf[10] << 40
+	| (uint64_t)buf[9] << 48 | (uint64_t)buf[8] << 56);
 	ft_fdprintf(2, "[TST] magic salt: %016llx\n", (*salt_val));
 	return (0);
 }

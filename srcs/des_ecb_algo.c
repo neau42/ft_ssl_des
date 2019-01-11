@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   des_algo.c                                         :+:      :+:    :+:   */
+/*   des_ecb_algo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/09 18:40:47 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/11 14:30:38 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void read_loop( t_des *des, uint64_t *k, uint64_t *final_buf, uint32_t opts)
 		(opts & OPT_A) ? b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) : write(des->fd_o, final_buf, i * 8);
 }
 
-void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
+void		des_ecb_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 {
 	uint64_t	k[16];
 	t_des		*des;

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/09 15:51:26 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/11 14:31:06 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ uint32_t		l_rot28(uint32_t n, unsigned int c);
 void			print_memory_hex(void *data, size_t blk_size);
 void			print_arg(t_arg *arg, uint32_t opts);
 
-void			des_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
+void			des_ecb_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
 
 
 #endif
