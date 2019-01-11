@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/11 14:25:53 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/11 14:44:59 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 	}
 	gen_key_vec_salt(des, opts);
 	if (opts & OPT_D)
-		decode_des();
+		des_ecb_algo_decrypt(des, opts);
 	else
 		algo(des, NULL, opts);
 	close_n_free(des);

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 06:12:17 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/11 18:38:45 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,30 @@ void				print_memory_hex(void *data, size_t blk_size)
 		}
 	}
 	print_last_memory_hex(size - size2, size, size2, str);
+}
+
+uint64_t	permut_bits(uint64_t original_len, uint64_t final_len,
+								uint64_t value, uint8_t *permut_tab)
+{
+	int			i;
+	uint64_t	ret;
+
+	i = -1;
+	ret = 0;
+	while (++i < (int)final_len)
+		ret |= (((value & (1UL << (original_len - permut_tab[i])))
+				>> (original_len - permut_tab[i])) << ((final_len - 1) - i));
+	return (ret);
+}
+
+uint64_t	unpermut_bits(uint64_t len, uint64_t value, uint8_t *permut_tab)
+{
+	int			i;
+	uint64_t	ret;
+
+	i = -1;
+	ret = 0;
+	while (++i < (int)len)
+		ret |= (((value >> (len - i - 1)) & 1) << (len - permut_tab[i]));
+	return (ret);
 }

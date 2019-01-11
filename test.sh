@@ -28,11 +28,11 @@ for e in `ls ${TEST_DIR}f_*` ; do
 		echo -n "."
 	fi
 	((a++))
-	echo "$e:" >>  ${TEST_DIR}$FILE_FT_MD5  >> ${TEST_DIR}$FILE_OP_MD5;  
+	echo "$e:" >>  ${TEST_DIR}$FILE_FT_MD5  >> ${TEST_DIR}$FILE_OP_MD5;
 	./ft_ssl md5 -q $e >> ${TEST_DIR}$FILE_FT_MD5
 	openssl md5 $e | cut -d' ' -f2 >> ${TEST_DIR}$FILE_OP_MD5
 done
-echo "\n" 
+echo "\n"
 
 if [ "`diff -q ${TEST_DIR}$FILE_FT_MD5 ${TEST_DIR}$FILE_OP_MD5`" = "" ]; then
 	echo "no Diff in $1 md5 hash"
@@ -52,7 +52,7 @@ for e in `ls ${TEST_DIR}f_*` ; do
 	./ft_ssl sha256 -q $e >> ${TEST_DIR}$FILE_FT_SHA
 	shasum -a 256 $e | cut -d' ' -f1 >> ${TEST_DIR}$FILE_OP_SHA
 done
-echo "\n" 
+echo "\n"
 
 if [ "`diff -q ${TEST_DIR}$FILE_FT_SHA ${TEST_DIR}$FILE_OP_SHA`" = "" ]; then
 	echo "no Diff in $1 sha256 hash"
@@ -75,7 +75,7 @@ for e in  `ls ${TEST_DIR}f_*` ; do
 	./ft_ssl md5 -q -s $str >> ${TEST_DIR}$FILE_FT_MD5 2>&1;
 	md5 -q -s $str >> ${TEST_DIR}$FILE_OP_MD5 2>&1;
 done
-echo "\n" 
+echo "\n"
 
 if [ "`diff -q ${TEST_DIR}$FILE_FT_MD5 ${TEST_DIR}$FILE_OP_MD5`" = "" ]; then
 	echo "no Diff in $1 md5 hash"
@@ -96,7 +96,7 @@ for e in  `ls ${TEST_DIR}f_*` ; do
 	./ft_ssl sha256 -q -s $str >> ${TEST_DIR}$FILE_FT_SHA 2>&1;
 	echo -n "`cat $e`" | shasum -a 256 | cut -d' ' -f1 >> ${TEST_DIR}$FILE_OP_SHA 2>&1;
 done
-echo "\n" 
+echo "\n"
 
 if [ "`diff -q ${TEST_DIR}$FILE_FT_SHA ${TEST_DIR}$FILE_OP_SHA`" = "" ]; then
 	echo "no Diff in $1 sha256 hash"
@@ -205,77 +205,81 @@ else
 	diff 1.out 2.out
 fi
 
-echo "\n\033[92m - - - - - - - - TEST BASE64 ENCODE // DECODE - - - - - - - - -\033[0m"
+# echo "\n\033[92m - - - - - - - - TEST BASE64 ENCODE // DECODE - - - - - - - - -\033[0m"
 
-i=0;
+# i=0;
 
-for str in ""\
-			"`cat /dev/urandom | base64 -b 1 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 2 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 3 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 4 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 5 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 6 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 7 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 8 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 9 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 10 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 12 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 42 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 43 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 44 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 62 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 63 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 64 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 65 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 66 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 67 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 68 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 69 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 70 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 125 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 126 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 127 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 129 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 130 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 131 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 132 | head -n 1`"\
-			"`cat Makefile`"
-			 ; do
-if [ "`echo -n $str | ./ft_ssl base64 -e | ./ft_ssl base64 -d`" = "$str" ]; then
-	printf "no diff with str $i encode/decode base64\n"
-else
-	printf "\033[31mERROR\033[0m diff with %0.10s encode/decode base64\n" "$str"
-fi ; ((i++)) ; done
+# for str in ""\
+# 			"`cat /dev/urandom | base64 -b 1 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 2 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 3 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 4 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 5 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 6 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 7 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 8 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 9 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 10 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 12 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 42 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 43 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 44 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 62 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 63 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 64 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 65 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 66 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 67 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 68 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 69 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 70 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 125 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 126 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 127 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 129 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 130 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 131 | head -n 1`"\
+# 			"`cat /dev/urandom | base64 -b 132 | head -n 1`"\
+# 			"`cat Makefile`"
+# 			 ; do
+# if [ "`echo -n $str | ./ft_ssl base64 -e | ./ft_ssl base64 -d`" = "$str" ]; then
+# 	printf "no diff with str $i encode/decode base64\n"
+# else
+# 	printf "\033[31mERROR\033[0m diff with %0.10s encode/decode base64\n" "$str"
+# fi ; ((i++)) ; done
+
 
 
 # i=0
 
 # for i in {1..257}
-# 	do str="`cat /dev/urandom | base64 -b $i | head -n 1`" 
-# 	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des  -k 4242 -v 11 | od -A n -t x1`" ]; then
+# 	do str="`cat /dev/urandom | base64 -b $i | head -n 1`"
+# 	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des-ecb  -k 4242 -v 11 | od -A n -t x1`" ]; then
 # 		printf "no diff with str $i (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
 # 	else
-# 		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\n founded: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des -k 4242  |od -A n -t x1 | sed 's/ //g'`"
+# 		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\n founded: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des-ecb -k 4242  |od -A n -t x1 | sed 's/ //g'`"
 # 	fi
 # 	# ((i++))
 # 	 done
 
-str="" 
-if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des  -k 4242 -v 11 | od -A n -t x1`" ]; then
+echo "\n\033[92m - - - - - - - - TEST DES ENCODE // DECODE - - - - -\033[0m"
+
+
+str=""
+if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des-ecb  -k 4242 -v 11 | od -A n -t x1`" ]; then
 	printf "no diff with str (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
 else
-	printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des -k 4242  |od -A n -t x1 | sed 's/ //g'`"
+	printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des-ecb -k 4242  |od -A n -t x1 | sed 's/ //g'`"
 fi
 for i in {1..257}
 do
-	str="`cat /dev/urandom | base64 -b $i | head -n 1`" 
-	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des  -k 4242 -v 11 | od -A n -t x1`" ]; then
+	str="`cat /dev/urandom | base64 -b $i | head -n 1`"
+	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des-ecb  -k 4242 -v 11 | od -A n -t x1`" ]; then
 		printf "no diff with str (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
 	else
-		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des -k 4242  |od -A n -t x1 | sed 's/ //g'`"
+		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des-ecb -k 4242  |od -A n -t x1 | sed 's/ //g'`"
 	fi
 done
 
