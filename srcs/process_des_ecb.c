@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/11 14:44:59 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/12 17:02:12 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,25 +184,28 @@ int		get_magic_salt(int fd, uint64_t *salt_val)
 	if (read(fd, buf, 16) < 16)
 	{
 		ft_fdprintf(2, "error reading input file\n", buf);
-		return (1);
+		return (0);
 	}
 	if (ft_strncmp("Salted__", (char *)buf, 8))
 	{
 		ft_fdprintf(2, "bad magic number: %s\n", buf);
-		return (1);
+		return (0);
 	}
 	*salt_val = ((uint64_t)buf[15] | (uint64_t)buf[14] << 8
 	| (uint64_t)buf[13] << 16 | (uint64_t)buf[12] << 24
 	| (uint64_t)buf[11] << 32 | (uint64_t)buf[10] << 40
 	| (uint64_t)buf[9] << 48 | (uint64_t)buf[8] << 56);
 	ft_fdprintf(2, "[TST] magic salt: %016llx\n", (*salt_val));
-	return (0);
+	return (1);
 }
 
-void		gen_key_vec_salt(t_des *des, uint32_t opts)
+int		gen_key_vec_salt(t_des *des, uint32_t opts)
 {
 	if (opts & OPT_D && !des->key)
-		get_magic_salt(des->fd_i, &des->salt_val);
+	{
+		if (!get_magic_salt(des->fd_i, &des->salt_val))
+			return (0);
+	}
 	else
 		des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
 			: ft_atoh_rpadd(des->salt);
@@ -211,11 +214,7 @@ void		gen_key_vec_salt(t_des *des, uint32_t opts)
 	if ((opts & GET_HASH) == OPT_CBC)
 		des->vec_val = (!des->vector) ? generate_key(OPT_MD5, des->pass, des->salt_val, 1)
 		: ft_atoh_rpadd(des->vector);
-}
-
-void decode_des(void)
-{
-	ft_printf("need decode -_-\n");
+	return (1);
 }
 
 t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
@@ -231,11 +230,8 @@ t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 		close_n_free(des);
 		return ((t_chksum)0);
 	}
-	gen_key_vec_salt(des, opts);
-	if (opts & OPT_D)
-		des_ecb_algo_decrypt(des, opts);
-	else
-		algo(des, NULL, opts);
+	if (gen_key_vec_salt(des, opts))
+		(opts & OPT_D) ? des_ecb_algo_decrypt(des, opts) : algo(des, NULL, opts);
 	close_n_free(des);
 	return ((t_chksum)1);
 }
