@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/11 22:43:05 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/13 00:18:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,9 +219,11 @@ void			print_memory_hex(void *data, size_t blk_size);
 void			print_arg(t_arg *arg, uint32_t opts);
 
 void			des_ecb_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
-void			des_ecb_algo_decrypt(t_des *des, uint32_t opts);
+// void			des_ecb_algo_decrypt(t_des *des, uint32_t opts);
+void			des_ecb_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf);
 
 void			des_gen_keytab(uint64_t key, uint64_t *k);
 
+void			b64_decode_str(char *buf_in, char *buf_out);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2019/01/11 15:04:16 by nboulaye         ###   ########.fr        #
+#    Updated: 2019/01/13 00:11:51 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,10 +20,10 @@ SRC =	srcs/md5.c\
 		srcs/sha256.c\
 		srcs/rm_data.c\
 		srcs/get_args.c\
-		srcs/des_ecb_algo.c\
 		srcs/get_opts.c\
 		srcs/get_io_file.c\
 		srcs/init_chksum.c\
+		srcs/des_ecb_algo.c\
 		srcs/process_file.c\
 		srcs/process_stdin.c\
 		srcs/base64_encode.c\
@@ -31,6 +31,7 @@ SRC =	srcs/md5.c\
 		srcs/process_base64.c\
 		srcs/des_gen_keytab.c\
 		srcs/process_des_ecb.c\
+		srcs/base64_decode_str.c\
 		srcs/des_ecb_algo_decrypt.c\
 		srcs/process_string.c
 

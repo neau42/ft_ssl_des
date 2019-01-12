@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/12 17:02:12 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/13 00:41:27 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,34 +176,81 @@ uint64_t		generate_key(uint32_t hashtype, char *pass, uint64_t salt, int type)
 	(endian_swap32(sum.md5[3]) + ((uint64_t)endian_swap32(sum.md5[2]) << 32));
 }
 
-int		get_magic_salt(int fd, uint64_t *salt_val)
+size_t	rm_space(unsigned char *str, size_t size)
 {
-	unsigned char buf[17];
+	size_t final_size;
 
-	ft_bzero(buf, 17);
-	if (read(fd, buf, 16) < 16)
+	final_size = size;
+	while (size--)
 	{
-		ft_fdprintf(2, "error reading input file\n", buf);
+		if (ft_isspace(*str) && size)
+		{
+			ft_memmove(str, &str[1], size);
+			str[size] = 0;
+			final_size--;
+		}
+		str++;
+	}
+	return (final_size);
+
+}
+
+int		read_without_space(int fd, unsigned char *buf, size_t size)
+{
+	size_t	final_size;
+	size_t	tmp_size;
+
+	final_size = 0;
+	while (final_size < size)
+	{
+		tmp_size = read(fd, &buf[final_size], size - final_size);
+		if (tmp_size <= 0)
+			return (-1);
+		final_size += rm_space(&buf[final_size], tmp_size);
+	}
+	return (final_size);
+}
+
+int get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts, uint64_t *buf_save)
+{
+	unsigned char	buf[65];
+	unsigned char	*ptr;
+	int				tst;
+
+	ft_bzero(buf, 65);
+	if (((opts & OPT_A
+	&& ((tst = read_without_space(fd, buf, 60)) < 24))
+	|| (!(opts & OPT_A) && ((tst = read(fd, buf, 16)) < 16)))
+	&& ft_fdprintf(2, "error reading input file\n"))
+		return (0);
+	if (opts & OPT_A)
+	{
+		b64_decode_str((char *)buf, (char *)buf_save);
+		ft_fdprintf(2, "[tst]: in: '%s'\nout: '%s'\n", buf, buf_save);
+		ptr = (unsigned char *)buf_save;
+		// buf_save += 2;
+	}
+	else
+		ptr = buf;
+	if (ft_strncmp("Salted__", (char *)ptr, 8))
+	{
+		ft_fdprintf(2, "bad magic number: %s\n", ptr);
 		return (0);
 	}
-	if (ft_strncmp("Salted__", (char *)buf, 8))
-	{
-		ft_fdprintf(2, "bad magic number: %s\n", buf);
-		return (0);
-	}
-	*salt_val = ((uint64_t)buf[15] | (uint64_t)buf[14] << 8
-	| (uint64_t)buf[13] << 16 | (uint64_t)buf[12] << 24
-	| (uint64_t)buf[11] << 32 | (uint64_t)buf[10] << 40
-	| (uint64_t)buf[9] << 48 | (uint64_t)buf[8] << 56);
+	*salt_val = ((uint64_t)ptr[15] | (uint64_t)ptr[14] << 8
+	| (uint64_t)ptr[13] << 16 | (uint64_t)ptr[12] << 24
+	| (uint64_t)ptr[11] << 32 | (uint64_t)ptr[10] << 40
+	| (uint64_t)ptr[9] << 48 | (uint64_t)ptr[8] << 56);
 	ft_fdprintf(2, "[TST] magic salt: %016llx\n", (*salt_val));
 	return (1);
 }
 
-int		gen_key_vec_salt(t_des *des, uint32_t opts)
+int		gen_key_vec_salt(t_des *des, uint32_t opts, uint64_t *buf)
 {
 	if (opts & OPT_D && !des->key)
 	{
-		if (!get_magic_salt(des->fd_i, &des->salt_val))
+		// ft_fdprintf(2, "need get_magic salt!\n");
+		if (!get_magic_salt(des->fd_i, &des->salt_val, opts, buf))
 			return (0);
 	}
 	else
@@ -220,7 +267,9 @@ int		gen_key_vec_salt(t_des *des, uint32_t opts)
 t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_des		*des;
+	uint64_t	buf[8] = {0};
 
+	// buf = 0;
 	(void)print;
 	des = (t_des *)arg->base;
 	if ((des->fd_i = get_input_file(des->input)) < 0
@@ -230,8 +279,10 @@ t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 		close_n_free(des);
 		return ((t_chksum)0);
 	}
-	if (gen_key_vec_salt(des, opts))
-		(opts & OPT_D) ? des_ecb_algo_decrypt(des, opts) : algo(des, NULL, opts);
+	if (gen_key_vec_salt(des, opts, buf))
+	{
+		(opts & OPT_D) ? des_ecb_algo_decrypt(des, opts, &buf[2]) : algo(des, NULL, opts);
+	}
 	close_n_free(des);
 	return ((t_chksum)1);
 }

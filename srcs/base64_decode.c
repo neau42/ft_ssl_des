@@ -6,15 +6,13 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 06:24:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/13 00:00:22 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-extern char g_b64[];
-// static char g_b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-// 					  "0123456789+/";
+// extern char g_b64[];
 
 static void	flush_chunk(t_base64 *base, uint8_t *val, int *i, int *iter)
 {
