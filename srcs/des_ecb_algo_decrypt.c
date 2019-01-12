@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/12 17:05:24 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/12 17:29:39 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,36 @@ uint64_t	ft_des_rounds_rev(uint64_t msg, uint64_t *k)
 	return (right + ((uint64_t)left << 32));
 }
 
+static void	last_chunk_rm_padd(uint64_t msg, uint64_t *k, t_des *des)
+{
+	uint64_t	result;
+	uint8_t		pad;
+
+	result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
+	pad = result >> 56;
+	write(des->fd_o, &result, 8 - pad);
+}
+
 void	des_ecb_algo_decrypt(t_des *des, uint32_t opts)
 {
 	uint64_t	k[16];
 	uint64_t	result;
 	int			read_size;
-	uint64_t	buf[2];
+	uint64_t	buf;
+	uint64_t	msg;
 
+	msg = 0;
 	des_gen_keytab(des->key_val, k);
-	while ((read_size = read(des->fd_i, &buf, (sizeof(uint64_t) * 2))) > 0)
+	while ((read_size = read(des->fd_i, &buf, (sizeof(uint64_t)))) > 0)
 	{
-		ft_printf("read size: %d\n", read_size);
-		buf[0] = endian_swap64(buf[0]);
-		result = unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(64, buf[0], g_ip_rev), k), g_ip);
-		ft_fdprintf(2, "result: %016llx\n", result, result);
-		result = endian_swap64(result);
-		ft_fdprintf(2, "last  : %016llx\n", result, result);
-		write(des->fd_o, &result, 8);
+		if (msg)
+		{
+			result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
+			write(des->fd_o, &result, 8);
+		}
+		msg = buf;
 	}
+	last_chunk_rm_padd(msg, k, des);
 	if (opts & OPT_PP)
 		ft_fdprintf(2, "Key : %016.16llX\nVect: %016.16llX\nSalt: %016.16llX\nPass: %s\n",
 					(des->key_val), (des->vec_val), (des->salt_val), des->pass);
