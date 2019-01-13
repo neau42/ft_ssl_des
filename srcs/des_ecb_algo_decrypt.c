@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 00:41:49 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/13 23:01:17 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,62 +54,91 @@ static int	last_chunk_rm_padd(uint64_t msg, uint64_t *k, t_des *des)
 	return (1);
 }
 
-// int get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts)
-// {
-// 	unsigned char buf[17];
+void decode_msg(t_des *des, uint64_t msg, uint64_t *k)
+{
+	uint64_t result;
 
-// 	ft_bzero(buf, 17);
-// 	if (opts & OPT_A)
-// 	{
-// 		ft_printf("NEED decode b64!\n");
-// 	}
-// 	int tst;
-// 	if ((tst = read(fd, buf, 16)) < 16)
-// 	{
-// 		ft_fdprintf(2, "error reading input file: size: %d\n", tst);
-// 		// return (0);
-// 	}
-// 	ft_printf("BUF FOR SALT:'%s'\n", buf);
-// 	if (ft_strncmp("Salted__", (char *)buf, 8))
-// 	{
-// 		ft_fdprintf(2, "bad magic number: %s\n", buf);
-// 		return (0);
-// 	}
-// 	*salt_val = ((uint64_t)buf[15] | (uint64_t)buf[14] << 8 | (uint64_t)buf[13] << 16 | (uint64_t)buf[12] << 24 | (uint64_t)buf[11] << 32 | (uint64_t)buf[10] << 40 | (uint64_t)buf[9] << 48 | (uint64_t)buf[8] << 56);
-// 	ft_fdprintf(2, "[TST] magic salt: %016llx\n", (*salt_val));
-// 	return (1);
-// }
+	result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
+	ft_fdprintf(2, "msg:(%016llx) '", msg);
+	write(2, &msg, 8);
+	ft_fdprintf(2, "', result:\n", msg);
+	write(des->fd_o, &result, 8);
+	ft_fdprintf(2, "\n");
+}
+
+uint64_t	ft_tst(unsigned char *str)
+{
+	uint64_t ret;
+
+	ret = str[0] + (str[1] << 8) + (str[2] << 16) + (str[3] << 24) + ((uint64_t)str[4] << 32) + ((uint64_t)str[5] << 40) + ((uint64_t)str[6] << 48) + ((uint64_t)str[7] << 56);
+	return (ret);
+}
+
+//./ft_ssl des-ecb -a -i f_100  -p coucou -s 123 | ./ft_ssl des-ecb -a -p coucou -s 123 -d
 
 void	des_ecb_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 {
 	uint64_t	k[16];
 	uint64_t	result;
-	// uint64_t	buf;
 	uint64_t	msg;
+	char 		tst_buf[65];
+	char 		tst_buf2[49];
+	int			tst;
 
 	msg = buf[0];
-
+	ft_bzero(tst_buf, 64);
+	ft_bzero(tst_buf2, 49);
 	ft_fdprintf(2, "[BUF]: %016llx\n", buf[0]);
 	ft_fdprintf(2, "[BUF]: %016llx\n", buf[1]);
 	ft_fdprintf(2, "[BUF]: %016llx\n", buf[2]);
 	ft_fdprintf(2, "[BUF]: %016llx\n", buf[3]);
-	ft_fdprintf(2, "[BUF]: %016llx\n", buf[4]);
-	// ft_fdprintf(2, "[BUF]: %016llx\n", buf[5]);
 	des_gen_keytab(des->key_val, k);
-	// if (!get_magic_salt(des->fd_i, &des->salt_val, opts))
-	// {
-	// 	// ft_printf()
-	// 	return ;
-	// }
-	while (read(des->fd_i, &buf[0], (sizeof(uint64_t))) > 0)
+	while (buf[1])
 	{
+		ft_fdprintf(2, "[WHILE *BUF]: buf %016llx\n", buf[0]);
 		if (msg)
 		{
-			result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(
-			unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
+			ft_fdprintf(2, "[WHILE *BUF]: msg %016llx\n", msg);
+			result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
 			write(des->fd_o, &result, 8);
+			ft_fdprintf(2, "\n");
 		}
+		buf++;
 		msg = buf[0];
+	}
+	while ((!(opts & OPT_A) && (tst = 1) && read(des->fd_i, &buf[0], (sizeof(uint64_t))) > 0)
+	|| ((opts & OPT_A) && (tst = read_without_space(des->fd_i, tst_buf, 64)) > 0))
+	{
+		if (opts & OPT_A)
+		{
+			tst = tst / 32 * 3;
+			b64_decode_str(tst_buf, tst_buf2, 64);
+			ft_fdprintf(2, "[READ   b64]: buf '%s', tst: %d\n", tst_buf, tst);
+			ft_fdprintf(2, "[READ   b64]: buf2 '");
+			write(2, tst_buf2, 49);
+			ft_bzero(tst_buf, 65);
+		}
+		else
+			ft_fdprintf(2, "[READnormal]: buf %016llx\n", buf[0]);
+		while (tst > 0)
+		{
+			ft_fdprintf(2, "\ntst : %d\n", tst);
+			if (msg)
+				decode_msg(des, msg, k);
+			if (opts & OPT_A)
+			{
+				// tst /= 6;
+				msg = ft_tst((unsigned char*) &tst_buf2[48 - tst * 8]);
+				msg = endian_swap64(msg);
+				ft_fdprintf(2, "[<MSG>]: %016llx\n", msg);
+				// b64_decode_str(&tst_buf[64 - tst * 8], (char *)&msg, 8);
+				// ft_bzero(tst_buf, 64);
+			}
+			else
+				msg = buf[0];
+			tst--;
+		}
+		ft_bzero(tst_buf2, 49);
 	}
 	if (!last_chunk_rm_padd(msg, k, des))
 		ft_printf("bad decrypt\n");

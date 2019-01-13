@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 00:18:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:48:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,10 @@ void			des_ecb_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf);
 
 void			des_gen_keytab(uint64_t key, uint64_t *k);
 
-void			b64_decode_str(char *buf_in, char *buf_out);
+
+void			b64_decode_str(char *buf_in, char *buf_out, size_t size);
+
+int				read_without_space(int fd, char *buf, size_t size);
+
 
 #endif
