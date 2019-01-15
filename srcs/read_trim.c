@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_without_space.c                               :+:      :+:    :+:   */
+/*   read_trim.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -31,7 +31,7 @@ static size_t	rm_space(char *str, size_t size)
 	return (final_size);
 }
 
-int			read_without_space(int fd, char *buf, size_t size)
+int			read_trim(int fd, char *buf, size_t size)
 {
 	size_t	final_size;
 	ssize_t	tmp_size;
@@ -41,18 +41,10 @@ int			read_without_space(int fd, char *buf, size_t size)
 	{
 		tmp_size = read(fd, &buf[final_size], size - final_size);
 		if (tmp_size < 0)
-		{
-			// ft_printf("[read without space 0] : final_size: %d, '%s'\n", final_size, buf);
-
 			return (-1);
-		}
 		if (tmp_size == 0)
-		{
-			// ft_printf("[read without space 1] : final_size: %d, '%s'\n", final_size, buf);
 			return (final_size);
-		}
 		final_size += rm_space(&buf[final_size], tmp_size);
 	}
-	// ft_printf("[read without space 2] : final_size: %d, '%s'\n", final_size, buf);
 	return (final_size);
 }

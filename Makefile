@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
+#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2019/01/13 18:40:11 by nboulaye         ###   ########.fr        #
+#    Updated: 2019/01/15 18:47:57 by no               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ SRC =	srcs/md5.c\
 		srcs/des_gen_keytab.c\
 		srcs/process_des_ecb.c\
 		srcs/base64_decode_str.c\
-		srcs/read_without_space.c\
+		srcs/read_trim.c\
 		srcs/des_ecb_algo_decrypt.c\
 		srcs/process_string.c
 

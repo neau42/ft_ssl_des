@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   des_ecb_algo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 18:38:48 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/15 19:48:44 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,10 @@ uint64_t	ft_des_rounds(uint64_t msg, uint64_t *k)
 void	process_des_chunk(uint64_t buf, uint64_t *k, uint64_t *final_buf)
 {
 	uint64_t	result;
-	// uint64_t	tmp;
 
-	// ft_fdprintf(2, "ENCODE_ buf0   : %016llx| %064llb\n", buf, buf);
 	buf = endian_swap64(buf);
-	// ft_fdprintf(2, "ENCODE_ buf1   : %016llx| %064llb\n", buf, buf);
-	// tmp = permut_bits(64, 64, buf, g_ip);
-	// ft_fdprintf(2, "ENCODE_ tmp    : %016llx| %064llb\n", tmp, tmp);
 	result = ft_des_rounds(permut_bits(64, 64, buf, g_ip), k);
-	// ft_fdprintf(2, "ENCODE_ result0: %016llx| %064llb\n", result, result);
-	result = permut_bits(64, 64, result, g_ip_rev);
-	// ft_fdprintf(2, "ENCODE_ result1: %016llx| %064llb\n", result, result);
-	result = endian_swap64(result);
-	// ft_fdprintf(2, "ENCODE_ result2: %016llx| %064llb\n\n", result, result);
+	result = endian_swap64(permut_bits(64, 64, result, g_ip_rev));
 	ft_memcpy((uint8_t *)final_buf, (void *)&result, 8);
 }
 
@@ -123,7 +114,9 @@ void read_loop( t_des *des, uint64_t *k, uint64_t *final_buf, uint32_t opts)
 	if (padding == 100)
 		des_last_chunk(buf, final_buf, k, &i);
 	if (i)
-		(opts & OPT_A) ? b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) : write(des->fd_o, final_buf, i * 8);
+		(opts & OPT_A) ?
+		b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) :
+		write(des->fd_o, final_buf, i * 8);
 }
 
 void		des_ecb_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)

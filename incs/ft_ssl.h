@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 19:48:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/15 18:47:57 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void			des_gen_keytab(uint64_t key, uint64_t *k);
 
 void			b64_decode_str(char *buf_in, char *buf_out, size_t size);
 
-int				read_without_space(int fd, char *buf, size_t size);
+int				read_trim(int fd, char *buf, size_t size);
 
 
 #endif

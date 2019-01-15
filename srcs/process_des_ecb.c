@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   process_des_ecb.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 20:02:35 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/15 19:45:17 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void free_des(t_des *des)
+void		free_des(t_des *des)
 {
 	if (des->pass)
 		free(des->pass);
@@ -28,7 +28,7 @@ void free_des(t_des *des)
 	des->key = NULL;
 }
 
-static void close_n_free(t_des *des)
+static void	close_n_free(t_des *des)
 {
 	if (des->fd_i != STDIN_FILENO)
 		close(des->fd_i);
@@ -176,6 +176,14 @@ uint64_t		generate_key(uint32_t hashtype, char *pass, uint64_t salt, int type)
 	(endian_swap32(sum.md5[3]) + ((uint64_t)endian_swap32(sum.md5[2]) << 32));
 }
 
+uint64_t str_to_uint64(unsigned char *str)
+{
+	return ((uint64_t)str[7] | (uint64_t)str[6] << 8
+	| (uint64_t)str[5] << 16 | (uint64_t)str[4] << 24
+	| (uint64_t)str[3] << 32 | (uint64_t)str[2] << 40
+	| (uint64_t)str[1] << 48 | (uint64_t)str[0] << 56);
+}
+
 int get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts, uint64_t *buf_save)
 {
 	char			buf[65];
@@ -184,14 +192,13 @@ int get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts, uint64_t *buf_save
 
 	ft_bzero(buf, 65);
 	if (((opts & OPT_A
-	&& ((tst = read_without_space(fd, buf, 64)) < 32))
+	&& ((tst = read_trim(fd, buf, 64)) < 32))
 	|| (!(opts & OPT_A) && ((tst = read(fd, buf, 16)) < 16)))
 	&& ft_fdprintf(2, "error reading input file, tst: %d\n", tst))
 		return (0);
 	if (opts & OPT_A)
 	{
 		b64_decode_str((char *)buf, (char *)buf_save, 65);
-		ft_fdprintf(2, "[tst]: in: '%s'\nout: '%s'\n", buf, buf_save);
 		ptr = (unsigned char *)buf_save;
 	}
 	else
@@ -201,11 +208,7 @@ int get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts, uint64_t *buf_save
 		ft_fdprintf(2, "bad magic number: %s\n", ptr);
 		return (0);
 	}
-	*salt_val = ((uint64_t)ptr[15] | (uint64_t)ptr[14] << 8
-	| (uint64_t)ptr[13] << 16 | (uint64_t)ptr[12] << 24
-	| (uint64_t)ptr[11] << 32 | (uint64_t)ptr[10] << 40
-	| (uint64_t)ptr[9] << 48 | (uint64_t)ptr[8] << 56);
-	ft_fdprintf(2, "[TST] magic salt: %016llx\n", (*salt_val));
+	*salt_val = str_to_uint64(&ptr[8]);
 	return (1);
 }
 
@@ -230,7 +233,7 @@ int		gen_key_vec_salt(t_des *des, uint32_t opts, uint64_t *buf)
 t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_des		*des;
-	uint64_t	buf[10] = {0};
+	uint64_t	buf[8] = {0};
 
 	(void)print;
 	des = (t_des *)arg->base;
