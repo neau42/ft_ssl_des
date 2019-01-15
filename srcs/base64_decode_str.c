@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base64_decode_str.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 22:33:00 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/15 15:34:20 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	get_b64_decode_value(char *buf_out, uint8_t idx, int op)
 	else if ((iter[0] % 4) == 0)
 		val[iter[1]] = (idx << 2);
 	iter[0]++;
-	ft_printf("b64 decode value: iter: %d, %d\n", iter[0], iter[1]);
+	// ft_fdprintf(2, "b64 decode value: iter: %d, %d\n", iter[0], iter[1]);
 }
 
 void		b64_decode_str(char *buf_in, char *buf_out, size_t size)
