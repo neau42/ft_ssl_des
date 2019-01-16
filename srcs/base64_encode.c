@@ -6,16 +6,11 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 07:58:48 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 15:35:38 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-// static char g_b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-// 					  "0123456789+/";
-
-extern char g_b64[];
 
 static void	get_b64_value(char *val, uint8_t *buf, int tmp_len, int len)
 {

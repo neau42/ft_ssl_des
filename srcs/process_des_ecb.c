@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_des_ecb.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/15 19:45:17 by no               ###   ########.fr       */
+/*   Updated: 2019/01/16 16:17:23 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ int			valid_hex_value(char *str)
 	return (1);
 }
 
-int		valid_hex_val(t_des *des)
+int			valid_hex_val(t_des *des)
 {
-	if (des->salt && !valid_hex_value(des->salt)) // if des-cbc
+	if (des->salt && !valid_hex_value(des->salt))
 	{
 		ft_fdprintf(2, "non-hex digit\ninvalid hex salt value");
 		return (0);
@@ -83,7 +83,7 @@ int		valid_hex_val(t_des *des)
 		ft_fdprintf(2, "non-hex digit\ninvalid hex key value");
 		return (0);
 	}
-	if (des->vector && !valid_hex_value(des->vector)) // if des-cbc
+	if (des->vector && !valid_hex_value(des->vector))
 	{
 		ft_fdprintf(2, "non-hex digit\ninvalid hex vector value");
 		return (0);
@@ -91,7 +91,7 @@ int		valid_hex_val(t_des *des)
 	return (1);
 }
 
-int valid_params(t_des *des, uint32_t opts)
+int			valid_params(t_des *des, uint32_t opts)
 {
 	if (!des->pass && !des->key)
 	{
@@ -102,16 +102,16 @@ int valid_params(t_des *des, uint32_t opts)
 	{
 		if ((opts & GET_HASH) == OPT_CBC
 		&& !des->vector)
-			{
-				ft_fdprintf(2, "vector undefined\n");
-					return (0);
-			}
-			return (valid_hex_val(des));
+		{
+			ft_fdprintf(2, "vector undefined\n");
+			return (0);
+		}
+		return (valid_hex_val(des));
 	}
 	return (valid_hex_val(des));
 }
 
-char			*sum_to_str(t_chksum *sum, char *pass)
+char		*sum_to_str(t_chksum *sum, char *pass)
 {
 	char		tmp[8][16];
 	char		*ret;
@@ -136,7 +136,7 @@ char			*sum_to_str(t_chksum *sum, char *pass)
 	return (ret);
 }
 
-char			*concat_pass_salt(char *pass, uint64_t salt)
+char		*concat_pass_salt(char *pass, uint64_t salt)
 {
 	int			len;
 	char		*str;
@@ -148,7 +148,7 @@ char			*concat_pass_salt(char *pass, uint64_t salt)
 		exit(42);
 	}
 	if (pass)
-	ft_strcpy(str, pass);
+		ft_strcpy(str, pass);
 	str[len + 7] = (salt & 0xFF);
 	str[len + 6] = ((salt >> 8) & 0xFF);
 	str[len + 5] = ((salt >> 16) & 0xFF);
@@ -160,7 +160,7 @@ char			*concat_pass_salt(char *pass, uint64_t salt)
 	return (str);
 }
 
-uint64_t		generate_key(uint32_t hashtype, char *pass, uint64_t salt, int type)
+uint64_t	generate_key(uint32_t hashtype, char *pass, uint64_t salt, int type)
 {
 	t_arg		arg;
 	t_chksum	sum;
@@ -176,7 +176,7 @@ uint64_t		generate_key(uint32_t hashtype, char *pass, uint64_t salt, int type)
 	(endian_swap32(sum.md5[3]) + ((uint64_t)endian_swap32(sum.md5[2]) << 32));
 }
 
-uint64_t str_to_uint64(unsigned char *str)
+uint64_t	str_to_uint64(unsigned char *str)
 {
 	return ((uint64_t)str[7] | (uint64_t)str[6] << 8
 	| (uint64_t)str[5] << 16 | (uint64_t)str[4] << 24
@@ -184,7 +184,8 @@ uint64_t str_to_uint64(unsigned char *str)
 	| (uint64_t)str[1] << 48 | (uint64_t)str[0] << 56);
 }
 
-int get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts, uint64_t *buf_save)
+int			get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts,
+											uint64_t *buf_save)
 {
 	char			buf[65];
 	unsigned char	*ptr;
@@ -212,7 +213,7 @@ int get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts, uint64_t *buf_save
 	return (1);
 }
 
-int		gen_key_vec_salt(t_des *des, uint32_t opts, uint64_t *buf)
+int			gen_key_vec_salt(t_des *des, uint32_t opts, uint64_t *buf)
 {
 	if (opts & OPT_D && !des->key)
 	{
@@ -222,20 +223,23 @@ int		gen_key_vec_salt(t_des *des, uint32_t opts, uint64_t *buf)
 	else
 		des->salt_val = (!des->salt) ? (rand() + ((uint64_t)rand() << 32))
 			: ft_atoh_rpadd(des->salt);
-	des->key_val = (!des->key) ? generate_key(OPT_MD5, des->pass, des->salt_val, 0)
-			: ft_atoh_rpadd(des->key);
+	des->key_val = (!des->key) ?
+		generate_key(OPT_MD5, des->pass, des->salt_val, 0)
+		: ft_atoh_rpadd(des->key);
 	if ((opts & GET_HASH) == OPT_CBC)
-		des->vec_val = (!des->vector) ? generate_key(OPT_MD5, des->pass, des->salt_val, 1)
+		des->vec_val = (!des->vector) ?
+		generate_key(OPT_MD5, des->pass, des->salt_val, 1)
 		: ft_atoh_rpadd(des->vector);
 	return (1);
 }
 
-t_chksum process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
+t_chksum	process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_des		*des;
-	uint64_t	buf[8] = {0};
+	uint64_t	buf[8];
 
 	(void)print;
+	ft_bzero(buf, sizeof(uint64_t) * 8);
 	des = (t_des *)arg->base;
 	if ((des->fd_i = get_input_file(des->input)) < 0
 	|| (des->fd_o = get_output_file(des->output)) < 0

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2018/11/27 04:31:39 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 16:10:21 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ static uint32_t	get_command(char *str, uint32_t *opts)
 	return (*opts);
 }
 
-t_arg *arg_error(uint32_t *opts, char *str, t_arg *first)
+t_arg			*arg_error(uint32_t *opts, char *str, t_arg *first)
 {
 	(*opts) |= OPT_ERR;
 	ft_fdprintf(2, "invalid option -- \"%s\"\n", str);
 	return (first);
 }
 
-t_base		*init_base(uint32_t *opts, t_arg *arg)
+t_base			*init_base(uint32_t *opts, t_arg *arg)
 {
 	if ((*opts & GET_HASH) == OPT_BASE64)
 	{

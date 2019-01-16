@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/15 18:47:57 by no               ###   ########.fr       */
+/*   Updated: 2019/01/16 14:51:29 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,11 +183,8 @@ t_chksum		process_string(t_arg *arg, uint32_t opts, uint8_t print);
 int				get_input_file(char *file_name);
 int				get_output_file(char *file_name);
 
-// t_chksum		process_des(t_arg *arg, uint32_t opts, uint8_t print);
 t_chksum		process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print);
 t_chksum		process_string_custom(t_arg *arg, uint32_t opts, int len);
-
-
 
 t_chksum		process_base64(t_arg *arg, uint32_t opts, uint8_t print);
 void			init_chksum_n_read(t_chksum *sum, uint32_t opts, t_read *r,
@@ -216,10 +213,8 @@ uint64_t		permut_bits(uint64_t original_len, uint64_t final_len,
 uint64_t		unpermut_bits(uint64_t len, uint64_t value, uint8_t *permut_tab);
 
 void			print_memory_hex(void *data, size_t blk_size);
-void			print_arg(t_arg *arg, uint32_t opts);
 
 void			des_ecb_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
-// void			des_ecb_algo_decrypt(t_des *des, uint32_t opts);
 void			des_ecb_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf);
 
 void			des_gen_keytab(uint64_t key, uint64_t *k);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_trim.c                               :+:      :+:    :+:   */
+/*   read_trim.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 18:39:44 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 22:13:03 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 16:11:24 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ static size_t	rm_space(char *str, size_t size)
 			str[size] = 0;
 			final_size--;
 		}
-		str++;
+		else
+			str++;
 	}
 	return (final_size);
 }
 
-int			read_trim(int fd, char *buf, size_t size)
+int				read_trim(int fd, char *buf, size_t size)
 {
 	size_t	final_size;
 	ssize_t	tmp_size;

@@ -6,19 +6,19 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/11 18:38:45 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 16:20:20 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-uint32_t			endian_swap32(uint32_t x)
+uint32_t	endian_swap32(uint32_t x)
 {
 	return (((x & 0x000000FF) << 24) | ((x & 0x0000FF00) << 8)
 	| (((x & 0x00FF0000) >> 8) | ((x & 0xFF000000) >> 24)));
 }
 
-uint64_t			endian_swap64(uint64_t x)
+uint64_t	endian_swap64(uint64_t x)
 {
 	return (((x & 0x00000000000000FF) << 56)
 		| ((x & 0x000000000000FF00) << 40)
@@ -30,7 +30,7 @@ uint64_t			endian_swap64(uint64_t x)
 		| ((x & 0xFF00000000000000) >> 56));
 }
 
-uint32_t			r_rot(uint32_t n, unsigned int c)
+uint32_t	r_rot(uint32_t n, unsigned int c)
 {
 	unsigned int mask;
 
@@ -39,19 +39,17 @@ uint32_t			r_rot(uint32_t n, unsigned int c)
 	return (n >> c) | (n << (-c & mask));
 }
 
-uint32_t			l_rot28(uint32_t n, unsigned int c)
+uint32_t	l_rot28(uint32_t n, unsigned int c)
 {
-	return (((n << c) | (n >> ((sizeof n * 7) - c))) & 0xFFFFFFF);
+	return (((n << c) | (n >> ((sizeof(n) * 7) - c))) & 0xFFFFFFF);
 }
 
-uint32_t			l_rot(uint32_t n, unsigned int c)
+uint32_t	l_rot(uint32_t n, unsigned int c)
 {
-	return (n << c) | (n >> ((sizeof n * CHAR_BIT) - c));
-	// return (n >> c) | (n << (-c & mask));
+	return (n << c) | (n >> ((sizeof(n) * CHAR_BIT) - c));
 }
 
-
-static void			print_last_memory_hex(size_t len, size_t size, size_t size2,
+static void	print_last_memory_hex(size_t len, size_t size, size_t size2,
 					unsigned char *str)
 {
 	int i;
@@ -70,7 +68,7 @@ static void			print_last_memory_hex(size_t len, size_t size, size_t size2,
 	ft_printf("|\n");
 }
 
-void				print_memory_hex(void *data, size_t blk_size)
+void		print_memory_hex(void *data, size_t blk_size)
 {
 	size_t			size;
 	size_t			size2;

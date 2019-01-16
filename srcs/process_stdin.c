@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 11:47:45 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 16:10:42 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_chksum		read_stdin(uint32_t opts, uint8_t print)
 	return (sum);
 }
 
-t_chksum	process_stdin(t_arg *arg, uint32_t opts, uint8_t print)
+t_chksum		process_stdin(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	(void)arg;
 	if ((read(STDIN_FILENO, NULL, 0) < 0)

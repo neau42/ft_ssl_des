@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base64_decode_str.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/15 19:45:50 by no               ###   ########.fr       */
+/*   Updated: 2019/01/16 15:27:59 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ static void	get_b64_decode_value(char *buf_out, uint8_t idx, int op)
 	static int		iter[2] = {0};
 
 	if (op)
-		return flush_chunk(buf_out, val, iter);
+		return (flush_chunk(buf_out, val, iter));
 	else if ((iter[0] % 4) == 3)
 	{
 		val[iter[1]++] += idx;
 		if (iter[1] >= 47)
-			return flush_chunk(buf_out, val, iter);
+			return (flush_chunk(buf_out, val, iter));
 	}
 	else if ((iter[0] % 4) == 2)
 	{
@@ -55,7 +55,7 @@ static void	get_b64_decode_value(char *buf_out, uint8_t idx, int op)
 
 void		b64_decode_str(char *buf_in, char *buf_out, size_t size)
 {
-	size_t		i;
+	size_t	i;
 	char	*ptr;
 
 	i = 0;

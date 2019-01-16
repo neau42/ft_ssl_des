@@ -6,13 +6,11 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/13 00:00:22 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 15:40:06 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-// extern char g_b64[];
 
 static void	flush_chunk(t_base64 *base, uint8_t *val, int *i, int *iter)
 {
@@ -30,12 +28,12 @@ static void	get_b64_decode_value(t_base64 *base, uint8_t idx, int op)
 	static int		index = 0;
 
 	if (op)
-		return flush_chunk(base, val, &index, &iter);
+		return (flush_chunk(base, val, &index, &iter));
 	else if ((iter % 4) == 3)
 	{
 		val[index++] += idx;
 		if (index >= 47)
-			return flush_chunk(base, val, &index, &iter);
+			return (flush_chunk(base, val, &index, &iter));
 	}
 	else if ((iter % 4) == 2)
 	{

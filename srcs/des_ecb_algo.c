@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   des_ecb_algo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/15 19:48:44 by no               ###   ########.fr       */
+/*   Updated: 2019/01/16 15:14:38 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-uint64_t 	ft_f(uint32_t right, uint64_t key)
+uint64_t	ft_f(uint32_t right, uint64_t key)
 {
 	int			i;
 	uint8_t		b[8];
@@ -52,7 +52,7 @@ uint64_t	ft_des_rounds(uint64_t msg, uint64_t *k)
 	return (left + ((uint64_t)right << 32));
 }
 
-void	process_des_chunk(uint64_t buf, uint64_t *k, uint64_t *final_buf)
+void		process_des_chunk(uint64_t buf, uint64_t *k, uint64_t *final_buf)
 {
 	uint64_t	result;
 
@@ -62,7 +62,7 @@ void	process_des_chunk(uint64_t buf, uint64_t *k, uint64_t *final_buf)
 	ft_memcpy((uint8_t *)final_buf, (void *)&result, 8);
 }
 
-void des_print(t_des *des, uint64_t *final_buf, int *i, uint32_t opts)
+void		des_print(t_des *des, uint64_t *final_buf, int *i, uint32_t opts)
 {
 	if (*i == 6)
 	{
@@ -73,7 +73,7 @@ void des_print(t_des *des, uint64_t *final_buf, int *i, uint32_t opts)
 	}
 }
 
-uint64_t add_padding(int read_size, uint64_t *buf)
+uint64_t	add_padding(int read_size, uint64_t *buf)
 {
 	uint64_t padding;
 	uint64_t padding_nb;
@@ -85,14 +85,16 @@ uint64_t add_padding(int read_size, uint64_t *buf)
 	return (padding);
 }
 
-void des_last_chunk(uint64_t buf, uint64_t *final_buf, uint64_t *k, int *i)
+void		des_last_chunk(uint64_t buf, uint64_t *final_buf, uint64_t *k,
+																	int *i)
 {
 	buf |= 0x0808080808080808;
 	process_des_chunk(buf, k, &final_buf[(*i)]);
 	(*i)++;
 }
 
-void read_loop( t_des *des, uint64_t *k, uint64_t *final_buf, uint32_t opts)
+void		read_loop(t_des *des, uint64_t *k, uint64_t *final_buf,
+														uint32_t opts)
 {
 	uint64_t	buf;
 	int			i;
@@ -123,10 +125,11 @@ void		des_ecb_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 {
 	uint64_t	k[16];
 	t_des		*des;
-	uint64_t	final_buf[6] = {0};
+	uint64_t	final_buf[6];
 	uint64_t	test;
 
 	(void)sum;
+	ft_bzero(final_buf, sizeof(uint64_t) * 6);
 	des = (t_des *)ptr;
 	if (des->pass)
 	{
@@ -136,7 +139,8 @@ void		des_ecb_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 	}
 	des_gen_keytab(des->key_val, k);
 	if (opts & OPT_PP)
-	ft_fdprintf(2, "Key : %016.16llX\nVect: %016.16llX\nSalt: %016.16llX\nPass: %s\n",
-		(des->key_val), (des->vec_val), (des->salt_val), des->pass);
+		ft_fdprintf(2, "Key : %016.16llX\nVect: %016.16llX\nSalt:"
+	"%016.16llX\nPass: %s\n", (des->key_val), (des->vec_val),
+	(des->salt_val), des->pass);
 	read_loop(des, k, final_buf, opts);
 }

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 06:23:20 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 15:47:00 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	close_fds(t_base64 *base)
 t_chksum	process_base64(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_base64	*base;
+
 	(void)print;
 	base = (t_base64 *)arg->base;
 	if ((base->fd_i = get_input_file(base->input)) < 0

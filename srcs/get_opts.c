@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:56:14 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/14 12:38:33 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 16:17:10 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,23 @@ void			get_base64_option(char *str, char *str_next, uint32_t *opts,
 		ft_opt_err(opts, str);
 }
 
+void			get_des_option2(char *str, char *str_next, uint32_t *opts,
+						t_des *base)
+{
+	if (*str == 'o' && (*opts |= (OPT_O | OPT_S)))
+		base->output = ft_cpy_string(base->output, str_next, opts);
+	else if (*str == 'k' && (*opts |= (OPT_K | OPT_S)))
+		base->key = ft_cpy_string(base->key, str_next, opts);
+	else if (*str == 'p' && (*opts |= (OPT_P | OPT_S)))
+		base->pass = ft_cpy_string(base->pass, str_next, opts);
+	else if (*str == 's' && (*opts |= (OPT_S | OPT_S)))
+		base->salt = ft_cpy_string(base->salt, str_next, opts);
+	else if (*str == 'v' && (*opts |= (OPT_V | OPT_S)))
+		base->vector = ft_cpy_string(base->vector, str_next, opts);
+	else if (*str)
+		ft_opt_err(opts, str);
+}
+
 void			get_des_option(char *str, char *str_next, uint32_t *opts,
 						t_base *b)
 {
@@ -113,18 +130,8 @@ void			get_des_option(char *str, char *str_next, uint32_t *opts,
 		(*opts) |= OPT_PP;
 	else if (*str == 'i' && (*opts |= (OPT_I | OPT_S)))
 		base->input = ft_cpy_string(base->input, str_next, opts);
-	else if (*str == 'o' && (*opts |= (OPT_O | OPT_S)))
-		base->output = ft_cpy_string(base->output, str_next, opts);
-	else if (*str == 'k' && (*opts |= (OPT_K | OPT_S)))
-		base->key = ft_cpy_string(base->key, str_next, opts);
-	else if (*str == 'p' && (*opts |= (OPT_P | OPT_S)))
-		base->pass = ft_cpy_string(base->pass, str_next, opts);
-	else if (*str == 's' && (*opts |= (OPT_S | OPT_S)))
-		base->salt = ft_cpy_string(base->salt, str_next, opts);
-	else if (*str == 'v' && (*opts |= (OPT_V | OPT_S)))
-		base->vector = ft_cpy_string(base->vector, str_next, opts);
 	else if (*str)
-		ft_opt_err(opts, str);
+		get_des_option2(str, str_next, opts, base);
 	if (str[1])
 		ft_opt_err(opts, str);
 }

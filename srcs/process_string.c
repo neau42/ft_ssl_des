@@ -6,13 +6,13 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2018/12/15 18:25:16 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 16:12:01 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-char	*format_final_name(char *str, uint64_t size)
+char		*format_final_name(char *str, uint64_t size)
 {
 	char	*final_name;
 
@@ -55,10 +55,10 @@ t_chksum	process_string(t_arg *arg, uint32_t opts, uint8_t print)
 
 t_chksum	process_string_custom(t_arg *arg, uint32_t opts, int len)
 {
-	uint8_t buf[MD_BUF_SIZE];
-	t_read r;
-	t_chksum sum;
-	char *str;
+	uint8_t		buf[MD_BUF_SIZE];
+	t_read		r;
+	t_chksum	sum;
+	char		*str;
 
 	str = arg->str;
 	init_chksum_n_read(&sum, opts, &r, (uint8_t *)buf);

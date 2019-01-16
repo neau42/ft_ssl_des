@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_io_file.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/15 19:49:25 by no               ###   ########.fr       */
+/*   Updated: 2019/01/16 15:41:51 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		open_error(int fd, char *file_name)
 	return (1);
 }
 
-int get_input_file(char *file_name)
+int		get_input_file(char *file_name)
 {
 	int			fd;
 

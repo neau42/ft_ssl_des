@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   des_ecb_algo_decrypt.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/15 19:39:02 by no               ###   ########.fr       */
+/*   Updated: 2019/01/16 16:21:04 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	last_chunk_rm_padd(uint64_t msg, uint64_t *k, t_des *des)
 {
 	uint64_t	result;
 	uint8_t		pad;
-	int		pad_save;
+	int			pad_save;
 
 	result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(
 	unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
@@ -54,9 +54,9 @@ static void	last_chunk_rm_padd(uint64_t msg, uint64_t *k, t_des *des)
 	write(des->fd_o, &result, 8 - pad);
 }
 
-static void decode_msg(t_des *des, uint64_t *msg, uint64_t *k, int size)
+static void		decode_msg(t_des *des, uint64_t *msg, uint64_t *k, int size)
 {
-	uint64_t result;
+	uint64_t	result;
 
 	while (size-- > 0)
 	{
@@ -70,14 +70,19 @@ static void decode_msg(t_des *des, uint64_t *msg, uint64_t *k, int size)
 static int	format_buf(char *b64_buf, char *final_buf, int size, uint64_t *msg)
 {
 	int final_size;
-	
+
 	b64_decode_str(b64_buf, final_buf, size);
 	final_size = (size / 8 * 6 / 8) + ((size % 8) ? 1 : 0) - 1;
 	ft_memcpy(msg, final_buf, (final_size + 1) * 8);
 	return (final_size);
 }
 
-void	des_ecb_algo_decrypt(t_des *des, uint32_t o, uint64_t *buf)
+int			get_size(int size)
+{
+	return (((size / 8) + ((size % 8) ? 1 : 0) - 1));
+}
+
+void		des_ecb_algo_decrypt(t_des *des, uint32_t o, uint64_t *buf)
 {
 	uint64_t	k[16];
 	uint64_t	msg[6];
@@ -98,7 +103,7 @@ void	des_ecb_algo_decrypt(t_des *des, uint32_t o, uint64_t *buf)
 		if (buf[0])
 			decode_msg(des, &buf[0], k, 1);
 		sz = (o & OPT_A) ? format_buf(b64_buf, final_buf, sz, msg) :
-		((sz / 8) + ((sz % 8) ? 1 : 0) -1);
+			get_size(sz);
 		buf[0] = msg[sz];
 		decode_msg(des, msg, k, sz);
 		ft_bzero(final_buf, 49);
