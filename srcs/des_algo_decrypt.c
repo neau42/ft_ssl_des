@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   des_ecb_algo_decrypt.c                             :+:      :+:    :+:   */
+/*   des_algo_decrypt.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 16:21:04 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 22:31:51 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int			get_size(int size)
 	return (((size / 8) + ((size % 8) ? 1 : 0) - 1));
 }
 
-void		des_ecb_algo_decrypt(t_des *des, uint32_t o, uint64_t *buf)
+void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 {
 	uint64_t	k[16];
 	uint64_t	msg[6];
@@ -97,12 +97,12 @@ void		des_ecb_algo_decrypt(t_des *des, uint32_t o, uint64_t *buf)
 		decode_msg(des, buf++, k, 1);
 		buf[-1] = buf[0];
 	}
-	while ((!(o & OPT_A) && (sz = read(des->fd_i, &msg, 48)) > 0)
-	|| ((o & OPT_A) && (sz = read_trim(des->fd_i, b64_buf, 64)) > 0))
+	while ((!(opts & OPT_A) && (sz = read(des->fd_i, &msg, 48)) > 0)
+	|| ((opts & OPT_A) && (sz = read_trim(des->fd_i, b64_buf, 64)) > 0))
 	{
 		if (buf[0])
 			decode_msg(des, &buf[0], k, 1);
-		sz = (o & OPT_A) ? format_buf(b64_buf, final_buf, sz, msg) :
+		sz = (opts & OPT_A) ? format_buf(b64_buf, final_buf, sz, msg) :
 			get_size(sz);
 		buf[0] = msg[sz];
 		decode_msg(des, msg, k, sz);

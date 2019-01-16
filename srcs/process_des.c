@@ -1,115 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_des_ecb.c                                  :+:      :+:    :+:   */
+/*   process_des.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 16:17:23 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 22:40:19 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-void		free_des(t_des *des)
-{
-	if (des->pass)
-		free(des->pass);
-	if (des->vector)
-		free(des->vector);
-	if (des->salt)
-		free(des->salt);
-	if (des->key)
-		free(des->key);
-	des->pass = NULL;
-	des->vector = NULL;
-	des->salt = NULL;
-	des->key = NULL;
-}
-
-static void	close_n_free(t_des *des)
-{
-	if (des->fd_i != STDIN_FILENO)
-		close(des->fd_i);
-	if (des->fd_o > STDOUT_FILENO)
-		close(des->fd_o);
-	free_des(des);
-}
-
-static int	ft_getpass(t_des *des, uint32_t opts)
-{
-	if (opts & OPT_D)
-	{
-		if (!(des->pass =
-		ft_strdup(getpass("(enter des decryption password) $> ")))
-		|| !*des->pass)
-			return (0);
-		return (1);
-	}
-	des->pass = ft_strdup(getpass("(enter des encryption password) $> "));
-	if (!des->pass || !*des->pass || ft_strcmp(des->pass,
-	getpass("(Verifying - enter des encryption password:)) $> ")))
-	{
-		ft_printf("Verify failure\n");
-		ft_fdprintf(2, "bad password read\n");
-		close_n_free(des);
-		return (0);
-	}
-	ft_printf("pass: %s\n", des->pass);
-	return (1);
-}
-
-int			valid_hex_value(char *str)
-{
-	while (*str)
-	{
-		if (!(ft_ishexdigit(*str)))
-			return (0);
-		str++;
-	}
-	return (1);
-}
-
-int			valid_hex_val(t_des *des)
-{
-	if (des->salt && !valid_hex_value(des->salt))
-	{
-		ft_fdprintf(2, "non-hex digit\ninvalid hex salt value");
-		return (0);
-	}
-	if (des->key && !valid_hex_value(des->key))
-	{
-		ft_fdprintf(2, "non-hex digit\ninvalid hex key value");
-		return (0);
-	}
-	if (des->vector && !valid_hex_value(des->vector))
-	{
-		ft_fdprintf(2, "non-hex digit\ninvalid hex vector value");
-		return (0);
-	}
-	return (1);
-}
-
-int			valid_params(t_des *des, uint32_t opts)
-{
-	if (!des->pass && !des->key)
-	{
-		if (!ft_getpass(des, opts))
-			return (0);
-	}
-	else if (des->key)
-	{
-		if ((opts & GET_HASH) == OPT_CBC
-		&& !des->vector)
-		{
-			ft_fdprintf(2, "vector undefined\n");
-			return (0);
-		}
-		return (valid_hex_val(des));
-	}
-	return (valid_hex_val(des));
-}
 
 char		*sum_to_str(t_chksum *sum, char *pass)
 {
@@ -233,7 +134,7 @@ int			gen_key_vec_salt(t_des *des, uint32_t opts, uint64_t *buf)
 	return (1);
 }
 
-t_chksum	process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
+t_chksum	process_des(t_arg *arg, uint32_t opts, uint8_t print)
 {
 	t_des		*des;
 	uint64_t	buf[8];
@@ -245,12 +146,12 @@ t_chksum	process_des_ecb(t_arg *arg, uint32_t opts, uint8_t print)
 	|| (des->fd_o = get_output_file(des->output)) < 0
 	|| !valid_params(des, opts))
 	{
-		close_n_free(des);
+		des_close_n_free(des);
 		return ((t_chksum)0);
 	}
 	if (gen_key_vec_salt(des, opts, buf))
-		(opts & OPT_D) ? des_ecb_algo_decrypt(des, opts, &buf[2])
+		(opts & OPT_D) ? des_algo_decrypt(des, opts, &buf[2])
 		: algo(des, NULL, opts);
-	close_n_free(des);
+	des_close_n_free(des);
 	return ((t_chksum)1);
 }

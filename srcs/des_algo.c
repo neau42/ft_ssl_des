@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   des_ecb_algo.c                                     :+:      :+:    :+:   */
+/*   des_algo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 15:14:38 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/16 22:33:13 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ uint64_t	ft_f(uint32_t right, uint64_t key)
 	result = 0;
 	i = -1;
 	while (++i < 8)
-		result |= ((g_S[i][((b[i] & 0x1E) >> 1) + 16 * (((b[i] & 0x20) >> 4)
+		result |= ((g_s[i][((b[i] & 0x1E) >> 1) + 16 * (((b[i] & 0x20) >> 4)
 					+ (b[i] & 0x1))]) << (28 - (i * 4)));
 	return (permut_bits(32, 32, result, g_p));
 }
@@ -52,14 +52,20 @@ uint64_t	ft_des_rounds(uint64_t msg, uint64_t *k)
 	return (left + ((uint64_t)right << 32));
 }
 
-void		process_des_chunk(uint64_t buf, uint64_t *k, uint64_t *final_buf)
+void		process_des_chunk(t_des *des, uint64_t *k, uint64_t *final_buf,
+																uint32_t opts)
 {
 	uint64_t	result;
 
-	buf = endian_swap64(buf);
-	result = ft_des_rounds(permut_bits(64, 64, buf, g_ip), k);
-	result = endian_swap64(permut_bits(64, 64, result, g_ip_rev));
+	(void)opts;
+	if ((opts & GET_HASH) == OPT_CBC)
+		des->buf ^= endian_swap64(des->vec_val);
+	des->buf = endian_swap64(des->buf);
+	result = endian_swap64(permut_bits(64, 64, ft_des_rounds(permut_bits(
+	64, 64, des->buf, g_ip), k), g_ip_rev));
 	ft_memcpy((uint8_t *)final_buf, (void *)&result, 8);
+	if ((opts & GET_HASH) == OPT_CBC)
+		des->vec_val = endian_swap64(result);
 }
 
 void		des_print(t_des *des, uint64_t *final_buf, int *i, uint32_t opts)
@@ -85,43 +91,41 @@ uint64_t	add_padding(int read_size, uint64_t *buf)
 	return (padding);
 }
 
-void		des_last_chunk(uint64_t buf, uint64_t *final_buf, uint64_t *k,
-																	int *i)
+void		des_last_chunk(t_des *des, uint64_t *final_buf, uint64_t *k,
+															uint32_t opts)
 {
-	buf |= 0x0808080808080808;
-	process_des_chunk(buf, k, &final_buf[(*i)]);
-	(*i)++;
+	des->buf = 0x0808080808080808;
+	process_des_chunk(des, k, final_buf, opts);
 }
 
 void		read_loop(t_des *des, uint64_t *k, uint64_t *final_buf,
 														uint32_t opts)
 {
-	uint64_t	buf;
 	int			i;
 	int			read_size;
 	uint64_t	padding;
 
 	i = (des->pass) ? 2 : 0;
-	buf = 0;
+	des->buf = 0;
 	padding = 100;
-	while ((read_size = read(des->fd_i, &buf, (sizeof(uint64_t)))) > 0)
+	while ((read_size = read(des->fd_i, &des->buf, (sizeof(uint64_t)))) > 0)
 	{
 		padding = (read_size < (int)(sizeof(uint64_t))) ?
-			add_padding(read_size, &buf) : 100;
-		process_des_chunk(buf, k, &final_buf[i]);
+			add_padding(read_size, &des->buf) : 100;
+		process_des_chunk(des, k, &final_buf[i], opts);
 		i++;
 		des_print(des, final_buf, &i, opts);
-		buf = 0;
+		des->buf = 0;
 	}
 	if (padding == 100)
-		des_last_chunk(buf, final_buf, k, &i);
+		des_last_chunk(des, &final_buf[i++], k, opts);
 	if (i)
 		(opts & OPT_A) ?
 		b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) :
 		write(des->fd_o, final_buf, i * 8);
 }
 
-void		des_ecb_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
+void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 {
 	uint64_t	k[16];
 	t_des		*des;

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: no <no@student.42.fr>                      +#+  +:+       +#+         #
+#    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2019/01/15 18:47:57 by no               ###   ########.fr        #
+#    Updated: 2019/01/16 22:38:21 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,20 +23,23 @@ SRC =	srcs/md5.c\
 		srcs/get_opts.c\
 		srcs/get_io_file.c\
 		srcs/init_chksum.c\
-		srcs/des_ecb_algo.c\
+		srcs/des_algo.c\
 		srcs/process_file.c\
 		srcs/process_stdin.c\
 		srcs/base64_encode.c\
 		srcs/base64_decode.c\
 		srcs/process_base64.c\
 		srcs/des_gen_keytab.c\
-		srcs/process_des_ecb.c\
+		srcs/process_des.c\
 		srcs/base64_decode_str.c\
 		srcs/read_trim.c\
-		srcs/des_ecb_algo_decrypt.c\
+		srcs/des_free.c\
+		srcs/valid_des_params.c\
+		srcs/des_algo_decrypt.c\
 		srcs/process_string.c
 
-FLAGS = -Wall -Werror -Wextra -fsanitize=address -g -ggdb
+FLAGS = -Wall -Werror -Wextra
+# -fsanitize=address -g -ggdb
 
 INC_PATH = incs/
 
