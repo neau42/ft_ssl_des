@@ -6,11 +6,20 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2019/01/17 18:41:02 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 19:29:52 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
+
+static void	get_h_opt_n_err(char *str, uint32_t *opts)
+{
+	if (str[0] == '-' && ft_strchr(str, 'h'))
+		*opts |= OPT_H;
+	else
+		ft_fdprintf(2, "ft_ssl: '%s' is an invalid command.\n", str);
+	*opts |= NULL_HASH;
+}
 
 uint32_t	get_command(char *str, uint32_t *opts)
 {
@@ -26,14 +35,14 @@ uint32_t	get_command(char *str, uint32_t *opts)
 		*opts |= OPT_ECB;
 	else if (!ft_strcmp(str, "DES-CBC") || !ft_strcmp(str, "des-cbc"))
 		*opts |= OPT_CBC;
+	else if (!ft_strcmp(str, "DES-CFB") || !ft_strcmp(str, "des-cfb"))
+		*opts |= OPT_CFB;
+	else if (!ft_strcmp(str, "DES-OFB") || !ft_strcmp(str, "des-ofb"))
+		*opts |= OPT_OFB;
+	else if (!ft_strcmp(str, "DES-PCBC") || !ft_strcmp(str, "des-pcbc"))
+		*opts |= OPT_PCBC;
 	else
-	{
-		if (str[0] == '-' && ft_strchr(str, 'h'))
-			*opts |= OPT_H;
-		else
-			ft_fdprintf(2, "ft_ssl: '%s' is an invalid command.\n", str);
-		*opts |= NULL_HASH;
-	}
+		get_h_opt_n_err(str, opts);
 	return (*opts);
 }
 

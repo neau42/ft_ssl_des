@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/17 18:54:49 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 19:31:10 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,19 @@
 # define OPT_DES    0x4
 # define OPT_ECB    0x5
 # define OPT_CBC    0x6
-# define GET_HASH   0x7
+
+# define OPT_CFB    0x7
+# define OPT_OFB    0x8
+# define OPT_CTR    0x9
+# define OPT_PCBC   0xa
+
+# define GET_HASH   0xF
 
 # define NULL_TYPE   0x0
 # define FILE_TYPE   0x1
 # define STRING_TYPE 0x2
 # define BASE64_TYPE 0x3
 # define DES_TYPE    0x4
-# define ECB_TYPE    0x5
-# define CBC_TYPE    0x6
 
 # define MD_BUF_SIZE      64
 # define B64_ENC_BUF_SIZE 48

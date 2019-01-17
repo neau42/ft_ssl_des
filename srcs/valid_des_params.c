@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/16 22:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/17 18:47:24 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 19:15:51 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int					valid_params(t_des *des, uint32_t opts)
 	}
 	else if (des->key)
 	{
-		if ((opts & GET_HASH) == OPT_CBC
+		if ((opts & GET_HASH) >= OPT_CBC
 		&& !des->vector)
 		{
 			ft_fdprintf(2, "vector undefined\n");

@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2019/01/17 18:34:57 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 19:11:07 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,9 @@ t_base			*init_base(uint32_t *opts, t_arg *arg)
 		arg->type = BASE64_TYPE;
 		return ((t_base *)ft_memalloc(sizeof(t_base64)));
 	}
-	else if ((*opts & GET_HASH) == OPT_DES)
+	else if ((*opts & GET_HASH) >= OPT_DES)
 	{
 		arg->type = DES_TYPE;
-		return ((t_base *)ft_memalloc(sizeof(t_des)));
-	}
-	else if ((*opts & GET_HASH) == OPT_ECB)
-	{
-		arg->type = ECB_TYPE;
-		return ((t_base *)ft_memalloc(sizeof(t_des)));
-	}
-	else if ((*opts & GET_HASH) == OPT_CBC)
-	{
-		arg->type = CBC_TYPE;
 		return ((t_base *)ft_memalloc(sizeof(t_des)));
 	}
 	*opts |= OPT_ERR;

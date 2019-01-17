@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/17 18:46:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 19:15:24 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int			gen_key_vec_salt(t_des *des, uint32_t opts, uint64_t *buf)
 	des->key_val = (!des->key) ?
 		generate_key(OPT_MD5, des->pass, des->salt_val, 0)
 		: ft_atoh_rpadd(des->key);
-	if ((opts & GET_HASH) == OPT_CBC)
+	if ((opts & GET_HASH) >= OPT_CBC)
 		des->vec_val = (!des->vector) ?
 		generate_key(OPT_MD5, des->pass, des->salt_val, 1)
 		: ft_atoh_rpadd(des->vector);
