@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   des_algo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 22:33:13 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 14:41:52 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void		read_loop(t_des *des, uint64_t *k, uint64_t *final_buf,
 
 void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 {
-	uint64_t	k[16];
+	uint64_t	*k;
 	t_des		*des;
 	uint64_t	final_buf[6];
 	uint64_t	test;
@@ -141,7 +141,7 @@ void		des_algo(const uint32_t *ptr, t_chksum *sum, uint32_t opts)
 		test = endian_swap64((uint64_t)des->salt_val);
 		ft_memcpy((uint8_t *)&final_buf[1], &test, 8);
 	}
-	des_gen_keytab(des->key_val, k);
+	k = des_gen_keytab(des->key_val);
 	if (opts & OPT_PP)
 		ft_fdprintf(2, "Key : %016.16llX\nVect: %016.16llX\nSalt:"
 	"%016.16llX\nPass: %s\n", (des->key_val), (des->vec_val),

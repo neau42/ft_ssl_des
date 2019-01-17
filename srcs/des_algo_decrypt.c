@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   des_algo_decrypt.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 22:31:51 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 15:08:56 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,19 @@ static uint64_t	ft_des_rounds_rev(uint64_t msg, uint64_t *k)
 	return (right + ((uint64_t)left << 32));
 }
 
-static void	last_chunk_rm_padd(uint64_t msg, uint64_t *k, t_des *des)
+static void	last_chunk_rm_padd(uint64_t msg, t_des *des, uint32_t opts)
 {
-	uint64_t	result;
-	uint8_t		pad;
-	int			pad_save;
+	uint64_t		result;
+	uint8_t			pad;
+	int				pad_save;
+	static uint64_t *k = NULL;
 
+	if (k == NULL)
+		k = des_gen_keytab(des->key_val);
 	result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(
 	unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
+	if ((opts & GET_HASH) == OPT_CBC)
+		result ^= endian_swap64(des->vec_val);
 	pad = result >> 56;
 	pad_save = pad;
 	while (pad_save > 0)
@@ -46,7 +51,7 @@ static void	last_chunk_rm_padd(uint64_t msg, uint64_t *k, t_des *des)
 		if ((result >> (64 - (pad_save * 8)) & 0xff) != pad)
 		{
 			write(des->fd_o, &result, 8 - pad);
-			ft_printf("bad decrypt\n");
+			ft_fdprintf(2, "bad decrypt\n");
 			return ;
 		}
 		pad_save--;
@@ -54,14 +59,25 @@ static void	last_chunk_rm_padd(uint64_t msg, uint64_t *k, t_des *des)
 	write(des->fd_o, &result, 8 - pad);
 }
 
-static void		decode_msg(t_des *des, uint64_t *msg, uint64_t *k, int size)
+static void		decode_msg(t_des *des, uint64_t *msg, int size, uint32_t opts)
 {
-	uint64_t	result;
+	uint64_t		result;
+	uint64_t		tmp_vector;
+	static uint64_t	*k = NULL;
 
+	if (k == NULL)
+		k = des_gen_keytab(des->key_val);
 	while (size-- > 0)
 	{
+		if ((opts & GET_HASH) == OPT_CBC)
+			tmp_vector = endian_swap64(*msg);
 		result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(
 		unpermut_bits(64, endian_swap64(*msg), g_ip_rev), k), g_ip));
+		if ((opts & GET_HASH) == OPT_CBC)
+		{
+			result ^= endian_swap64(des->vec_val);
+			des->vec_val = tmp_vector;
+		}
 		write(des->fd_o, &result, 8);
 		msg++;
 	}
@@ -84,29 +100,27 @@ int			get_size(int size)
 
 void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 {
-	uint64_t	k[16];
 	uint64_t	msg[6];
 	char		b64_buf[65];
 	char		final_buf[49];
 	int			sz;
 
-	des_gen_keytab(des->key_val, k);
 	ft_bzero(final_buf, 49);
 	while (buf[1])
 	{
-		decode_msg(des, buf++, k, 1);
+		decode_msg(des, buf++, 1, opts);
 		buf[-1] = buf[0];
 	}
 	while ((!(opts & OPT_A) && (sz = read(des->fd_i, &msg, 48)) > 0)
 	|| ((opts & OPT_A) && (sz = read_trim(des->fd_i, b64_buf, 64)) > 0))
 	{
 		if (buf[0])
-			decode_msg(des, &buf[0], k, 1);
+			decode_msg(des, &buf[0], 1, opts);
 		sz = (opts & OPT_A) ? format_buf(b64_buf, final_buf, sz, msg) :
 			get_size(sz);
 		buf[0] = msg[sz];
-		decode_msg(des, msg, k, sz);
+		decode_msg(des, msg, sz, opts);
 		ft_bzero(final_buf, 49);
 	}
-	last_chunk_rm_padd(buf[0], k, des);
+	last_chunk_rm_padd(buf[0], des, opts);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   des_gen_keytab.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:58:45 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 15:36:20 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 14:40:04 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ static uint8_t	g_pc2[] = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10, 23, 19,
 	12, 4, 26, 8, 16, 7, 27, 20, 13, 2, 41, 52, 31, 37, 47, 55, 30, 40, 51, 45,
 	33, 48, 44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
 
-void		des_gen_keytab(uint64_t key, uint64_t *k)
+uint64_t		*des_gen_keytab(uint64_t key)
 {
-	int			i;
-	uint64_t	tmp;
-	uint32_t	c0;
-	uint32_t	d0;
+	int				i;
+	uint64_t		tmp;
+	uint32_t		c0;
+	uint32_t		d0;
+	static uint64_t	k[16] = {0};
 
 	tmp = permut_bits(64, 56, key, g_pc1);
 	c0 = 0xFFFFFFF & (tmp >> 28);
@@ -39,4 +40,5 @@ void		des_gen_keytab(uint64_t key, uint64_t *k)
 		k[i - 1] = permut_bits(56, 48, d0 + ((uint64_t)c0 << 28), g_pc2);
 	}
 	i = 0;
+	return (k);
 }

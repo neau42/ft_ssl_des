@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 22:39:57 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 14:40:08 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,8 @@ int				valid_params(t_des *des, uint32_t opts);
 void			print_memory_hex(void *data, size_t blk_size);
 void			des_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
 void			des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf);
-void			des_gen_keytab(uint64_t key, uint64_t *k);
+// void			des_gen_keytab(uint64_t key, uint64_t *k);
+uint64_t		*des_gen_keytab(uint64_t key);
 void			b64_decode_str(char *buf_in, char *buf_out, size_t size);
 int				read_trim(int fd, char *buf, size_t size);
 
