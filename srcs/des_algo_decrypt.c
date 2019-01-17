@@ -3,33 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   des_algo_decrypt.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/17 15:08:56 by no               ###   ########.fr       */
+/*   Updated: 2019/01/17 18:15:12 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-
-static uint64_t	ft_des_rounds_rev(uint64_t msg, uint64_t *k)
-{
-	uint32_t	left;
-	uint32_t	right;
-	uint32_t	tmp_right;
-	int			i;
-
-	left = msg;
-	right = (msg >> 32);
-	i = 16;
-	while (--i >= 0)
-	{
-		tmp_right = right;
-		right = left;
-		left = tmp_right ^ ft_f(left, k[i]);
-	}
-	return (right + ((uint64_t)left << 32));
-}
 
 static void	last_chunk_rm_padd(uint64_t msg, t_des *des, uint32_t opts)
 {
@@ -59,30 +40,6 @@ static void	last_chunk_rm_padd(uint64_t msg, t_des *des, uint32_t opts)
 	write(des->fd_o, &result, 8 - pad);
 }
 
-static void		decode_msg(t_des *des, uint64_t *msg, int size, uint32_t opts)
-{
-	uint64_t		result;
-	uint64_t		tmp_vector;
-	static uint64_t	*k = NULL;
-
-	if (k == NULL)
-		k = des_gen_keytab(des->key_val);
-	while (size-- > 0)
-	{
-		if ((opts & GET_HASH) == OPT_CBC)
-			tmp_vector = endian_swap64(*msg);
-		result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(
-		unpermut_bits(64, endian_swap64(*msg), g_ip_rev), k), g_ip));
-		if ((opts & GET_HASH) == OPT_CBC)
-		{
-			result ^= endian_swap64(des->vec_val);
-			des->vec_val = tmp_vector;
-		}
-		write(des->fd_o, &result, 8);
-		msg++;
-	}
-}
-
 static int	format_buf(char *b64_buf, char *final_buf, int size, uint64_t *msg)
 {
 	int final_size;
@@ -93,7 +50,7 @@ static int	format_buf(char *b64_buf, char *final_buf, int size, uint64_t *msg)
 	return (final_size);
 }
 
-int			get_size(int size)
+int			get_uint64_size(int size)
 {
 	return (((size / 8) + ((size % 8) ? 1 : 0) - 1));
 }
@@ -108,18 +65,18 @@ void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 	ft_bzero(final_buf, 49);
 	while (buf[1])
 	{
-		decode_msg(des, buf++, 1, opts);
+		decode_des_msg(des, buf++, 1, opts);
 		buf[-1] = buf[0];
 	}
 	while ((!(opts & OPT_A) && (sz = read(des->fd_i, &msg, 48)) > 0)
 	|| ((opts & OPT_A) && (sz = read_trim(des->fd_i, b64_buf, 64)) > 0))
 	{
 		if (buf[0])
-			decode_msg(des, &buf[0], 1, opts);
+			decode_des_msg(des, &buf[0], 1, opts);
 		sz = (opts & OPT_A) ? format_buf(b64_buf, final_buf, sz, msg) :
-			get_size(sz);
+			get_uint64_size(sz);
 		buf[0] = msg[sz];
-		decode_msg(des, msg, sz, opts);
+		decode_des_msg(des, msg, sz, opts);
 		ft_bzero(final_buf, 49);
 	}
 	last_chunk_rm_padd(buf[0], des, opts);

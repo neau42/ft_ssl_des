@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/17 14:40:08 by no               ###   ########.fr       */
+/*   Updated: 2019/01/17 18:54:49 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,10 @@ void			get_base64_option(char *str, char *str_next, uint32_t *opts,
 						t_base *base);
 void			get_des_option(char *str, char *str_next, uint32_t *opts,
 						t_base *base);
+void			ft_opt_err(uint32_t *opts, char *str);
+uint32_t		get_command(char *str, uint32_t *opts);
+t_arg			*arg_error(uint32_t *opts, char *str, t_arg *first);
+
 t_arg			*init_arg(void);
 void			short_usage(char *str);
 void			long_usage(char *str);
@@ -204,17 +208,26 @@ uint64_t		ft_f(uint32_t right, uint64_t key);
 uint64_t		permut_bits(uint64_t original_len, uint64_t final_len,
 								uint64_t value, uint8_t *permut_tab);
 uint64_t		unpermut_bits(uint64_t len, uint64_t value,
-												uint8_t *permut_tab);
+								uint8_t *permut_tab);
+uint64_t		str_to_uint64(unsigned char *str);
 
+int				get_magic_salt(int fd, uint64_t *salt_val, uint32_t opts,
+								uint64_t *buf_save);
 void			des_close_n_free(t_des *des);
 int				valid_params(t_des *des, uint32_t opts);
 
 void			print_memory_hex(void *data, size_t blk_size);
 void			des_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
 void			des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf);
-// void			des_gen_keytab(uint64_t key, uint64_t *k);
+
+void			decode_des_msg(t_des *des, uint64_t *msg, int size,
+											uint32_t opts);
+uint64_t		ft_des_rounds_rev(uint64_t msg, uint64_t *k);
+
 uint64_t		*des_gen_keytab(uint64_t key);
 void			b64_decode_str(char *buf_in, char *buf_out, size_t size);
 int				read_trim(int fd, char *buf, size_t size);
+void			process_des_chunk(t_des *des, uint64_t *k, uint64_t *final_buf,
+																uint32_t opts);
 
 #endif

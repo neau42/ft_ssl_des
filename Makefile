@@ -6,7 +6,7 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2019/01/16 22:38:21 by nboulaye         ###   ########.fr        #
+#    Updated: 2019/01/17 18:45:42 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,11 +31,17 @@ SRC =	srcs/md5.c\
 		srcs/process_base64.c\
 		srcs/des_gen_keytab.c\
 		srcs/process_des.c\
+		srcs/get_command.c\
 		srcs/base64_decode_str.c\
+		srcs/get_md_option.c\
 		srcs/read_trim.c\
 		srcs/des_free.c\
+		srcs/decode_des_msg.c\
 		srcs/valid_des_params.c\
 		srcs/des_algo_decrypt.c\
+		srcs/process_des_chunk.c\
+		srcs/permut_bits_n_endian_swap.c\
+		srcs/get_magic_salt.c\
 		srcs/process_string.c
 
 FLAGS = -Wall -Werror -Wextra
@@ -68,8 +74,6 @@ clean:
 fclean: clean
 	make fclean -C $(LIBFT_PATH)
 	rm -f $(NAME)
-
-test:
 
 re: fclean all
 

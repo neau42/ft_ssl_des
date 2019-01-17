@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 22:38:51 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 18:02:01 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,3 @@ void			des_close_n_free(t_des *des)
 		close(des->fd_o);
 	des_free(des);
 }
-

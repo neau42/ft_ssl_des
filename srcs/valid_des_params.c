@@ -6,13 +6,13 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/16 22:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 22:40:29 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/17 18:47:24 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-static int	ft_getpass(t_des *des, uint32_t opts)
+static int			ft_getpass(t_des *des, uint32_t opts)
 {
 	if (opts & OPT_D)
 	{
