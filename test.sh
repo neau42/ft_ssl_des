@@ -206,80 +206,89 @@ else
 fi
 
 echo "\n\033[92m - - - - - - - - TEST BASE64 ENCODE // DECODE - - - - - - - - -\033[0m"
-
-i=0;
-
-for str in ""\
-			"`cat /dev/urandom | base64 -b 1 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 2 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 3 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 4 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 5 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 6 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 7 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 8 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 9 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 10 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 12 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 42 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 43 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 44 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 62 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 63 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 64 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 65 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 66 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 67 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 68 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 69 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 70 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 125 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 126 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 127 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 128 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 129 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 130 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 131 | head -n 1`"\
-			"`cat /dev/urandom | base64 -b 132 | head -n 1`"\
-			"`cat Makefile`"
-			 ; do
+for i in {1..$1} ; do
+str="`cat /dev/urandom | base64 -b $i | head -n 1`"
 if [ "`echo -n $str | ./ft_ssl base64 -e | ./ft_ssl base64 -d`" = "$str" ]; then
-	printf "no diff with str $i encode/decode base64\n"
+
+	printf "no diff with str $i encode/decode base64\r"
 else
 	printf "\033[31mERROR\033[0m diff with %0.10s encode/decode base64\n" "$str"
 fi ; ((i++)) ; done
 
-# i=0
-# for i in {1..257}
-# 	do str="`cat /dev/urandom | base64 -b $i | head -n 1`"
-# 	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des-ecb  -k 4242 -v 11 | od -A n -t x1`" ]; then
-# 		printf "no diff with str $i (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
-# 	else
-# 		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\n founded: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des-ecb -k 4242  |od -A n -t x1 | sed 's/ //g'`"
-# 	fi
-# 	# ((i++))
-# 	 done
-
-echo "\n\033[92m - - - - - - - - TEST DES ENCODE // DECODE - - - - -\033[0m"
-
-
-str=""
-if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des-ecb  -k 4242 -v 11 | od -A n -t x1`" ]; then
-	printf "no diff with str (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
-else
-	printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des-ecb -k 4242  |od -A n -t x1 | sed 's/ //g'`"
-fi
-for i in {1..157}
+echo "\n\033[92m - - - - - - - - TEST DES-ECB ENCODE/DECODE with pass - - - - -\033[0m"
+for i in {1..$1}
 do
 	str="`cat /dev/urandom | base64 -b $i | head -n 1`"
-	if [ "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1`" = "`echo -n $str | ./ft_ssl des-ecb  -k 4242 -v 11 | od -A n -t x1`" ]; then
-		printf "no diff with str (len: %d) encode DES\n"  "`echo -n \"$str\" | wc -c`"
+	echo -n $str | ./ft_ssl des-ecb -a -p coucou -o test.txt
+	openssl_encode="`openssl des-ecb -a -pass 'pass:coucou' -d -in test.txt`"
+	decode="`./ft_ssl des-ecb -a -p coucou -d -i test.txt`"
+	if [ "`echo $decode`" = "`echo $str`" ] || [ "`echo $decode_o`" = "`echo $str`" ] ; then
+		printf "no diff with str (len: %d) encode DES\r" "`echo -n \"$str\" | wc -c`"
 	else
-		printf "\033[31mERROR\033[0m diff with '%s' (len: %d) \nwanted: [%s]\nfound: [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "`echo -n $str | openssl des-ecb -K 4242  |od -A n -t x1 | sed 's/ //g'`" "`echo -n $str | ./ft_ssl des-ecb -k 4242  |od -A n -t x1 | sed 's/ //g'`"
+		printf "\033[31mERROR\033[0m diff with '%s' (len: %d)\nwanted: [%s]\nfound : [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "$str" "$decode"
 	fi
 done
+echo ""
 
+echo "\n\033[92m - - - - - - - - TEST DES-ECB ENCODE/DECODE with pass - salt - - - - -\033[0m"
+for i in {1..$1}
+do
+	str="`cat /dev/urandom | base64 -b $i | head -n 1`"
+	echo -n $str | ./ft_ssl des-ecb -a -p coucou -s 1230123 -o test.txt
+	openssl_encode="`openssl des-ecb -a -pass 'pass:coucou' -S 1230123 -d -in test.txt`"
+	decode="`./ft_ssl des-ecb -a -p coucou -d -s 1230123 -i test.txt`"
+	if [ "`echo $decode`" = "`echo $str`" ] || [ "`echo $decode_o`" = "`echo $str`" ] ; then
+		printf "no diff with str (len: %d) encode DES\r" "`echo -n \"$str\" | wc -c`"
+	else
+		printf "\033[31mERROR\033[0m diff with '%s' (len: %d)\nwanted: [%s]\nfound : [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "$str" "$decode"
+	fi
+done
+echo ""
+
+echo "\n\033[92m - - - - - - - - TEST DES-ECB ENCODE/DECODE with key - - - - -\033[0m"
+for i in {1..$1}
+do
+	str="`cat /dev/urandom | base64 -b $i | head -n 1`"
+	echo -n $str | ./ft_ssl des-ecb -a -k FFAA42 -o test.txt
+	openssl_encode="`openssl des-ecb -a -K FFAA42 -d -in test.txt`"
+	decode="`./ft_ssl des-ecb -a -k FFAA42 -d -i test.txt`"
+	if [ "`echo $decode`" = "`echo $str`" ] || [ "`echo $decode_o`" = "`echo $str`" ] ; then
+		printf "no diff with str (len: %d) encode DES\r" "`echo -n \"$str\" | wc -c`"
+	else
+		printf "\033[31mERROR\033[0m diff with '%s' (len: %d)\nwanted: [%s]\nfound : [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "$str" "$decode"
+	fi
+done
+echo ""
+
+echo "\n\033[92m - - - - - - - - TEST DES-ECB ENCODE/DECODE with key - salt - - - - -\033[0m"
+for i in {1..$1}
+do
+	str="`cat /dev/urandom | base64 -b $i | head -n 1`"
+	echo -n $str | ./ft_ssl des-ecb -a -k FFAA42 -s 4242 -o test.txt
+	openssl_encode="`openssl des-ecb -a -K FFAA42 -S 4242 -d -in test.txt`"
+	decode="`./ft_ssl des-ecb -a -k FFAA42 -s 4242 -d -i test.txt`"
+	if [ "`echo $decode`" = "`echo $str`" ] || [ "`echo $decode_o`" = "`echo $str`" ] ; then
+		printf "no diff with str (len: %d) encode DES\r" "`echo -n \"$str\" | wc -c`"
+	else
+		printf "\033[31mERROR\033[0m diff with '%s' (len: %d)\nwanted: [%s]\nfound : [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "$str" "$decode"
+	fi
+done
+echo ""
+
+echo "\n\033[92m - - - - - - - - TEST DES-CBC ENCODE/DECODE with key - vector - salt - - - - -\033[0m"
+for i in {1..$1}
+do
+	str="`cat /dev/urandom | base64 -b $i | head -n 1`"
+	echo -n $str | ./ft_ssl des-cbc -a -k FFAA42 -v 1234567 -s 4242 -o test.txt
+	openssl_encode="`openssl des-cbc -a -K FFAA42 -iv 1234567 -S 4242 -d -in test.txt`"
+	decode="`./ft_ssl des-cbc -a -k FFAA42 -s 4242 -v 1234567 -d -i test.txt`"
+	if [ "`echo $decode`" = "`echo $str`" ] || [ "`echo $decode_o`" = "`echo $str`" ] ; then
+		printf "no diff with str (len: %d) encode DES\r" "`echo -n \"$str\" | wc -c`"
+	else
+		printf "\033[31mERROR\033[0m diff with '%s' (len: %d)\nwanted: [%s]\nfound : [%s]\n" "$str" "`echo -n \"$str\" | wc -c`" "$str" "$decode"
+	fi
+done
+echo ""
 
 rm -f file big_smoke_order_remix big_f 1.out 2.out
 rm ${TEST_DIR}*
