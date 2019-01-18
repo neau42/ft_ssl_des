@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2019/01/17 19:11:07 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/18 16:38:56 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ t_base			*init_base(uint32_t *opts, t_arg *arg)
 t_arg			*get_base_opts(int ac, char **av, uint32_t *opts, t_arg *arg)
 {
 	int			i;
-	static void	(*fcts[4])(char *, char *, uint32_t *, t_base *) = {
-		get_base64_option,
-		get_des_option,
-		get_des_option,
+	static void	(*fcts[10])(char *, char *, uint32_t *, t_base *) = {
+		get_base64_option, get_des_option, get_des_option,
+		get_des_option, get_des_option, get_des_option,
+		get_des_option, get_des_option, get_des_option,
 		get_des_option };
 
 	i = 1;

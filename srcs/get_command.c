@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2019/01/17 19:29:52 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/18 16:42:48 by no               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ uint32_t	get_command(char *str, uint32_t *opts)
 		*opts |= OPT_CFB;
 	else if (!ft_strcmp(str, "DES-OFB") || !ft_strcmp(str, "des-ofb"))
 		*opts |= OPT_OFB;
+	else if (!ft_strcmp(str, "DES-CTR") || !ft_strcmp(str, "des-ctr"))
+		*opts |= OPT_CTR;
 	else if (!ft_strcmp(str, "DES-PCBC") || !ft_strcmp(str, "des-pcbc"))
 		*opts |= OPT_PCBC;
 	else
