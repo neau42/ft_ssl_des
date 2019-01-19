@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2019/01/17 19:30:54 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 03:54:47 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void		short_usage(char *str)
 {
 	ft_fdprintf(2, "usage:\n%s <md5|sha256|des|des-ecb|des-cbcdes-cfb|"
-	"des-ofb|des-ctr|des-pcbc> [options] file ...\n", str);
+	"des-ctr|des-pcbc> [options] file ...\n", str);
 }
 
 static void	usage_option(void)
@@ -62,7 +62,6 @@ void		long_usage(char *str)
 	"\n des-ecb (Electronic Code Book)"
 	"\n des-cbc (Cipher Block Chaining)"
 	"\n des-cfb (Cipher Feedback)"
-	"\n des-ofb (Output Feedback)"
 	"\n des-ctr (CounTeR)"
 	"\n des-pcbc (Propagating Cipher Block Chaining)");
 	usage_option();
