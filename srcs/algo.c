@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/18 16:41:00 by no               ###   ########.fr       */
+/*   Updated: 2019/01/18 23:40:28 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		algo(void *buf, t_chksum *sum, uint32_t opts)
 {
 	static void (*fcts[11])(const uint32_t *, t_chksum *, uint32_t) = {
 		ft_null, md5, sha256, ft_null, des_algo, des_algo, des_algo,
-		 des_algo, des_algo, des_algo, des_algo};
+		des_algo, des_algo, des_algo, des_algo};
 
 	if (opts & OPT_DD)
 		print_memory_hex(buf, 64);

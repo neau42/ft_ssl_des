@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/17 19:31:10 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 01:03:26 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,8 @@ void			b64_encode(t_base64 *base);
 void			b64_decode(t_base64 *base);
 void			b64_encode_buffer(t_base64 *base, char *buf, int len);
 
+uint64_t		ft_des_rounds(uint64_t msg, uint64_t *k);
+
 uint64_t		endian_swap64(uint64_t x);
 uint32_t		endian_swap32(uint32_t x);
 uint32_t		r_rot(uint32_t n, unsigned int c);
@@ -223,6 +225,11 @@ int				valid_params(t_des *des, uint32_t opts);
 void			print_memory_hex(void *data, size_t blk_size);
 void			des_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
 void			des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf);
+
+uint64_t		des_decode(t_des *des, uint64_t msg, uint64_t *k, uint32_t opts);
+
+// uint64_t		des_decode(uint64_t msg, uint64_t *k);
+// uint64_t		des_decode_ofb(t_des *des, uint64_t msg, uint64_t *k);
 
 void			decode_des_msg(t_des *des, uint64_t *msg, int size,
 											uint32_t opts);

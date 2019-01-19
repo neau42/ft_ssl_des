@@ -6,37 +6,35 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/17 18:15:12 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 01:04:21 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-static void	last_chunk_rm_padd(uint64_t msg, t_des *des, uint32_t opts)
+static void	last_chunk_rm_padd(uint64_t msg, t_des *des, uint32_t opts, int sz)
 {
-	uint64_t		result;
-	uint8_t			pad;
-	int				pad_save;
-	static uint64_t *k = NULL;
+	uint64_t	result;
+	uint64_t	*k;
+	int			pad_save;
+	uint8_t		pad;
 
-	if (k == NULL)
-		k = des_gen_keytab(des->key_val);
-	result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(
-	unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip));
+	k = des_gen_keytab(des->key_val);
+	result = des_decode(des, msg, k, opts);
 	if ((opts & GET_HASH) == OPT_CBC)
 		result ^= endian_swap64(des->vec_val);
+	if ((opts & GET_HASH) == OPT_OFB)
+		return (void)write(des->fd_o, &result, sz % 8);
 	pad = result >> 56;
 	pad_save = pad;
 	while (pad_save > 0)
-	{
 		if ((result >> (64 - (pad_save * 8)) & 0xff) != pad)
 		{
 			write(des->fd_o, &result, 8 - pad);
-			ft_fdprintf(2, "bad decrypt\n");
-			return ;
+			return (void)ft_fdprintf(2, "bad decrypt\n");
 		}
-		pad_save--;
-	}
+		else
+			pad_save--;
 	write(des->fd_o, &result, 8 - pad);
 }
 
@@ -50,7 +48,7 @@ static int	format_buf(char *b64_buf, char *final_buf, int size, uint64_t *msg)
 	return (final_size);
 }
 
-int			get_uint64_size(int size)
+static int	get_uint64_size(int size)
 {
 	return (((size / 8) + ((size % 8) ? 1 : 0) - 1));
 }
@@ -58,9 +56,10 @@ int			get_uint64_size(int size)
 void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 {
 	uint64_t	msg[6];
-	char		b64_buf[65];
+	char		b64_buf[B64_DEC_BUF_SIZE + 1];
 	char		final_buf[49];
 	int			sz;
+	int			size;
 
 	ft_bzero(final_buf, 49);
 	while (buf[1])
@@ -71,6 +70,7 @@ void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 	while ((!(opts & OPT_A) && (sz = read(des->fd_i, &msg, 48)) > 0)
 	|| ((opts & OPT_A) && (sz = read_trim(des->fd_i, b64_buf, 64)) > 0))
 	{
+		size = sz;
 		if (buf[0])
 			decode_des_msg(des, &buf[0], 1, opts);
 		sz = (opts & OPT_A) ? format_buf(b64_buf, final_buf, sz, msg) :
@@ -79,5 +79,5 @@ void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 		decode_des_msg(des, msg, sz, opts);
 		ft_bzero(final_buf, 49);
 	}
-	last_chunk_rm_padd(buf[0], des, opts);
+	last_chunk_rm_padd(buf[0], des, opts, size);
 }

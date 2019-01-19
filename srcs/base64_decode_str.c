@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 12:56:19 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/16 15:27:59 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/18 22:48:14 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	flush_chunk(char *buf_out, uint8_t *val, int *iter)
 
 static void	get_b64_decode_value(char *buf_out, uint8_t idx, int op)
 {
-	static uint8_t	val[48] = {0};
+	static uint8_t	val[B64_ENC_BUF_SIZE] = {0};
 	static int		iter[2] = {0};
 
 	if (op)

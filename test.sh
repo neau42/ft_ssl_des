@@ -291,4 +291,4 @@ done
 echo ""
 
 rm -f file big_smoke_order_remix big_f 1.out 2.out
-rm ${TEST_DIR}*
+rm ${TEST_DIR}* test.txt

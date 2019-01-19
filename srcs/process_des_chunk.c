@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_des_chunk.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: no <no@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/18 16:46:36 by no               ###   ########.fr       */
+/*   Updated: 2019/01/19 00:53:37 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ uint64_t		ft_f(uint32_t right, uint64_t key)
 	return (permut_bits(32, 32, result, g_p));
 }
 
-static uint64_t	ft_des_rounds(uint64_t msg, uint64_t *k)
+uint64_t		ft_des_rounds(uint64_t msg, uint64_t *k)
 {
 	uint32_t	left;
 	uint32_t	right;
@@ -53,7 +53,7 @@ static uint64_t	ft_des_rounds(uint64_t msg, uint64_t *k)
 }
 
 static void		des_variantions(t_des *des, uint32_t opts, uint64_t *result,
-													 uint64_t original_block)
+													uint64_t original_buf)
 {
 	if ((opts & GET_HASH) == OPT_CBC)
 		des->vec_val = endian_swap64(*result);
@@ -64,7 +64,7 @@ static void		des_variantions(t_des *des, uint32_t opts, uint64_t *result,
 	}
 	else if ((opts & GET_HASH) == OPT_OFB)
 	{
-		des->vec_val = *result;
+		des->vec_val = endian_swap64(*result);
 		*result ^= des->buf;
 	}
 	else if ((opts & GET_HASH) == OPT_CTR)
@@ -73,9 +73,9 @@ static void		des_variantions(t_des *des, uint32_t opts, uint64_t *result,
 		*result ^= des->buf;
 	}
 	else if ((opts & GET_HASH) == OPT_PCBC)
-		des->vec_val = *result ^ original_block;
+		des->vec_val = endian_swap64(*result) ^ endian_swap64(original_buf);
 	else if ((opts & GET_HASH) == OPT_CBC)
-		des->vec_val = *result;
+		des->vec_val = endian_swap64(*result);
 }
 
 void			process_des_chunk(t_des *des, uint64_t *k, uint64_t *final_buf,
@@ -83,9 +83,9 @@ void			process_des_chunk(t_des *des, uint64_t *k, uint64_t *final_buf,
 {
 	uint64_t	msg;
 	uint64_t	result;
-	uint64_t 	original_block;
+	uint64_t	original_buf;
 
-	original_block = des->buf;
+	original_buf = des->buf;
 	if ((opts & GET_HASH) == OPT_CBC || (opts & GET_HASH) == OPT_PCBC)
 		des->buf ^= endian_swap64(des->vec_val);
 	msg = (((opts & GET_HASH) == OPT_CBC || (opts & GET_HASH) == OPT_ECB
@@ -93,6 +93,6 @@ void			process_des_chunk(t_des *des, uint64_t *k, uint64_t *final_buf,
 		? endian_swap64(des->buf) : des->vec_val;
 	result = endian_swap64(permut_bits(64, 64, ft_des_rounds(permut_bits(
 	64, 64, msg, g_ip), k), g_ip_rev));
-	des_variantions(des, opts, &result, original_block);
+	des_variantions(des, opts, &result, original_buf);
 	ft_memcpy((uint8_t *)final_buf, (void *)&result, 8);
 }
