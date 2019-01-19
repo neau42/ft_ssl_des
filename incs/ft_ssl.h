@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 01:03:26 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 03:41:25 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 # define OPT_CBC    0x6
 
 # define OPT_CFB    0x7
-# define OPT_OFB    0x8
+// # define OPT_OFB    0x8
 # define OPT_CTR    0x9
 # define OPT_PCBC   0xa
 

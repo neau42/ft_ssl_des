@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/18 23:48:13 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 03:42:11 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ void		des_print(t_des *des, uint64_t *final_buf, int *i, uint32_t opts)
 	}
 }
 
-uint64_t	add_padding(int read_size, uint64_t *buf, uint32_t opts)
+uint64_t	add_padding(int read_size, uint64_t *buf)
 {
 	uint64_t padding;
 	uint64_t padding_nb;
 
-	if ((opts & GET_HASH) == OPT_OFB)
-		return (read_size);
+	// if ((opts & GET_HASH) == OPT_OFB)
+	// 	return (read_size);
+
 	padding = (int)(sizeof(uint64_t)) - read_size;
 	padding_nb = (int)(sizeof(uint64_t)) - read_size;
 	while (padding_nb-- > 0)
@@ -37,10 +38,10 @@ uint64_t	add_padding(int read_size, uint64_t *buf, uint32_t opts)
 	return (padding);
 }
 
-uint8_t		get_write_size(int i, uint64_t padding, uint32_t opts)
-{
-	return (i - 1) * 8 + (((opts & GET_HASH) == OPT_OFB) ? padding : 8);
-}
+// uint8_t		get_write_size(int i, uint64_t padding, uint32_t opts)
+// {
+// 	return ((i - 1) * 8 + (((opts & GET_HASH) == OPT_OFB) ? padding : 8));
+// }
 
 void		read_loop(t_des *des, uint64_t *k, uint64_t *final_buf,
 														uint32_t opts)
@@ -55,7 +56,7 @@ void		read_loop(t_des *des, uint64_t *k, uint64_t *final_buf,
 	while ((read_size = read(des->fd_i, &des->buf, (sizeof(uint64_t)))) > 0)
 	{
 		padding = (read_size < (int)(sizeof(uint64_t))) ?
-		add_padding(read_size, &des->buf, opts) : 100;
+		add_padding(read_size, &des->buf) : 100;
 		process_des_chunk(des, k, &final_buf[i], opts);
 		i++;
 		des_print(des, final_buf, &i, opts);
@@ -67,7 +68,7 @@ void		read_loop(t_des *des, uint64_t *k, uint64_t *final_buf,
 	{
 		(opts & OPT_A) ?
 		b64_encode_buffer((t_base64 *)des, (char *)final_buf, i * 8) :
-		write(des->fd_o, final_buf, get_write_size(i, padding, opts));
+		write(des->fd_o, final_buf, i * 8);
 	}
 }
 
