@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 01:04:16 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 01:27:38 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,17 @@ uint64_t	des_decode(t_des *des, uint64_t msg, uint64_t *k, uint32_t opts)
 		result ^= msg;
 		return (result);
 	}
-	return (endian_swap64(unpermut_bits(64, ft_des_rounds_rev(
-		unpermut_bits(64, endian_swap64(msg), g_ip_rev), k), g_ip)));
+	else if ((opts & GET_HASH) == OPT_CFB)
+	{
+		result = endian_swap64(permut_bits(64, 64, ft_des_rounds(permut_bits(
+			64, 64, des->vec_val, g_ip), k), g_ip_rev));
+		result ^= (msg);
+		des->vec_val = endian_swap64(msg);
+		return (result);
+	}
+	return (endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(
+		64, endian_swap64(msg), g_ip_rev), k), g_ip)));
+
 }
 
 void		decode_des_msg(t_des *des, uint64_t *msg, int size, uint32_t opts)
@@ -66,6 +75,7 @@ void		decode_des_msg(t_des *des, uint64_t *msg, int size, uint32_t opts)
 			result ^= endian_swap64(des->vec_val);
 			des->vec_val = tmp_vector;
 		}
+
 		write(des->fd_o, &result, 8);
 		msg++;
 	}

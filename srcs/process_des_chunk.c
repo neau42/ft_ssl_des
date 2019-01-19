@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 00:53:37 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 01:11:01 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void		des_variantions(t_des *des, uint32_t opts, uint64_t *result,
 	else if ((opts & GET_HASH) == OPT_CFB)
 	{
 		*result ^= des->buf;
-		des->vec_val = *result;
+		des->vec_val = endian_swap64(*result);
 	}
 	else if ((opts & GET_HASH) == OPT_OFB)
 	{
