@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 02:27:56 by no                #+#    #+#             */
-/*   Updated: 2019/01/19 03:41:06 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 03:46:42 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ uint32_t	get_command(char *str, uint32_t *opts)
 		*opts |= OPT_CBC;
 	else if (!ft_strcmp(str, "DES-CFB") || !ft_strcmp(str, "des-cfb"))
 		*opts |= OPT_CFB;
-	// else if (!ft_strcmp(str, "DES-OFB") || !ft_strcmp(str, "des-ofb"))
-	// 	*opts |= OPT_OFB;
 	else if (!ft_strcmp(str, "DES-CTR") || !ft_strcmp(str, "des-ctr"))
 		*opts |= OPT_CTR;
 	else if (!ft_strcmp(str, "DES-PCBC") || !ft_strcmp(str, "des-pcbc"))

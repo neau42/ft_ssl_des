@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 04:00:08 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 03:42:11 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 03:46:39 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,12 @@ uint64_t	add_padding(int read_size, uint64_t *buf)
 	uint64_t padding;
 	uint64_t padding_nb;
 
-	// if ((opts & GET_HASH) == OPT_OFB)
-	// 	return (read_size);
-
 	padding = (int)(sizeof(uint64_t)) - read_size;
 	padding_nb = (int)(sizeof(uint64_t)) - read_size;
 	while (padding_nb-- > 0)
 		*buf |= (padding << (uint64_t)(64 - (padding_nb + 1) * 8));
 	return (padding);
 }
-
-// uint8_t		get_write_size(int i, uint64_t padding, uint32_t opts)
-// {
-// 	return ((i - 1) * 8 + (((opts & GET_HASH) == OPT_OFB) ? padding : 8));
-// }
 
 void		read_loop(t_des *des, uint64_t *k, uint64_t *final_buf,
 														uint32_t opts)

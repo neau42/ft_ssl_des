@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 15:18:48 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 03:41:25 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 03:47:38 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@
 # define OPT_CBC    0x6
 
 # define OPT_CFB    0x7
-// # define OPT_OFB    0x8
 # define OPT_CTR    0x9
 # define OPT_PCBC   0xa
 
@@ -226,10 +225,8 @@ void			print_memory_hex(void *data, size_t blk_size);
 void			des_algo(const uint32_t *buf, t_chksum *sum, uint32_t opts);
 void			des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf);
 
-uint64_t		des_decode(t_des *des, uint64_t msg, uint64_t *k, uint32_t opts);
-
-// uint64_t		des_decode(uint64_t msg, uint64_t *k);
-// uint64_t		des_decode_ofb(t_des *des, uint64_t msg, uint64_t *k);
+uint64_t		des_decode(t_des *des, uint64_t msg, uint64_t *k,
+														uint32_t opts);
 
 void			decode_des_msg(t_des *des, uint64_t *msg, int size,
 											uint32_t opts);

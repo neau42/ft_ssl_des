@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 03:44:19 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 03:46:25 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ static void	last_chunk_rm_padd(uint64_t msg, t_des *des, uint32_t opts)
 	result = des_decode(des, msg, k, opts);
 	if ((opts & GET_HASH) == OPT_CBC || (opts & GET_HASH) == OPT_PCBC)
 		result ^= endian_swap64(des->vec_val);
-	// if ((opts & GET_HASH) == OPT_OFB)
-	// {
-	// 	ft_fdprintf(2, "\n\n [coucou]__ %d __ \n", sz);
-	// 	return (void)write(des->fd_o, &result, (sz % 8) ? sz % 8 : 8);
-	// }
 	pad = result >> 56;
 	pad_save = pad;
 	while (pad_save > 0)
@@ -48,7 +43,6 @@ static int	format_buf(char *b64_buf, char *final_buf, int size, uint64_t *msg)
 	b64_decode_str(b64_buf, final_buf, size);
 	final_size = (size / 8 * 6 / 8) + ((size % 8) ? 1 : 0) - 1;
 	ft_memcpy(msg, final_buf, (final_size + 1) * 8);
-	// ft_fdprintf(2, " __ strlen(final_buf) = %d %s__ \n", ft_strlen(final_buf), final_buf);
 	return (final_size);
 }
 
@@ -63,7 +57,6 @@ void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 	char		b64_buf[B64_DEC_BUF_SIZE + 1];
 	char		final_buf[49];
 	int			sz;
-	// int			size;
 
 	ft_bzero(final_buf, 49);
 	while (buf[1])
@@ -74,7 +67,6 @@ void		des_algo_decrypt(t_des *des, uint32_t opts, uint64_t *buf)
 	while ((!(opts & OPT_A) && (sz = read(des->fd_i, &msg, 48)) > 0)
 	|| ((opts & OPT_A) && (sz = read_trim(des->fd_i, b64_buf, 64)) > 0))
 	{
-		// size = sz;
 		if (buf[0])
 			decode_des_msg(des, &buf[0], 1, opts);
 		sz = (opts & OPT_A) ? format_buf(b64_buf, final_buf, sz, msg) :
