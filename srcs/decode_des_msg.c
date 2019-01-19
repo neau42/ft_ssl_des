@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 01:30:36 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 01:54:14 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ uint64_t	des_decode(t_des *des, uint64_t msg, uint64_t *k, uint32_t opts)
 			64, 64, des->vec_val, g_ip), k), g_ip_rev));
 		des->vec_val = endian_swap64(result);
 		result ^= msg;
-		return (result);
 	}
 	else if ((opts & GET_HASH) == OPT_CFB)
 	{
@@ -49,7 +48,6 @@ uint64_t	des_decode(t_des *des, uint64_t msg, uint64_t *k, uint32_t opts)
 			64, 64, des->vec_val, g_ip), k), g_ip_rev));
 		result ^= (msg);
 		des->vec_val = endian_swap64(msg);
-		return (result);
 	}
 	else if ((opts & GET_HASH) == OPT_CTR)
 	{
@@ -57,10 +55,11 @@ uint64_t	des_decode(t_des *des, uint64_t msg, uint64_t *k, uint32_t opts)
 			64, 64, des->vec_val, g_ip), k), g_ip_rev));
 		des->vec_val += 1;
 		result ^= msg;
-		return (result);
 	}
-	return (endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(
-		64, endian_swap64(msg), g_ip_rev), k), g_ip)));
+	else
+		result = endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(
+		64, endian_swap64(msg), g_ip_rev), k), g_ip));
+	return (result);
 
 }
 
@@ -74,8 +73,7 @@ void		decode_des_msg(t_des *des, uint64_t *msg, int size, uint32_t opts)
 		k = des_gen_keytab(des->key_val);
 	while (size-- > 0)
 	{
-
-		if ((opts & GET_HASH) == OPT_CBC)
+		if ((opts & GET_HASH) == OPT_CBC | (opts & GET_HASH) == OPT_PCBC)
 			tmp_vector = endian_swap64(*msg);
 		result = des_decode(des, *msg, k, opts);
 		if ((opts & GET_HASH) == OPT_CBC)
@@ -83,7 +81,11 @@ void		decode_des_msg(t_des *des, uint64_t *msg, int size, uint32_t opts)
 			result ^= endian_swap64(des->vec_val);
 			des->vec_val = tmp_vector;
 		}
-
+		else if ((opts & GET_HASH) == OPT_PCBC)
+		{
+			result ^= endian_swap64(des->vec_val);
+			des->vec_val = tmp_vector ^ endian_swap64(result);
+		}
 		write(des->fd_o, &result, 8);
 		msg++;
 	}

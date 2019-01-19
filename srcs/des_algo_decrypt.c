@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 01:04:21 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 01:55:24 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	last_chunk_rm_padd(uint64_t msg, t_des *des, uint32_t opts, int sz)
 
 	k = des_gen_keytab(des->key_val);
 	result = des_decode(des, msg, k, opts);
-	if ((opts & GET_HASH) == OPT_CBC)
+	if ((opts & GET_HASH) == OPT_CBC || (opts & GET_HASH) == OPT_PCBC)
 		result ^= endian_swap64(des->vec_val);
 	if ((opts & GET_HASH) == OPT_OFB)
 		return (void)write(des->fd_o, &result, sz % 8);
