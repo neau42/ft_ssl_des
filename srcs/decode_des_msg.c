@@ -6,7 +6,7 @@
 /*   By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 14:35:57 by nboulaye          #+#    #+#             */
-/*   Updated: 2019/01/19 01:27:38 by nboulaye         ###   ########.fr       */
+/*   Updated: 2019/01/19 01:30:36 by nboulaye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ uint64_t	des_decode(t_des *des, uint64_t msg, uint64_t *k, uint32_t opts)
 			64, 64, des->vec_val, g_ip), k), g_ip_rev));
 		result ^= (msg);
 		des->vec_val = endian_swap64(msg);
+		return (result);
+	}
+	else if ((opts & GET_HASH) == OPT_CTR)
+	{
+		result = endian_swap64(permut_bits(64, 64, ft_des_rounds(permut_bits(
+			64, 64, des->vec_val, g_ip), k), g_ip_rev));
+		des->vec_val += 1;
+		result ^= msg;
 		return (result);
 	}
 	return (endian_swap64(unpermut_bits(64, ft_des_rounds_rev(unpermut_bits(
