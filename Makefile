@@ -6,7 +6,7 @@
 #    By: nboulaye <nboulaye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/26 03:02:39 by no                #+#    #+#              #
-#    Updated: 2019/01/19 00:43:52 by nboulaye         ###   ########.fr        #
+#    Updated: 2019/01/19 03:52:26 by nboulaye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,33 +19,32 @@ SRC =	srcs/md5.c\
 		srcs/usage.c\
 		srcs/sha256.c\
 		srcs/rm_data.c\
+		srcs/des_free.c\
 		srcs/get_args.c\
 		srcs/get_opts.c\
-		srcs/get_io_file.c\
-		srcs/init_chksum.c\
 		srcs/des_algo.c\
+		srcs/read_trim.c\
+		srcs/process_des.c\
+		srcs/get_io_file.c\
+		srcs/get_command.c\
+		srcs/init_chksum.c\
 		srcs/process_file.c\
 		srcs/process_stdin.c\
+		srcs/get_md_option.c\
 		srcs/base64_encode.c\
 		srcs/base64_decode.c\
 		srcs/process_base64.c\
 		srcs/des_gen_keytab.c\
-		srcs/process_des.c\
-		srcs/get_command.c\
-		srcs/base64_decode_str.c\
-		srcs/get_md_option.c\
-		srcs/read_trim.c\
-		srcs/des_free.c\
 		srcs/decode_des_msg.c\
+		srcs/get_magic_salt.c\
+		srcs/process_string.c\
 		srcs/valid_des_params.c\
 		srcs/des_algo_decrypt.c\
 		srcs/process_des_chunk.c\
-		srcs/permut_bits_n_endian_swap.c\
-		srcs/get_magic_salt.c\
-		srcs/process_string.c
+		srcs/base64_decode_str.c\
+		srcs/permut_bits_n_endian_swap.c
 
 FLAGS = -Wall -Werror -Wextra
-# -fsanitize=address -g -ggdb
 
 INC_PATH = incs/
 
