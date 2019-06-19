@@ -1,5 +1,5 @@
 # FT_SSL
-An introduction to cryptographic hashing algorithms
+An introduction to cryptographic hashing algorithms and symmetric encoding and encryption
 
 #### hasing:
 md5 - sha256
