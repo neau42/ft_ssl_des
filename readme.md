@@ -1,12 +1,14 @@
-#FT_SSL
+# FT_SSL
 An introduction to cryptographic hashing algorithms
 
-####hasing:
+#### hasing:
 md5 - sha256
 
-####Encrypt:
+#### Encrypt:
 base64 - des - des-ecb - des-cbc - des-cfb - des-ctr - des-pcbc
 
+
+#### Usage:
 ```
 usage:
 ./ft_ssl <md5|sha256|des|des-ecb|des-cbc|des-cfb|des-ctr|des-pcbc> [options] file ...
